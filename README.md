@@ -18,7 +18,7 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed
 
 Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
 
-* `gcc`, `g++`, `make`, `cmake`, `automake`
+* `g++`
 * `python3`, `python3-pip`
 * `jupyter` (recommend `jupyterlab`)
 
@@ -42,7 +42,7 @@ install_cpp_kernel --user
 
 ```shell
 sudo apt update && sudo apt full-upgrade -y 
-sudo apt install -y gcc g++ make cmake automake
+sudo apt install -y g++
 sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
@@ -70,7 +70,7 @@ install_cpp_kernel --user
 
 ```shell
 sudo apt update && sudo apt full-upgrade -y 
-sudo apt install -y gcc g++ make cmake automake
+sudo apt install -y g++
 sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
