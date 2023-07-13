@@ -7,3 +7,4 @@ MANIFEST
 .ipynb_checkpoints/
 *.egg-info/
 venv/
+.vscode/settings.json
