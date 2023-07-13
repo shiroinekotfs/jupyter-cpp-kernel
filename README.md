@@ -32,7 +32,7 @@ Normally, your target machine must meet these requirement packages before instal
 > After that, you can copy this script and install the kernel
 
 ```shell
-pip install jupyter-c-kernel
+pip install jupyter-cpp-kernel
 install_cpp_kernel
 ```
 
@@ -44,7 +44,7 @@ sudo apt install -y gcc g++ make cmake automake
 sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
-pip install jupyter-c-kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
+pip install jupyter-cpp-kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
 install_cpp_kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
 ```
 
