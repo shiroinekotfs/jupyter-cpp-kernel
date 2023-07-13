@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import json, os, sys, argparse
+import logging
 from jupyter_client.kernelspec import KernelSpecManager
 from IPython.utils.tempdir import TemporaryDirectory
 
