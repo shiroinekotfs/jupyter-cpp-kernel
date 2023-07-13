@@ -1,2 +1,2 @@
-include jupyter_c_kernel/resources/master.c
+include jupyter_cpp_kernel/resources/master.cpp
 include README.md LICENSE.txt
