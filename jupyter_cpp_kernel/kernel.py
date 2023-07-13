@@ -153,17 +153,7 @@ class CPPKernel(Kernel):
                                   self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-shared', '-rdynamic'] + cflags
-        if self.linkMaths:
-            cflags = cflags + ['-lm']
-        if self.wError:
-            cflags = cflags + ['-Werror']
-        if self.wAll:
-            cflags = cflags + ['-Wall']
-        if self.readOnlyFileSystem:
-            cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
-        if self.bufferedOutput:
-            cflags = ['-DBUFFERED_OUTPUT'] + cflags
+        cflags = ['-std=c++14', '-fPIC', '-shared', '-rdynamic'] + cflags
         args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
         return self.create_jupyter_subprocess(args)
 
