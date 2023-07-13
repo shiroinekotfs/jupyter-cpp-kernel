@@ -3,7 +3,7 @@
 ```markdown
 This repo is originally created by Brendan Rius - `C Kernel for Jupyter`
 
-You can see the original profile at https://github.com/brendan-rius/jupyter-c-kernel
+You can see the original project at https://github.com/brendan-rius/jupyter-c-kernel
 
 Plus, this C++ kernel only uses C++ 14. The others are being developed
 (or not, who knows 😅)
