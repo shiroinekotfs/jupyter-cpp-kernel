@@ -29,7 +29,7 @@ def install_my_kernel_spec(user=True, prefix=None):
         # TODO: Copy resources once they're specified
 
         print('Installing C++ 14 kernel spec')
-        KernelSpecManager().install_kernel_spec(td, 'c', user=user, prefix=prefix)
+        KernelSpecManager().install_kernel_spec(td, 'cpp', user=user, prefix=prefix)
 
 def _is_root():
     try:
