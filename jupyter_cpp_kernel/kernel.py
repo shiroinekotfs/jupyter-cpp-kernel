@@ -6,15 +6,11 @@ from threading import Thread
 from ipykernel.kernelbase import Kernel
 
 class RealTimeSubprocess(subprocess.Popen):
-    """
-    A subprocess that allows to read its stdout and stderr in real time (lol)
-    """
-
     def __init__(self, cmd, write_to_stdout, write_to_stderr):
         """
-        :param cmd: the command to execute
-        :param write_to_stdout: a callable that will be called with chunks of data from stdout
-        :param write_to_stderr: a callable that will be called with chunks of data from stderr
+        cmd: the command to execute
+        write_to_stdout: a callable that will be called with chunks of data from stdout
+        write_to_stderr: a callable that will be called with chunks of data from stderr
         """
         self._write_to_stdout = write_to_stdout
         self._write_to_stderr = write_to_stderr
