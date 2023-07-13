@@ -17,7 +17,7 @@ kernel_json = {
     "language": "cpp"
 }
 
-def install_my_kernel_spec(user=False, prefix=None):
+def install_my_kernel_spec(user=True, prefix=None):
     with TemporaryDirectory() as td:
         os.chmod(td, 0o755)  # Starts off as 700, not user readable
         with open(os.path.join(td, 'kernel.json'), 'w') as f:
@@ -26,7 +26,7 @@ def install_my_kernel_spec(user=False, prefix=None):
 
         print('Installing C++ 14 kernel spec')
         KernelSpecManager().log.setLevel(logging.ERROR)
-        KernelSpecManager().install_kernel_spec(td, 'cpp', user=user, prefix=prefix)
+        KernelSpecManager().install_kernel_spec(td, 'cpp', user=user, replace=True, prefix=prefix)
 
 def _is_root():
     try:
