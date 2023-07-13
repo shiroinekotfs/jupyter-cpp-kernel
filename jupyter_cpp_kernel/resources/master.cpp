@@ -1,11 +1,16 @@
 #include <cstdlib>
 #include <cstdio>
-#include <iostream>
 #include <dlfcn.h>
+
+extern "C"
+{
+  #include "stdio_wrap.h"
+}
 
 typedef int (*main_t)(int, char **, char **);
 
-int main(int argc, char **argv, char **envp) {
+int main(int argc, char **argv, char **envp)
+{
     char *error = nullptr;
     setbuf(stdout, nullptr);
     setbuf(stderr, nullptr);
