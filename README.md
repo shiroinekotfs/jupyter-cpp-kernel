@@ -1,4 +1,4 @@
-# C++ kernel for Jupyter
+# C++ 14 kernel for Jupyter
 
 ```markdown
 This repo is originally created by Brendan Rius - `C Kernel for Jupyter`
