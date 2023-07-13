@@ -5,7 +5,8 @@ This repo is originally created by Brendan Rius - `C Kernel for Jupyter`
 
 You can see the original profile at https://github.com/brendan-rius/jupyter-c-kernel
 
-Plus, this C++ kernel only uses C++ 14. The others are being developed (or not, I am not a dev, and I don't really love this job lol)
+Plus, this C++ kernel only uses C++ 14. The others are being developed
+(or not, I am not a dev, and I don't really love this job lol)
 ```
 
 ## Manual installation
@@ -13,7 +14,7 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed (or not, 
 > :warning:
 >
 > This kernel only works on Linux and macOS.
-> If you want to use on Windows, please consider to use [WSL](https://aka.ms/wsl), [Docker](https://docker.com), or using a virtual machine.
+> If you want to use it on Windows, please consider using [WSL](https://aka.ms/wsl), [Docker](https://docker.com), or using a virtual machine.
 
 Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
 
@@ -25,9 +26,9 @@ Normally, your target machine must meet these requirement packages before instal
 
 > :warning:
 >
-> You must all requirement above before doing anything else
-> I don't use macOS too regular, so I don't know how macOS get these packages
-> But you can follow insallation instruction on the Internet
+> You must all requirements above before doing anything else
+> I don't use macOS too regularly, so I don't know how macOS get these packages
+> But you can follow installation instructions on the Internet
 > After that, you can copy this script and install the kernel
 
 ```shell
