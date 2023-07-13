@@ -1,6 +1,6 @@
 from queue import Queue
 from threading import Thread
-from os import system as cs
+
 from ipykernel.kernelbase import Kernel
 import re
 import subprocess
@@ -8,8 +8,14 @@ import tempfile
 import os
 import os.path as path
 
+
 class RealTimeSubprocess(subprocess.Popen):
+    """
+    A subprocess that allows to read its stdout and stderr in real time
+    """
+
     inputRequest = "<inputRequest>"
+
     def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
         """
         cmd: the command to execute
@@ -62,6 +68,8 @@ class RealTimeSubprocess(subprocess.Popen):
         stdout_contents = read_all_from_queue(self._stdout_queue)
         if stdout_contents:
             contents = stdout_contents.decode()
+            # if there is input request, make output and then
+            # ask frontend for input
             start = contents.find(self.__class__.inputRequest)
             if(start >= 0):
                 contents = contents.replace(self.__class__.inputRequest, '')
@@ -70,6 +78,7 @@ class RealTimeSubprocess(subprocess.Popen):
                 readLine = ""
                 while(len(readLine) == 0):
                     readLine = self._read_from_stdin()
+                # need to add newline since it is not captured by frontend
                 readLine += "\n"
                 self.stdin.write(readLine.encode())
             else:
@@ -77,28 +86,18 @@ class RealTimeSubprocess(subprocess.Popen):
 
 
 class CPPKernel(Kernel):
-    try:
-        gcc_version = cs('gcc --version')
-    except:
-        gcc_version = "Cannot get GCC version"
-    
-    try:
-        gpp_version = cs('g++ --version')
-    except:
-        gpp_version = "Cannot get G++ version"
-
     implementation = 'jupyter_cpp_kernel'
-    implementation_version = '1.0'
+    implementation_version = '1.0.0a'
     language = 'cpp'
-    language_version = 'C++ 14'
-    language_info = {'name': 'cpp',
-                     'mimetype': 'text/plain',
-                     'file_extension': '.cpp'
-                     }
-    
-    banner = "C++ 14 kernel for Jupyter\n\nGCC version:\n" + gcc_version + "\n\nG++ version:\n" + gpp_version + "\n\n"
+    language_version = 'C++17'
+    language_info = {'name': 'text/x-csrc',
+                     'mimetype': 'text/x-csrc',
+                     'file_extension': '.cpp'}
+    banner = "C++ kernel for Jupyter.\n" \
+             "Uses g++, compiles using C++ 17 standard. Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
-    main_head = "#include <iostream>\n" \
+    main_head = "#include <stdio.h>\n" \
+            "#include <math.h>\n" \
             "int main(){\n"
 
     main_foot = "\nreturn 0;\n}"
@@ -111,14 +110,14 @@ class CPPKernel(Kernel):
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
         self.wError = False # but keep comipiling for warnings
-        self.standard = "c++14" # default standard if none is specified
+        self.standard = "c++17" # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
         self.master_path = mastertemp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-ldl', '-o', self.master_path])
+        subprocess.call(['g++', filepath, '-std=c++17', '-rdynamic', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -180,7 +179,7 @@ class CPPKernel(Kernel):
             if line.startswith('//%'):
                 magicSplit = line[3:].split(":", 2)
                 if(len(magicSplit) < 2):
-                    self._write_to_stderr("[C++ kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
+                    self._write_to_stderr("[C++ 17 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
                     continue
 
                 key, value = magicSplit
@@ -244,7 +243,7 @@ class CPPKernel(Kernel):
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
                     self._write_to_stderr(
-                            "[C++ 14 kernel] G++ exited with code {}, the executable will not be executed".format(
+                            "[C++ 17 kernel] G++ exited with code {}, the code will not be executed".format(
                                     p.returncode))
 
                     # delete source files before exit
