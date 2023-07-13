@@ -10,10 +10,6 @@ import os.path as path
 
 
 class RealTimeSubprocess(subprocess.Popen):
-    """
-    A subprocess that allows to read its stdout and stderr in real time
-    """
-
     inputRequest = "<inputRequest>"
 
     def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
@@ -52,7 +48,6 @@ class RealTimeSubprocess(subprocess.Popen):
         Write the available content from stdin and stderr where specified when the instance was created
         :return:
         """
-
         def read_all_from_queue(queue):
             res = b''
             size = queue.qsize()
@@ -84,19 +79,19 @@ class RealTimeSubprocess(subprocess.Popen):
             else:
                 self._write_to_stdout(contents)
 
-
 class CPPKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
-    implementation_version = '1.0.0a'
+    implementation_version = '1.0'
     language = 'cpp'
     language_version = 'C++14'
     language_info = {'name': 'text/x-csrc',
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.cpp'}
-    banner = "C++ kernel for Jupyter.\n" \
-             "Uses g++, compiles using C++ 14 standard. Created by Tsuki Takineko (github.com/takinekotfs).\n"
+    banner = "C++ interpreter for Jupyter.\n" \
+             "Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
-    main_head = "#include <iostream>\n" \
+    main_head = "#include <stdio.h>\n" \
+            "#include <math.h>\n" \
             "int main(){\n"
 
     main_foot = "\nreturn 0;\n}"
@@ -152,7 +147,17 @@ class CPPKernel(Kernel):
                                   self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-std=c++14', '-fPIC', '-shared', '-rdynamic'] + cflags
+        cflags = ['-pedantic', '-fPIC', '-shared', '-rdynamic'] + cflags
+        if self.linkMaths:
+            cflags = cflags + ['-lm']
+        if self.wError:
+            cflags = cflags + ['-Werror']
+        if self.wAll:
+            cflags = cflags + ['-Wall']
+        if self.readOnlyFileSystem:
+            cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
+        if self.bufferedOutput:
+            cflags = ['-DBUFFERED_OUTPUT'] + cflags
         args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
         return self.create_jupyter_subprocess(args)
 
@@ -168,7 +173,7 @@ class CPPKernel(Kernel):
             if line.startswith('//%'):
                 magicSplit = line[3:].split(":", 2)
                 if(len(magicSplit) < 2):
-                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.\n")
+                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
                     continue
 
                 key, value = magicSplit
@@ -217,6 +222,11 @@ class CPPKernel(Kernel):
 
         magics, code = self._add_main(magics, code)
 
+        # replace stdio with wrapped version
+        headerDir = "\"" + self.resDir + "/std_io_remap.h" + "\""
+        code = code.replace("<stdio.h>", headerDir)
+        code = code.replace("\"stdio.h\"", headerDir)
+
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
             source_file.flush()
@@ -225,9 +235,9 @@ class CPPKernel(Kernel):
                 while p.poll() is None:
                     p.write_contents()
                 p.write_contents()
-                if p.returncode != 0:  # Compilation failed
+                if p.returncode != 0: 
                     self._write_to_stderr(
-                            "[C++ 14 kernel] G++ exited with code {}, the code will not be executed".format(
+                            "\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(
                                     p.returncode))
 
                     # delete source files before exit
@@ -252,9 +262,8 @@ class CPPKernel(Kernel):
         os.remove(binary_file.name)
 
         if p.returncode != 0:
-            self._write_to_stderr("\n[C++ 14 kernel] Executable exited with code {} \n".format(p.returncode))
+            self._write_to_stderr("\n[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
-        """Cleanup the created source code files and executables when shutting down the kernel"""
         self.cleanup_files()
