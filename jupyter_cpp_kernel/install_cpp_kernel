@@ -31,7 +31,6 @@ def install_my_kernel_spec(user=True, prefix=None):
         print('Installing C++ 17 kernel spec')
         KernelSpecManager().install_kernel_spec(td, 'c', user=user, prefix=prefix)
 
-
 def _is_root():
     try:
         return os.geteuid() == 0
