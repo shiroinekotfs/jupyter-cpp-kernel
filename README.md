@@ -45,7 +45,7 @@ sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
 pip install jupyter-cpp-kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
-install_cpp_kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
+install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
 ```
 
 ## Contributing
