@@ -96,8 +96,7 @@ class CPPKernel(Kernel):
     banner = "C++ kernel for Jupyter.\n" \
              "Uses g++, compiles using C++ 14 standard. Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
-    main_head = "#include <stdio.h>\n" \
-            "#include <math.h>\n" \
+    main_head = "#include <iostream>\n" \
             "int main(){\n"
 
     main_foot = "\nreturn 0;\n}"
@@ -169,7 +168,7 @@ class CPPKernel(Kernel):
             if line.startswith('//%'):
                 magicSplit = line[3:].split(":", 2)
                 if(len(magicSplit) < 2):
-                    self._write_to_stderr("[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
+                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.\n")
                     continue
 
                 key, value = magicSplit
@@ -218,11 +217,6 @@ class CPPKernel(Kernel):
 
         magics, code = self._add_main(magics, code)
 
-        # replace stdio with wrapped version
-        headerDir = "\"" + self.resDir + "/stdio_wrap.h" + "\""
-        code = code.replace("<stdio.h>", headerDir)
-        code = code.replace("\"stdio.h\"", headerDir)
-
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
             source_file.flush()
@@ -258,7 +252,7 @@ class CPPKernel(Kernel):
         os.remove(binary_file.name)
 
         if p.returncode != 0:
-            self._write_to_stderr("[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
+            self._write_to_stderr("\n[C++ 14 kernel] Executable exited with code {} \n".format(p.returncode))
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
