@@ -1,6 +1,7 @@
 import re, subprocess, tempfile, os
 
 import os.path as path
+from os import system as cs
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
@@ -54,15 +55,27 @@ class RealTimeSubprocess(subprocess.Popen):
 
 
 class CPPKernel(Kernel):
+
+    try:
+        gcc_version = cs('gcc --version')
+    except:
+        gcc_version = "Cannot get GCC version"
+    
+    try:
+        gpp_version = cs('g++ --version')
+    except:
+        gpp_version = "Cannot get G++ version"
+
     implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
     language = 'cpp'
     language_version = 'C++ 14'
     language_info = {'name': 'cpp',
                      'mimetype': 'text/plain',
-                     'file_extension': '.cpp'}
-    banner = "C++ kernel.\n" \
-             "Uses g++, compiles in C++ 14, and creates source code files and executables in temporary folder.\n"
+                     'file_extension': '.cpp'
+                    }
+    
+    banner = "C++ 14 kernel for Jupyter\n\nGCC version:\n" + gcc_version + "\n\nG++ version:\n" + gpp_version + "\n\n"
 
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
