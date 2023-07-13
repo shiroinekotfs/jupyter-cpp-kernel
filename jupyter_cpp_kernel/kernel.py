@@ -1,17 +1,13 @@
+import re, subprocess, tempfile, os
+
+import os.path as path
 from queue import Queue
 from threading import Thread
-
 from ipykernel.kernelbase import Kernel
-import re
-import subprocess
-import tempfile
-import os
-import os.path as path
-
 
 class RealTimeSubprocess(subprocess.Popen):
     """
-    A subprocess that allows to read its stdout and stderr in real time
+    A subprocess that allows to read its stdout and stderr in real time (lol)
     """
 
     def __init__(self, cmd, write_to_stdout, write_to_stderr):
@@ -45,11 +41,6 @@ class RealTimeSubprocess(subprocess.Popen):
         stream.close()
 
     def write_contents(self):
-        """
-        Write the available content from stdin and stderr where specified when the instance was created
-        :return:
-        """
-
         def read_all_from_queue(queue):
             res = b''
             size = queue.qsize()
@@ -66,25 +57,25 @@ class RealTimeSubprocess(subprocess.Popen):
             self._write_to_stderr(stderr_contents)
 
 
-class CKernel(Kernel):
-    implementation = 'jupyter_c_kernel'
+class CPPKernel(Kernel):
+    implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
-    language = 'c'
-    language_version = 'C11'
-    language_info = {'name': 'c',
+    language = 'cpp'
+    language_version = 'C++ 14'
+    language_info = {'name': 'cpp',
                      'mimetype': 'text/plain',
-                     'file_extension': '.c'}
-    banner = "C kernel.\n" \
-             "Uses gcc, compiles in C11, and creates source code files and executables in temporary folder.\n"
+                     'file_extension': '.cpp'}
+    banner = "C++ kernel.\n" \
+             "Uses g++, compiles in C++ 14, and creates source code files and executables in temporary folder.\n"
 
     def __init__(self, *args, **kwargs):
-        super(CKernel, self).__init__(*args, **kwargs)
+        super(CPPKernel, self).__init__(*args, **kwargs)
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
         self.master_path = mastertemp[1]
-        filepath = path.join(path.dirname(path.realpath(__file__)), 'resources', 'master.c')
-        subprocess.call(['gcc', filepath, '-std=c11', '-rdynamic', '-ldl', '-o', self.master_path])
+        filepath = path.join(path.dirname(path.realpath(__file__)), 'resources', 'master.cpp')
+        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -113,8 +104,8 @@ class CKernel(Kernel):
                                   lambda contents: self._write_to_stderr(contents.decode()))
 
     def compile_with_gcc(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-std=c11', '-fPIC', '-shared', '-rdynamic'] + cflags
-        args = ['gcc', source_filename] + cflags + ['-o', binary_filename] + ldflags
+        cflags = ['-std=c++14', '-fPIC', '-shared', '-rdynamic'] + cflags
+        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
         return self.create_jupyter_subprocess(args)
 
     def _filter_magics(self, code):
@@ -143,7 +134,7 @@ class CKernel(Kernel):
 
         magics = self._filter_magics(code)
 
-        with self.new_temp_file(suffix='.c') as source_file:
+        with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
             source_file.flush()
             with self.new_temp_file(suffix='.out') as binary_file:
@@ -153,7 +144,7 @@ class CKernel(Kernel):
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
                     self._write_to_stderr(
-                            "[C kernel] GCC exited with code {}, the executable will not be executed".format(
+                            "[C++ 14 kernel] g++ exited with code {}, the executable will not be executed".format(
                                     p.returncode))
                     return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [],
                             'user_expressions': {}}
@@ -164,7 +155,7 @@ class CKernel(Kernel):
         p.write_contents()
 
         if p.returncode != 0:
-            self._write_to_stderr("[C kernel] Executable exited with code {}".format(p.returncode))
+            self._write_to_stderr("[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
