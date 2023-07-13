@@ -144,7 +144,7 @@ class CPPKernel(Kernel):
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
                     self._write_to_stderr(
-                            "[C++ 14 kernel] g++ exited with code {}, the executable will not be executed".format(
+                            "[C++ 14 kernel] g++ exited with code {}, the code will not be executed".format(
                                     p.returncode))
                     return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [],
                             'user_expressions': {}}
