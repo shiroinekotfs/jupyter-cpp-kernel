@@ -6,7 +6,7 @@ This repo is originally created by Brendan Rius - `C Kernel for Jupyter`
 You can see the original profile at https://github.com/brendan-rius/jupyter-c-kernel
 
 Plus, this C++ kernel only uses C++ 14. The others are being developed
-(or not, I am not a dev, and I don't really love this job lol)
+(or not, who know 😅)
 ```
 
 ## Manual installation
