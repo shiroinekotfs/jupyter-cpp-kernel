@@ -89,12 +89,12 @@ class CPPKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0.0a'
     language = 'cpp'
-    language_version = 'C++17'
+    language_version = 'C++14'
     language_info = {'name': 'text/x-csrc',
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.cpp'}
     banner = "C++ kernel for Jupyter.\n" \
-             "Uses g++, compiles using C++ 17 standard. Created by Tsuki Takineko (github.com/takinekotfs).\n"
+             "Uses g++, compiles using C++ 14 standard. Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
     main_head = "#include <stdio.h>\n" \
             "#include <math.h>\n" \
@@ -110,14 +110,14 @@ class CPPKernel(Kernel):
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
         self.wError = False # but keep comipiling for warnings
-        self.standard = "c++17" # default standard if none is specified
+        self.standard = "c++14" # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
         self.master_path = mastertemp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        subprocess.call(['g++', filepath, '-std=c++17', '-rdynamic', '-ldl', '-o', self.master_path])
+        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -179,7 +179,7 @@ class CPPKernel(Kernel):
             if line.startswith('//%'):
                 magicSplit = line[3:].split(":", 2)
                 if(len(magicSplit) < 2):
-                    self._write_to_stderr("[C++ 17 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
+                    self._write_to_stderr("[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
                     continue
 
                 key, value = magicSplit
@@ -243,7 +243,7 @@ class CPPKernel(Kernel):
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
                     self._write_to_stderr(
-                            "[C++ 17 kernel] G++ exited with code {}, the code will not be executed".format(
+                            "[C++ 14 kernel] G++ exited with code {}, the code will not be executed".format(
                                     p.returncode))
 
                     # delete source files before exit
@@ -268,7 +268,7 @@ class CPPKernel(Kernel):
         os.remove(binary_file.name)
 
         if p.returncode != 0:
-            self._write_to_stderr("[C++ 17 kernel] Executable exited with code {}".format(p.returncode))
+            self._write_to_stderr("[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):

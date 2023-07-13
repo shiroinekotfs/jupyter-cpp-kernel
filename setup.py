@@ -13,6 +13,6 @@ setup(name='jupyter_cpp_kernel',
       download_url='',
       packages=['jupyter_cpp_kernel'],
       scripts=['jupyter_cpp_kernel/install_cpp_kernel'],
-      keywords=['jupyter', 'cpp17', 'jupyter_kernels', 'cpp', 'pip'],
+      keywords=['jupyter', 'cpp14', 'jupyter_kernels', 'cpp', 'pip'],
       include_package_data=True
       )

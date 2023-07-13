@@ -3,11 +3,11 @@ This repo is originally created by Brendan Rius - `C Kernel for Jupyter`
 
 You can see the original project at https://github.com/brendan-rius/jupyter-c-kernel
 
-Plus, this C++ kernel only uses C++ 17. The others are being developed
+Plus, this C++ kernel only uses C++ 14. The others are being developed
 (or not, who knows 😅)
 ```
 
-# C++ 17 kernel for Jupyter
+# C++ 14 kernel for Jupyter
 
 ## Installation
 

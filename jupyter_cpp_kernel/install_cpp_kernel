@@ -16,7 +16,7 @@ kernel_json = {
         "-f",
         "{connection_file}"
     ],
-    "display_name": "C++ 17",
+    "display_name": "C++ 14",
     "language": "cpp"
 }
 
@@ -28,7 +28,7 @@ def install_my_kernel_spec(user=True, prefix=None):
             json.dump(kernel_json, f, sort_keys=True)
         # TODO: Copy resources once they're specified
 
-        print('Installing C++ 17 kernel spec')
+        print('Installing C++ 14 kernel spec')
         KernelSpecManager().install_kernel_spec(td, 'c', user=user, prefix=prefix)
 
 def _is_root():
