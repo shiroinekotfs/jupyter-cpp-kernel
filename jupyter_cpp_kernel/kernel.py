@@ -268,7 +268,7 @@ class CPPKernel(Kernel):
         os.remove(binary_file.name)
 
         if p.returncode != 0:
-            self._write_to_stderr("[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
+            self._write_to_stderr("[C++ 17 kernel] Executable exited with code {}".format(p.returncode))
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
