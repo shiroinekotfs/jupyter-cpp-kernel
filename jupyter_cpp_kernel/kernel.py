@@ -216,21 +216,24 @@ class CPPKernel(Kernel):
 
         return magics, code
 
-    def do_execute(self, code, silent, store_history=True,
-                   user_expressions=None, allow_stdin=True):
+    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
 
         magics, code = self._filter_magics(code)
 
         magics, code = self._add_main(magics, code)
 
         with self.new_temp_file(suffix='.cpp') as source_file:
+            # Write to .cpp
             source_file.write(code)
             source_file.flush()
+            
             with self.new_temp_file(suffix='.out') as binary_file:
                 p = self.compile_with_gpp(source_file.name, binary_file.name, magics['cflags'], magics['ldflags'])
                 while p.poll() is None:
                     p.write_contents()
                 p.write_contents()
+                
+                # Error cannot write. Either the compiler is crashed or just cannot read/write from *.out
                 if p.returncode != 0: 
                     self._write_to_stderr(
                             "\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(
@@ -239,7 +242,8 @@ class CPPKernel(Kernel):
                     # delete source files before exit
                     os.remove(source_file.name)
                     os.remove(binary_file.name)
-
+                    
+                    # Compiling exited with successfully
                     return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [],
                             'user_expressions': {}}
 
