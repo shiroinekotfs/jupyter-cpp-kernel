@@ -1,18 +1,18 @@
 from setuptools import setup
 
-setup(name='jupyter_cpp_kernel',
-      version='1.0.0a0',
-      description='C++ 14 kernel for Jupyter',
-      author='Tsuki Takineko',
-      author_email='systakineko.tfs@gmail.com',
+setup(name='jupyter_c_kernel',
+      version='1.2.1',
+      description='Minimalistic C kernel for Jupyter',
+      author='Brendan Rius',
+      author_email='ping@brendan-rius.com',
       license='MIT',
       classifiers=[
           'License :: OSI Approved :: MIT License',
       ],
-      url='https://github.com/takinekotfs/jupyter-cpp-kernel',
-      download_url='https://github.com/takinekotfs/jupyter-cpp-kernel',
-      packages=['jupyter_cpp_kernel'],
-      scripts=['jupyter_cpp_kernel/install_cpp_kernel'],
-      keywords=['jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
+      url='https://github.com/brendan-rius/jupyter-c-kernel/',
+      download_url='https://github.com/brendan-rius/jupyter-c-kernel/tarball/1.2.1',
+      packages=['jupyter_c_kernel'],
+      scripts=['jupyter_c_kernel/install_c_kernel'],
+      keywords=['jupyter', 'notebook', 'kernel', 'c'],
       include_package_data=True
       )

@@ -12,12 +12,12 @@ kernel_json = {
     "argv": [
         "python3",
         "-m",
-        "jupyter_cpp_kernel",
+        "jupyter_c_kernel",
         "-f",
         "{connection_file}"
     ],
-    "display_name": "C++ 14",
-    "language": "cpp"
+    "display_name": "C",
+    "language": "c"
 }
 
 
@@ -28,8 +28,9 @@ def install_my_kernel_spec(user=True, prefix=None):
             json.dump(kernel_json, f, sort_keys=True)
         # TODO: Copy resources once they're specified
 
-        print('Installing C++ 14 kernel spec')
-        KernelSpecManager().install_kernel_spec(td, 'cpp', user=user, prefix=prefix)
+        print('Installing IPython kernel spec')
+        KernelSpecManager().install_kernel_spec(td, 'c', user=user, prefix=prefix)
+
 
 def _is_root():
     try:
@@ -40,7 +41,7 @@ def _is_root():
 
 def main(argv=[]):
     parser = argparse.ArgumentParser(
-        description='Install KernelSpec for C++ Kernel'
+        description='Install KernelSpec for C Kernel'
     )
     prefix_locations = parser.add_mutually_exclusive_group()
 
