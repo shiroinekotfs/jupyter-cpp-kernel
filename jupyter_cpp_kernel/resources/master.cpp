@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <cstdio>
 #include <dlfcn.h>
+//Include the remapped header
+#include "std_io_remap.h"
 
 typedef int (*main_t)(int, char **, char **);
 

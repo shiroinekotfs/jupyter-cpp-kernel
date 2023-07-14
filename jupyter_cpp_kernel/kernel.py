@@ -8,8 +8,8 @@ import tempfile
 import os
 import os.path as path
 
-
 class RealTimeSubprocess(subprocess.Popen):
+
     inputRequest = "<inputRequest>"
 
     def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
@@ -90,7 +90,7 @@ class CPPKernel(Kernel):
     banner = "C++ interpreter for Jupyter.\n" \
              "Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
-    main_head = "#include <stdio.h>\n" \
+    main_head = "#include <std_io_remap.h>\n" \
             "#include <math.h>\n" \
             "int main(){\n"
 
@@ -226,6 +226,7 @@ class CPPKernel(Kernel):
         headerDir = "\"" + self.resDir + "/std_io_remap.h" + "\""
         code = code.replace("<stdio.h>", headerDir)
         code = code.replace("\"stdio.h\"", headerDir)
+        code  = code.releace("<iostream>", "<iostream>" +"\n" + "#include" + headerDir)
 
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
