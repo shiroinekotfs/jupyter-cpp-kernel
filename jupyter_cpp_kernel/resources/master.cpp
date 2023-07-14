@@ -1,7 +1,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include <dlfcn.h>
-#include "stdio_remap.h"
 
 typedef int (*main_t)(int, char **, char **);
 

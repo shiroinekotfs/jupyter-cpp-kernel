@@ -223,12 +223,7 @@ class CPPKernel(Kernel):
         magics, code = self._filter_magics(code)
 
         magics, code = self._add_main(magics, code)
-
-        # replace stdio with wrapped version
-        headerDir = "\"" + self.resDir + "/stdio_wrap.h" + "\""
-        code = code.replace("<stdio.h>", headerDir)
-        code = code.replace("\"stdio.h\"", headerDir)
-
+        
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
             source_file.flush()

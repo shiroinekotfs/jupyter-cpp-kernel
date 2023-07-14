@@ -17,11 +17,7 @@ kernel_json = {
         "{connection_file}"
     ],
     "display_name": "C++ 14",
-    "language": "cpp",
-    "interrupt_mode": "signal",
-    "metadata": {
-    "debugger": True
-    }
+    "language": "cpp"
 }
 
 def install_my_kernel_spec(user=True, prefix=None):
