@@ -112,7 +112,7 @@ int main() {
 int main() {
     int x = 3, y = 6;
     std::cout << "Sum of x and y is " << x + y << std::endl;
-    std::cout << "Subtract of x and y is" << x - y << std::endl;
+    std::cout << "Subtract of x and y is " << x - y << std::endl;
     return 0;
 }
 ```
