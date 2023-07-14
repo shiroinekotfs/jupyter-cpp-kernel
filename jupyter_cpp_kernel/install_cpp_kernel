@@ -12,7 +12,7 @@ kernel_json = {
     "argv": [
         "python3",
         "-m",
-        "jupyter_c_kernel",
+        "jupyter_cpp_kernel",
         "-f",
         "{connection_file}"
     ],
