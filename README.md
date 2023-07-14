@@ -164,7 +164,7 @@ int main() {
 
 int main() {
     int lim = 10;
-    for (int i = 0, i < lim, i++) {
+    for (int i = 0; i < lim; i++) {
         std::cout << i << std::endl;
     }
     return 0;
