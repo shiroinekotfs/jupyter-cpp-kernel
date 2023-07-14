@@ -20,7 +20,7 @@ kernel_json = {
     "language": "cpp",
     "interrupt_mode": "signal",
     "metadata": {
-    "debugger": true
+    "debugger": True
     }
 }
 
