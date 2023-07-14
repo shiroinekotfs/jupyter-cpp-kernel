@@ -142,12 +142,12 @@ int main() {
 #include <iostream>
 
 int main() {
-    bool isMale = false;
-    switch (isMale) {
-        case false:
-            std::cout << "Male" << std::endl;
-        case true:
-            std::cout << "Is not Male" << std::endl;
+    int number = 1;
+    switch (number) {
+        case 1:
+            std::cout << "1" << std::endl;
+        case 2:
+            std::cout << "2" << std::endl;
         default:
             std::cout << "Not defined" << std::endl;
     }
