@@ -1,6 +1,6 @@
 from queue import Queue
 from threading import Thread
-
+import sys
 from ipykernel.kernelbase import Kernel
 import re
 import subprocess
@@ -98,12 +98,17 @@ class CPPKernel(Kernel):
     main_foot = "\nreturn 0;\n}"
 
     def __init__(self, *args, **kwargs):
+        """
+        Create a temp folder inside ~/.tmp/cpp-runtime
+        """
+
         super(CPPKernel, self).__init__(*args, **kwargs)
         self._allow_stdin = True
         self.readOnlyFileSystem = False
         self.bufferedOutput = True
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
+        self._allow_raw_input = True
         self.wError = False # but keep comipiling for warnings
         self.standard = "c++14" # default standard if none is specified
         self.files = []
