@@ -87,8 +87,10 @@ class CPPKernel(Kernel):
     language_info = {'name': 'text/x-csrc',
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.cpp'}
-    banner = "C++ interpreter for Jupyter.\n" \
-             "Created by Tsuki Takineko (github.com/takinekotfs).\n"
+    try:
+        banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n" + "G++ version:\n" + os.system("g++ --version")
+    except:
+        banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
     main_head = "#include <iostream>\n" \
             "int main(){\n"
