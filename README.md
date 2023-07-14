@@ -105,7 +105,7 @@ int main() {
 }
 ```
 
-### Declare varible (`int`) and take a math of them
+### Declare variable (`int`) and take a math of them
 
 ```cpp
 #include <iostream>
