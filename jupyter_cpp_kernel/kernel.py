@@ -1,6 +1,5 @@
 from queue import Queue
 from threading import Thread
-import sys
 from ipykernel.kernelbase import Kernel
 import re
 import subprocess
@@ -8,16 +7,18 @@ import tempfile
 import os
 import os.path as path
 
-class RealTimeSubprocess(subprocess.Popen):
 
+class RealTimeSubprocess(subprocess.Popen):
     inputRequest = "<inputRequest>"
 
     def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
+
         """
         cmd: the command to execute
         write_to_stdout: a callable that will be called with chunks of data from stdout
         write_to_stderr: a callable that will be called with chunks of data from stderr
         """
+        
         self._write_to_stdout = write_to_stdout
         self._write_to_stderr = write_to_stderr
         self._read_from_stdin = read_from_stdin
@@ -48,6 +49,7 @@ class RealTimeSubprocess(subprocess.Popen):
         Write the available content from stdin and stderr where specified when the instance was created
         :return:
         """
+
         def read_all_from_queue(queue):
             res = b''
             size = queue.qsize()
@@ -79,36 +81,30 @@ class RealTimeSubprocess(subprocess.Popen):
             else:
                 self._write_to_stdout(contents)
 
+
 class CPPKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
     language = 'cpp'
     language_version = 'C++14'
-    language_info = {'name': 'text/x-csrc',
+    language_info = {
+                     'name': 'text/x-csrc',
                      'mimetype': 'text/x-csrc',
-                     'file_extension': '.cpp'}
-    try:
-        banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n" + "G++ version:\n" + os.system("g++ --version")
-    except:
-        banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n"
+                     'file_extension': '.cpp'
+                    }
+    banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n" + "G++ version:\n"
 
-    main_head = "#include <iostream>\n" \
-            "int main(){\n"
+    main_head = "#include <iostream>\n" + "int main(){\n"
 
     main_foot = "\nreturn 0;\n}"
 
     def __init__(self, *args, **kwargs):
-        """
-        Create a temp folder inside ~/.tmp/cpp-runtime
-        """
-
         super(CPPKernel, self).__init__(*args, **kwargs)
         self._allow_stdin = True
         self.readOnlyFileSystem = False
         self.bufferedOutput = True
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
-        self._allow_raw_input = True
         self.wError = False # but keep comipiling for warnings
         self.standard = "c++14" # default standard if none is specified
         self.files = []
@@ -164,8 +160,6 @@ class CPPKernel(Kernel):
             cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
         if self.bufferedOutput:
             cflags = ['-DBUFFERED_OUTPUT'] + cflags
-        if True:
-            cflags = ['-Wno-unused-variable'] + cflags
         args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
         return self.create_jupyter_subprocess(args)
 
@@ -223,34 +217,33 @@ class CPPKernel(Kernel):
 
         return magics, code
 
-    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
+    def do_execute(self, code, silent, store_history=True,
+                   user_expressions=None, allow_stdin=True):
 
         magics, code = self._filter_magics(code)
 
         magics, code = self._add_main(magics, code)
 
+        # replace stdio with wrapped version
+        headerDir = "\"" + self.resDir + "/stdio_wrap.h" + "\""
+        code = code.replace("<stdio.h>", headerDir)
+        code = code.replace("\"stdio.h\"", headerDir)
+
         with self.new_temp_file(suffix='.cpp') as source_file:
-            # Write to .cpp
             source_file.write(code)
             source_file.flush()
-            
             with self.new_temp_file(suffix='.out') as binary_file:
                 p = self.compile_with_gpp(source_file.name, binary_file.name, magics['cflags'], magics['ldflags'])
                 while p.poll() is None:
                     p.write_contents()
                 p.write_contents()
-                
-                # Error cannot write. Either the compiler is crashed or just cannot read/write from *.out
-                if p.returncode != 0: 
-                    self._write_to_stderr(
-                            "\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(
-                                    p.returncode))
+                if p.returncode != 0:  # Compilation failed
+                    self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
 
                     # delete source files before exit
                     os.remove(source_file.name)
                     os.remove(binary_file.name)
-                    
-                    # Compiling exited with successfully
+
                     return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [],
                             'user_expressions': {}}
 
