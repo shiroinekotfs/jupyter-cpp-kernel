@@ -117,7 +117,7 @@ class CPPKernel(Kernel):
         self.master_path = mastertemp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-ldl', '-o', self.master_path])
+        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-ldl', '-Wno-unused-variable', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -164,6 +164,8 @@ class CPPKernel(Kernel):
             cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
         if self.bufferedOutput:
             cflags = ['-DBUFFERED_OUTPUT'] + cflags
+        if True:
+            cflags = ['-Wno-unused-variable'] + cflags
         args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
         return self.create_jupyter_subprocess(args)
 
