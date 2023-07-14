@@ -1,5 +1,4 @@
 FROM jupyter/minimal-notebook
-MAINTAINER Xaver Klemenschits <klemenschits@iue.tuwien.ac.at>
 
 USER root
 
@@ -9,10 +8,10 @@ RUN apt-get install -y vim openssh-client
 
 WORKDIR /tmp
 
-COPY ./ jupyter_c_kernel/
+COPY ./ jupyter_cpp_kernel/
 
-RUN pip install --no-cache-dir -e jupyter_c_kernel/ > piplog.txt
-RUN cd jupyter_c_kernel && install_c_kernel --user > installlog.txt
+RUN pip install --no-cache-dir -e jupyter_cpp_kernel/ > piplog.txt
+RUN cd jupyter_cpp_kernel && install_cpp_kernel --user > installlog.txt
 
 WORKDIR /home/$NB_USER/
 

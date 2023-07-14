@@ -86,10 +86,10 @@ class RealTimeSubprocess(subprocess.Popen):
 
 
 class CKernel(Kernel):
-    implementation = 'jupyter_c_kernel'
+    implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
-    language = 'c'
-    language_version = 'C11'
+    language = 'cpp'
+    language_version = 'C++14'
     language_info = {'name': 'text/x-csrc',
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.c'}
