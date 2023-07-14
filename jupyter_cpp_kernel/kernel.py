@@ -92,7 +92,7 @@ class CPPKernel(Kernel):
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.cpp'
                     }
-    banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n" + "G++ version:\n"
+    banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n"
 
     main_head = "#include <iostream>\n" + "int main(){\n"
 
