@@ -7,6 +7,8 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed
 (or not, who knows 😅)
 ```
 
+[![CodeQL](https://github.com/takinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/takinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
+
 # C++ 14 kernel for Jupyter
 
 ## Installation
