@@ -83,3 +83,115 @@ install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for l
 You can clone, create a fork or import this repo whenever you want.
 
 Please follow the GitHub standards and the license
+
+## Sample codes
+
+> :warning:
+>
+> - Raw input into program is still not completed yet. You may `cannot` using `cin` or any user input parameter.
+>
+> - For the best practices, you shouldn't write `using namespace std;` because of the conflicts between the `namespace`. This problem doesn't come from the interpreter, it's actually the problem of `g++` globally
+
+### Hello world
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello World" << std::endl;
+    return 0;
+}
+```
+
+### Declare varible (`int`) and take a math of them
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+int main() {
+    int x = 3, y = 6;
+    std::cout << "Sum of x and y >>" << x + y << std::endl;
+    std::cout << "Subtract of x and y" << x - y << std::endl;
+    return 0;
+}
+```
+
+### Condition
+
+#### With `If...else...`
+
+```cpp
+#include <iostream>
+
+int main() {
+    bool isMale = false;
+    if (isMale) {
+        std::cout << "Male" << std::endl;
+    }
+    else {
+        std::cout << "Is not Male" << std::endl;
+    }
+    return 0;
+}
+```
+
+#### With `switch...case...`
+
+```cpp
+#include <iostream>
+
+int main() {
+    bool isMale = false;
+    switch (isMale) {
+        case false:
+            std::cout << "Male" << std::endl;
+        case true:
+            std::cout << "Is not Male" << std::endl;
+        default:
+            std::cout << "Not defined" << std::endl;
+    }
+    return 0;
+}
+```
+
+### Loop
+
+#### For float condition
+
+```cpp
+#include <iostream>
+
+int main() {
+    int lim = 10;
+    for (int i = 0, i < lim, i++) {
+        std::cout << i << std::endl;
+    }
+    return 0;
+}
+```
+
+#### For fixed condition
+
+```cpp
+#include <iostream>
+
+int main() {
+    int lim = 0;
+    while (lim < 10) {
+        std::cout << lim << std::endl;
+        lim++;
+    }
+    return 0;
+}
+```
+
+### Exception handler
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cerr << "Exception happened";
+}
+```
