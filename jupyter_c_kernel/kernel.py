@@ -110,14 +110,14 @@ class CKernel(Kernel):
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
         self.wError = False # but keep comipiling for warnings
-        self.standard = "c11" # default standard if none is specified
+        self.standard = "c++14" # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
         self.master_path = mastertemp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.c')
-        subprocess.call(['gcc', filepath, '-std=c11', '-rdynamic', '-ldl', '-o', self.master_path])
+        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -164,7 +164,7 @@ class CKernel(Kernel):
             cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
         if self.bufferedOutput:
             cflags = ['-DBUFFERED_OUTPUT'] + cflags
-        args = ['gcc', source_filename] + cflags + ['-o', binary_filename] + ldflags
+        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
         return self.create_jupyter_subprocess(args)
 
     def _filter_magics(self, code):
