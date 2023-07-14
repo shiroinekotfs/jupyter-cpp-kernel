@@ -1,18 +1,14 @@
 FROM jupyter/minimal-notebook
-MAINTAINER Xaver Klemenschits <klemenschits@iue.tuwien.ac.at>
+MAINTAINER Tsuki Takineko <systakineko.tfs@gmail.com>
 
 USER root
 
-# Install vim and ssh
-RUN apt-get update
-RUN apt-get install -y vim openssh-client
-
 WORKDIR /tmp
 
-COPY ./ jupyter_c_kernel/
+COPY ./ jupyter_cpp_kernel/
 
-RUN pip install --no-cache-dir -e jupyter_c_kernel/ > piplog.txt
-RUN cd jupyter_c_kernel && install_c_kernel --user > installlog.txt
+RUN pip install --no-cache-dir jupyter_cpp_kernel/
+RUN cd jupyter_cpp_kernel && install_cpp_kernel --user
 
 WORKDIR /home/$NB_USER/
 
