@@ -90,8 +90,7 @@ class CPPKernel(Kernel):
     banner = "C++ interpreter for Jupyter.\n" \
              "Created by Tsuki Takineko (github.com/takinekotfs).\n"
 
-    main_head = "#include <std_io_remap.h>\n" \
-            "#include <math.h>\n" \
+    main_head = "#include <iostream>\n" \
             "int main(){\n"
 
     main_foot = "\nreturn 0;\n}"
@@ -221,12 +220,6 @@ class CPPKernel(Kernel):
         magics, code = self._filter_magics(code)
 
         magics, code = self._add_main(magics, code)
-
-        # replace stdio with wrapped version
-        headerDir = "\"" + self.resDir + "/std_io_remap.h" + "\""
-        code = code.replace("<stdio.h>", headerDir)
-        code = code.replace("\"stdio.h\"", headerDir)
-        code  = code.releace("<iostream>", "<iostream>" +"\n" + "#include" + headerDir)
 
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)

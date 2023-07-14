@@ -1,3 +1,2 @@
 include jupyter_cpp_kernel/resources/master.cpp
-include jupyter_cpp_kernel/resources/std_io_remap.h
 include README.md LICENSE.txt
