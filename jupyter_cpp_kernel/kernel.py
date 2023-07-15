@@ -9,6 +9,7 @@ import os.path as path
 
 
 class RealTimeSubprocess(subprocess.Popen):
+
     inputRequest = "<inputRequest>"
 
     def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
@@ -209,16 +210,13 @@ class CPPKernel(Kernel):
         tmpCode = re.sub(r"//.*", "", code)
         tmpCode = re.sub(r"/\*.*?\*/", "", tmpCode, flags=re.M|re.S)
 
-        x = re.search(r"int\s+main\s*\(", tmpCode)
-
-        if not x:
+        if not re.search(r"int\s+main\s*\(", tmpCode):
             code = self.main_head + code + self.main_foot
             magics['cflags'] += ['-lm']
 
         return magics, code
 
-    def do_execute(self, code, silent, store_history=True,
-                   user_expressions=None, allow_stdin=True):
+    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
 
         magics, code = self._filter_magics(code)
 
@@ -234,13 +232,9 @@ class CPPKernel(Kernel):
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
                     self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
-
-                    # delete source files before exit
                     os.remove(source_file.name)
                     os.remove(binary_file.name)
-
-                    return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [],
-                            'user_expressions': {}}
+                    return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
         p = self.create_jupyter_subprocess([self.master_path, binary_file.name] + magics['args'])
         while p.poll() is None:
