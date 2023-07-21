@@ -30,9 +30,7 @@ Normally, your target machine must meet these requirement packages before instal
 
 > :warning:
 >
-> You must all requirements above before doing anything else
-> I don't use macOS too regularly, so I don't know how macOS get these packages
-> But you can follow installation instructions on the Internet
+> You must all requirements above before doing anything else.\
 > After that, you can copy this script and install the kernel
 
 ```shell
@@ -58,9 +56,7 @@ install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for l
 
 > :warning:
 >
-> You must all requirements above before doing anything else
-> I don't use macOS too regularly, so I don't know how macOS get these packages
-> But you can follow installation instructions on the Internet
+> You must all requirements above before doing anything else.\
 > After that, you can copy this script and install the kernel
 
 ```shell
@@ -90,7 +86,7 @@ Please follow the GitHub standards and the license
 
 > :warning:
 >
-> - Raw input into program is still not completed yet. You may `cannot` using `cin` or any user input parameter.
+> - Raw input into program is still not completed yet. You may cannot using `cin` or any user input parameter.
 >
 > - For the best practices, you shouldn't write `using namespace std;` because of the conflicts between the `namespace`. This problem doesn't come from the interpreter, it's actually the problem of `g++` globally
 
