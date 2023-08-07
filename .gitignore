@@ -11,3 +11,6 @@ venv/
 *.exe
 *.msi
 *.aip
+gcc-win/i686/MinGW GCC for Windows (x86)-cache/cacheIndex.txt
+gcc-win/i686/MinGW GCC for Windows (x86)-cache/part1/disk1.cab
+gcc-win/i686/MinGW GCC for Windows (x86)-cache/part1/output-info.ini
