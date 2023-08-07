@@ -8,3 +8,6 @@ MANIFEST
 *.egg-info/
 venv/
 *.vs*
+*.exe
+*.msi
+*.aip
