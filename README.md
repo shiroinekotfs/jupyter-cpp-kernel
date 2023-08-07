@@ -15,8 +15,7 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed
 
 > :warning:
 >
-> This kernel only works on Linux and macOS.
-> If you want to use it on Windows, please consider using [WSL](https://aka.ms/wsl), [Docker](https://docker.com), or using a virtual machine.
+> If you want to use it on Windows, please installing the [GNU Compiler Collection for Windows](https://github.com/takinekotfs/jupyter-cpp-kernel/releases/tag/gcc-13.2.0)
 
 Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
 
@@ -26,7 +25,7 @@ Normally, your target machine must meet these requirement packages before instal
 
 ### Install from PyPI
 
-#### Installing on macOS
+#### Installing on macOS and Windows
 
 > :warning:
 >
@@ -52,7 +51,7 @@ install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for l
 
 ### Install from GitHub repo
 
-#### Installing on macOS
+#### Installing on macOS and Windows
 
 > :warning:
 >
