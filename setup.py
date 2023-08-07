@@ -18,7 +18,7 @@ setup(name='jupyter_cpp_kernel',
       packages=['jupyter_cpp_kernel'],
       scripts=['jupyter_cpp_kernel/install_cpp_kernel'],
       keywords=['jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
-      include_package_data=True
+      include_package_data=True,
       data_files=[
           ("share/jupyter/kernels/cpp14",
            glob.glob(os.path.join(here, "kernel_spec/*")))
