@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 import os
 import os.path as path
-
+from sys import platform
 
 class RealTimeSubprocess(subprocess.Popen):
 
@@ -114,9 +114,9 @@ class CPPKernel(Kernel):
         self.master_path = mastertemp[1]    
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        try:
+        if platform != "win32":
             subprocess.call(['g++', filepath, '-std=c++14', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
-        except: # For G++ on Windows
+        else: # For G++ on Windows
             subprocess.call(['g++', filepath, '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
