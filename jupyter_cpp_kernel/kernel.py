@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 import os
 import os.path as path
-
+from sys import platform
 
 class RealTimeSubprocess(subprocess.Popen):
 
@@ -111,10 +111,13 @@ class CPPKernel(Kernel):
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
-        self.master_path = mastertemp[1]
+        self.master_path = mastertemp[1]    
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
+        if platform != "win32":
+            subprocess.call(['g++', filepath, '-std=c++14', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
+        else: # For G++ on Windows
+            subprocess.call(['g++', filepath, '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -150,7 +153,7 @@ class CPPKernel(Kernel):
                                   self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-shared', '-rdynamic', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
+        cflags = ['-pedantic', '-fPIC', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
         if self.linkMaths:
             cflags = cflags + ['-lm']
         if self.wError:

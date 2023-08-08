@@ -29,7 +29,7 @@ Normally, your target machine must meet these requirement packages before instal
 
 > :warning:
 >
-> You must all requirements above before doing anything else.\
+> You must all requirements above before doing anything else.
 > After that, you can copy this script and install the kernel
 
 ```shell

@@ -1,6 +1,17 @@
 #include <cstdlib>
 #include <cstdio>
-#include <dlfcn.h>
+
+//dlfcn.h is not available on G++ for Windows
+
+#ifdef __linux__ 
+    #include <dlfcn.h> //global
+#elif _WIN32
+    #include "dlfcn.h" //local
+#elif __FreeBSD__
+    #include <dlfcn.h> //global, but need more research
+#else
+    #include <dlfcn.h> //global
+#endif
 
 typedef int (*main_t)(int, char **, char **);
 
