@@ -34,7 +34,6 @@ Normally, your target machine must meet these requirement packages before instal
 
 ```shell
 pip install jupyter-cpp-kernel
-install_cpp_kernel --user
 ```
 
 #### Installing on Debian/Ubuntu
@@ -46,7 +45,6 @@ sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
 sudo pip install jupyter-cpp-kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
-install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
 ```
 
 ### Install from GitHub repo
@@ -60,7 +58,6 @@ install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for l
 
 ```shell
 pip install git+https://github.com/takinekotfs/jupyter-cpp-kernel.git
-install_cpp_kernel --user
 ```
 
 #### Installing on Debian/Ubuntu
@@ -72,7 +69,6 @@ sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
 sudo pip install git+https://github.com/takinekotfs/jupyter-cpp-kernel.git 
-install_cpp_kernel --user # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
 ```
 
 ## Contributing
