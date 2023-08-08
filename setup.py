@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(name='jupyter_cpp_kernel',
       version='1.0.0a3',
-      description='C++ 14 kernel for Jupyter',
+      description='C++ kernel for Jupyter',
       author='Tsuki Takineko',
       author_email='systakineko.tfs@gmail.com',
       license='MIT',
@@ -17,10 +17,10 @@ setup(name='jupyter_cpp_kernel',
       url='https://github.com/takinekotfs/jupyter-cpp-kernel',
       download_url='https://github.com/takinekotfs/jupyter-cpp-kernel',
       packages=['jupyter_cpp_kernel'],
-      keywords=['jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
+      keywords=['jupyter', 'cpp', 'jupyter-kernels', 'pip'],
       include_package_data=True,
       data_files=[
-          ("share/jupyter/kernels/cpp14",
+          ("share/jupyter/kernels/cpp",
            ["kernel_spec/logo-64x64.png", "kernel_spec/kernel.json", "kernel_spec/logo-32x32.png", "kernel_spec/logo-svg.svg"]),
       ]
 )
