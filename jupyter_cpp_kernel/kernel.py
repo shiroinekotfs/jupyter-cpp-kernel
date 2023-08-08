@@ -197,6 +197,10 @@ class CPPKernel(Kernel):
             else:
                 actualCode += line + '\n'
 
+        # add default standard if cflags does not contain one
+        if not any(item.startswith('-std=') for item in magics["cflags"]):
+            magics["cflags"] += ["-std=" + self.standard]
+
         return magics, actualCode
 
     # check whether int main() is specified, if not add it around the code
