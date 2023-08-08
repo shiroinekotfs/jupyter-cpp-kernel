@@ -87,13 +87,13 @@ class CPPKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
     language = 'cpp'
-    language_version = 'C++14'
+    language_version = 'C++'
     language_info = {
                      'name': 'text/x-csrc',
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.cpp'
                     }
-    banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n"
+    banner = "C++ interpreter for Jupyter. Created by Tsuki Takineko (github.com/takinekotfs).\nSee more at github.com/takinekotfs/jupyter-cpp-kernel\n\n"
 
     main_head = "#include <iostream>\n" + "int main(){\n"
 
@@ -107,17 +107,14 @@ class CPPKernel(Kernel):
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
         self.wError = False # but keep comipiling for warnings
-        self.standard = "c++14" # default standard if none is specified
+        self.standard = "" # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
         self.master_path = mastertemp[1]    
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        if platform != "win32":
-            subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
-        else: # For G++ on Windows
-            subprocess.call(['g++', filepath, '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
+        subprocess.call(['g++', filepath, '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
@@ -153,7 +150,7 @@ class CPPKernel(Kernel):
                                   self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-rdynamic', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
+        cflags = ['-pedantic', '-fPIC', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
         if self.linkMaths:
             cflags = cflags + ['-lm']
         if self.wError:
@@ -179,7 +176,7 @@ class CPPKernel(Kernel):
             if line.startswith('//%'):
                 magicSplit = line[3:].split(":", 2)
                 if(len(magicSplit) < 2):
-                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
+                    self._write_to_stderr("\n[C++ kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
                     continue
 
                 key, value = magicSplit
@@ -234,7 +231,7 @@ class CPPKernel(Kernel):
                     p.write_contents()
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
-                    self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
+                    self._write_to_stderr("\n[C++ kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
                     os.remove(source_file.name)
                     os.remove(binary_file.name)
                     return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
@@ -254,7 +251,7 @@ class CPPKernel(Kernel):
         os.remove(binary_file.name)
 
         if p.returncode != 0:
-            self._write_to_stderr("\n[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
+            self._write_to_stderr("\n[C++ kernel] Executable exited with code {}".format(p.returncode))
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
