@@ -111,10 +111,13 @@ class CPPKernel(Kernel):
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
         os.close(mastertemp[0])
-        self.master_path = mastertemp[1]
+        self.master_path = mastertemp[1]    
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
-        subprocess.call(['g++', filepath, '-std=c++14', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
+        try:
+            subprocess.call(['g++', filepath, '-std=c++14', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
+        except: # For G++ on Windows
+            subprocess.call(['g++', filepath, '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
 
     def cleanup_files(self):
         """Remove all the temporary files created by the kernel"""
