@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cstdio>
-#include <dlfcn.h>
+#include "dlfcn.h"
 
 typedef int (*main_t)(int, char **, char **);
 
