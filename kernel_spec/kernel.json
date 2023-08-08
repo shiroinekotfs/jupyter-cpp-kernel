@@ -6,6 +6,6 @@
         "-f",
         "{connection_file}"
     ],
-    "display_name": "C++",
+    "display_name": "C++ 14",
     "language": "cpp"
 }
