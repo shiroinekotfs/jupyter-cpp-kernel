@@ -115,7 +115,7 @@ class CPPKernel(Kernel):
         self.resDir = path.join(path.dirname(path.realpath(__file__)), 'resources')
         filepath = path.join(self.resDir, 'master.cpp')
         if platform != "win32":
-            subprocess.call(['g++', filepath, '-std=c++14', '-rdynamic', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
+            subprocess.call(['g++', filepath, '-std=c++14', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
         else: # For G++ on Windows
             subprocess.call(['g++', filepath, '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable', '-ldl', '-o', self.master_path])
 
@@ -153,7 +153,7 @@ class CPPKernel(Kernel):
                                   self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-rdynamic', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
+        cflags = ['-pedantic', '-fPIC', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
         if self.linkMaths:
             cflags = cflags + ['-lm']
         if self.wError:
