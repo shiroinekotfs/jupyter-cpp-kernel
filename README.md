@@ -3,13 +3,15 @@ This repo is originally created by Brendan Rius - `C Kernel for Jupyter`
 
 You can see the original project at https://github.com/brendan-rius/jupyter-c-kernel
 
-Plus, this C++ kernel only uses C++ 14. The others are being developed
-(or not, who knows 😅)
+Generally, C++ will only use the default C++ standard, depending on your default G++ 
+configuration
+ - On Linux, macOS: G++ is the C++ 17, or the latest, depending on your G++
+ - On Windows: G++ is the C++ 11
 ```
 
 [![CodeQL](https://github.com/takinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/takinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
 
-# C++ 14 kernel for Jupyter
+# C++ kernel for Jupyter
 
 ## Installation
 
