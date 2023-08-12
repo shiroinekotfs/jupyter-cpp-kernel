@@ -1,22 +1,20 @@
-#include <cstdlib>
-#include <cstdio>
+extern "C" {
+    #include <cstdlib>
+    #include <cstdio>
+    #include "basicf/rstdio.h"
+    //dlfcn.h is not available on G++ for Windows
+    #ifdef _WIN32
+        #include "basicf/dlfcn.h" //local
+    #else
+        #include <dlfcn.h> //global
+    #endif
+}
 
-//dlfcn.h is not available on G++ for Windows
-
-#ifdef __linux__ 
-    #include <dlfcn.h> //global
-#elif _WIN32
-    #include "dlfcn.h" //local
-#elif __FreeBSD__
-    #include <dlfcn.h> //global, but need more research
-#else
-    #include <dlfcn.h> //global
-#endif
+#include "basicf/riostream.hpp"
 
 typedef int (*main_t)(int, char **, char **);
 
-int main(int argc, char **argv, char **envp)
-{
+int main(int argc, char **argv, char **envp) {
     char *error = nullptr;
     setbuf(stdout, nullptr);
     setbuf(stderr, nullptr);
