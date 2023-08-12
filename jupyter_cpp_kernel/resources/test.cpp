@@ -17,6 +17,6 @@ extern "C" {
 
 int main() {
     std::string i;
-    getline(cin, i);
+    cin >> i;
     std::cout << "The input string is: " << i;
 }
