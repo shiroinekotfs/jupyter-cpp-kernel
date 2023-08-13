@@ -4,7 +4,5 @@
 #include "gcpph.hpp"
 
 int main() {
-    std::string i;
-    std::cin >> i;
-    std::cout << "The input string is: " << i;
+    std::cout << GET_INPUT_STREAM_JP << std::endl;
 }
