@@ -80,6 +80,6 @@ Please follow the GitHub standards and the license
 ## Guides (notebook)
 
 <p align="center">
-    <b>See more at </b><a href="https://github.com/takinekotfs/jupyter-cpp-kernel/tree/master/notebook_guides">notebook_guides</a>
+    <b>See more at </b><a href="https://github.com/takinekotfs/jupyter-cpp-kernel-doc">notebook_guides</a>
     <img src="https://github.com/takinekotfs/jupyter-cpp-kernel/assets/115929530/201d3f51-fa4c-44d4-bc2b-4ea2a252f13c" />
 </p>
