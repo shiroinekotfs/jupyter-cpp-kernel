@@ -2,17 +2,17 @@
 #define _gcpph_hpp
 
 //global
-#include <array>
 #include <iostream>
-#include <string>
-#include <sstream>
+#include <array>
 #include <cmath>
 #include <exception>
-#include <typeinfo>
 #include <fstream>
-#include <vector>
 #include <memory>
+#include <vector>
+#include <sstream>
 #include <stdexcept>
+#include <string>
+#include <typeinfo>
 
 //basicf
 extern "C" {
