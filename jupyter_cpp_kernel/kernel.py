@@ -93,7 +93,8 @@ class CPPKernel(Kernel):
                      'mimetype': 'text/x-csrc',
                      'file_extension': '.cpp'
                     }
-    banner = "C++ interpreter for Jupyter. Using C++ 14 standard.\n" + "Created by Tsuki Takineko (github.com/takinekotfs).\n\n"
+    
+    banner = "C++ 14 kernel for Jupyter (main), version 1.0.0a4\nCopyright (C) 2023 Tsuki Takineko\n\nLegal infomation: https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nGuide notebooks: https://github.com/takinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/takinekotfs"
 
     main_head = "#include <iostream>\n" + "int main(){\n"
 
@@ -223,7 +224,7 @@ class CPPKernel(Kernel):
                        r'std::cout<<GET_INPUT_STREAM_JP;std::getline',
                        code)
         
-        global_header = "\"" + self.resDir + "/gcpph.hpp" + "\""
+        global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
 
         code = global_header + "\n" + code
 
