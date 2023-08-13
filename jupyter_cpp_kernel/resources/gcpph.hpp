@@ -30,12 +30,9 @@ extern "C" {
 }
 
 //qiskitcpp
-
 #include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header
 
-
 //define global variable
-
 #define GET_INPUT_STREAM_JP "<inputRequest>"
 
 #endif
