@@ -217,11 +217,15 @@ class CPPKernel(Kernel):
 
         #Adding HTML
         code = re.sub(r'cin>>|cin >>|cin  >>|std::cin>>|std::cin >>|std::cin  >>', 
-                      r'std::cout<<"<inputRequest>";std::cin >>', 
+                      r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', 
                       code)
         code =  re.sub(r'getline|std::getline|getline |std::getline ',
-                       r'std::cout<<"<inputRequest>";std::getline',
+                       r'std::cout<<GET_INPUT_STREAM_JP;std::getline',
                        code)
+        
+        global_header = self.resDir + "/gcpph.hpp"
+
+        code = global_header + "\n" + code
 
         return magics, code
 
