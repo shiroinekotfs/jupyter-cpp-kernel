@@ -19,6 +19,7 @@ extern "C" {
     #include <cstdlib>
     #include <cstdio>
     #include "basicf/rstdio.h"
+    #include "basicf/timer.h"
     //dlfcn.h is not available on G++ for Windows
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
