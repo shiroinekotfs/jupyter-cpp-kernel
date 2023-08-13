@@ -10,6 +10,7 @@ setup(name='jupyter_cpp_kernel',
         'Programming Language :: Python :: 3',
         'Programming Language :: C++',
         'License :: OSI Approved :: MIT License',
+        'Operating System :: Windows'
         'Operating System :: Unix',
         'Operating System :: MacOS',
         'Operating System :: POSIX :: Linux',
