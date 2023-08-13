@@ -9,10 +9,9 @@
 #include <complex>
 #include <ctime>
 #include <map>
-
-#define _USE_MATH_DEFINES
 #include <cmath>
 
+#define _USE_MATH_DEFINES
 #define RESET "\033[0m"
 #define RED "\033[31m" /* Red */
 #define ERROR(MESSAGE) error_handler(MESSAGE)
@@ -333,7 +332,7 @@ class Simulator {
         std::vector < std::vector < double >> ket;
         ket = simulate(qc);
 
-        vector < double > probs;
+        std::vector < double > probs;
         for (int j = 0; j < ket.size(); j++) {
 
             probs.push_back(pow(ket[j][0], 2) + pow(ket[j][1], 2));
@@ -354,33 +353,33 @@ class Simulator {
         shots = shots_in;
     }
 
-    vector < complex < double >> get_statevector() {
+    std::vector < std::complex < double >> get_statevector() {
 
-        vector < vector < double >> ket;
+        std::vector < std::vector < double >> ket;
         ket = simulate(qc);
-        vector < complex < double >> complex_ket;
+        std::vector < std::complex < double >> complex_ket;
 
         for (int j = 0; j < ket.size(); j++) {
-            complex < double > e(ket[j][0], ket[j][1]);
+            std::complex < double > e(ket[j][0], ket[j][1]);
             complex_ket.push_back(e);
         }
 
         return complex_ket;
     }
 
-    vector < string > get_memory() {
+    std::vector < std::string > get_memory() {
 
-        vector < double > probs;
+        std::vector < double > probs;
         probs = get_probs(qc);
 
-        vector < string > memory;
+        std::vector < std::string > memory;
 
         for (int s = 0; s < shots; s++) {
 
             double cumu = 0;
             bool un = true;
             double r = double(rand()) / RAND_MAX;
-            vector < char > bitstr(qc.nQubits, '0');
+            std::vector < char > bitstr(qc.nQubits, '0');
 
             for (int j = 0; j < probs.size(); j++) {
                 cumu += probs[j]; //this will add up to 1  
@@ -389,7 +388,7 @@ class Simulator {
                         bool result = int(pow(2, w)) & j;
                         bitstr[qc.nQubits - 1 - w] = result ? '1' : '0';
                     }
-                    string out(bitstr.begin(), bitstr.end());
+                    std::string out(bitstr.begin(), bitstr.end());
                     memory.push_back(out);
                     un = false;
                 }
@@ -399,10 +398,10 @@ class Simulator {
         return memory; //e.g. <"10","10","10","10","10","10","10","10","10","10">
     }
 
-    map < string, int > get_counts() {
+    std::map < std::string, int > get_counts() {
 
-        map < string, int > counts;
-        vector < string > memory = get_memory();
+        std::map < std::string, int > counts;
+        std::vector < std::string > memory = get_memory();
         if (memory.size() > 0) {
             for (int s = 0; s < shots; s++) {
                 counts[memory[s]] += 1; //aggregate by key/bitstr
@@ -412,13 +411,13 @@ class Simulator {
         return counts;
     }
 
-    string get_qiskit() {
-        string qiskitPy;
+    std::string get_qiskit() {
+        std::string qiskitPy;
 
         if (qc.nBits == 0) {
-            qiskitPy += "qc = QuantumCircuit(" + to_string(qc.nQubits) + ")\n";
+            qiskitPy += "qc = QuantumCircuit(" + std::to_string(qc.nQubits) + ")\n";
         } else {
-            qiskitPy += "qc = QuantumCircuit(" + to_string(qc.nQubits) + "," + to_string(qc.nBits) + ")\n";
+            qiskitPy += "qc = QuantumCircuit(" + std::to_string(qc.nQubits) + "," + std::to_string(qc.nBits) + ")\n";
         }
 
         for (int g = 0; g < qc.data.size(); g++) {
