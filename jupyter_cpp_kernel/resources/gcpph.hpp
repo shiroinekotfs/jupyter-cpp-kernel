@@ -15,6 +15,7 @@
 #include <typeinfo>
 
 //basicf
+#include "basicf/timer.hpp" //Timer header
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
@@ -25,7 +26,6 @@ extern "C" {
         #include <dlfcn.h> //global
     #endif
     #include "basicf/rstdio.h" //stdio.h, but recontructed
-    #include "basicf/timer.h" //Timer header
 }
 
 //qiskitcpp
