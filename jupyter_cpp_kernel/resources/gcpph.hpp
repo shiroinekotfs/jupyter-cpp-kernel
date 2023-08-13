@@ -18,15 +18,14 @@
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
-    #include "basicf/rstdio.h" //stdio.h, but recontructed
-    #include "basicf/timer.h" //Timer header
-
     //dlfcn.h is not available on G++ for Windows
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
     #else
         #include <dlfcn.h> //global
     #endif
+    #include "basicf/rstdio.h" //stdio.h, but recontructed
+    #include "basicf/timer.h" //Timer header
 }
 
 //qiskitcpp
