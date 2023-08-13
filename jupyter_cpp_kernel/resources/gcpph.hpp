@@ -4,6 +4,12 @@
 //global
 
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <cmath>
+#include <exception>
+#include <typeinfo>
+#include <fstream>
 
 //basicf
 extern "C" {
