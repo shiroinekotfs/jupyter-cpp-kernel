@@ -18,8 +18,9 @@
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
-    #include "basicf/rstdio.h"
-    #include "basicf/timer.h"
+    #include "basicf/rstdio.h" //stdio.h, but recontructed
+    #include "basicf/timer.h" //Timer header
+    #include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header
     //dlfcn.h is not available on G++ for Windows
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
