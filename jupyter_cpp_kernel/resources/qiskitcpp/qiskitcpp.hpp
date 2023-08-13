@@ -1,5 +1,5 @@
 #ifndef QISKITCPP_H
-#define QISKITCPP_H#include <iostream>
+#define QISKITCPP_H
 
 #include <iostream>
 #include <stdlib.h>
@@ -10,9 +10,14 @@
 #include <ctime>
 #include <map>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #define RESET "\033[0m"
 #define RED "\033[31m" /* Red */
 #define ERROR(MESSAGE) error_handler(MESSAGE)
+
+//using namespace std;
 
 void error_handler(const std::string message) {
     std::cout << RED << message << RESET << std::endl;
@@ -94,8 +99,8 @@ class QuantumCircuit {
         verify_qubit_range(s, "cx gate");
         verify_qubit_range(t, "cx gate");
         gate.push_back("cx");
-        gate.push_back(to_string(s));
-        gate.push_back(to_string(t));
+        gate.push_back(std::to_string(s));
+        gate.push_back(std::to_string(t));
         data.push_back(gate);
     }
     //new ch gate
@@ -104,8 +109,8 @@ class QuantumCircuit {
         verify_qubit_range(s, "ch gate");
         verify_qubit_range(t, "ch gate");
         gate.push_back("ch");
-        gate.push_back(to_string(s));
-        gate.push_back(to_string(t));
+        gate.push_back(std::to_string(s));
+        gate.push_back(std::to_string(t));
         data.push_back(gate);
     }
     //new crx gate
@@ -115,8 +120,8 @@ class QuantumCircuit {
         verify_qubit_range(t, "crx gate");
         gate.push_back("crx");
         gate.push_back(std::to_string(theta));
-        gate.push_back(to_string(s));
-        gate.push_back(to_string(t));
+        gate.push_back(std::to_string(s));
+        gate.push_back(std::to_string(t));
         data.push_back(gate);
     }
     void measure(int q, int b) {
@@ -158,9 +163,9 @@ class QuantumCircuit {
 
     bool has_measurements() {
         //this is not totally bulletproof. i.e. it doesn't care where in time you actually place the gates :/
-        vector < int > mGates;
-        map < int, int > mUnique;
-        map < int, int > ::iterator it;
+        std::vector < int > mGates;
+        std::map < int, int > mUnique;
+        std::map < int, int > ::iterator it;
         //check all gates in circuit
         for (int g = 0; g < data.size(); g++) {
             //collect all measure gates in mGates
@@ -187,13 +192,13 @@ class QuantumCircuit {
 
     private:
 
-        void verify_qubit_range(int q, string gate) {
+        void verify_qubit_range(int q, std::string gate) {
             if (!(q >= 0) || !(q < nQubits)) {
                 ERROR(gate + ": Index for qubit out of range");
             }
         }
 
-    void verify_bit_range(int b, string gate) {
+    void verify_bit_range(int b, std::string gate) {
         if (!(b >= 0) || !(b < nBits)) {
             ERROR(gate + ": Index for bit out of range");
         }
@@ -204,13 +209,13 @@ class QuantumCircuit {
 class Simulator {
     // Contains methods required to simulate a circuit and provide the desired outputs.
 
-    vector < vector < double >> simulate(QuantumCircuit qc) {
+    std::vector < std::vector < double >> simulate(QuantumCircuit qc) {
 
-        vector < vector < double >> ket;
+        std::vector < std::vector < double >> ket;
 
         // initializing the internal ket
         for (int j = 0; j < pow(2, qc.nQubits); j++) {
-            vector < double > e;
+            std::vector < double > e;
             for (int k = 0; k < 2; k++) {
                 e.push_back(0.0);
             }
@@ -247,7 +252,7 @@ class Simulator {
                         b0 = i0 + int(pow(2, q + 1)) * i1;
                         b1 = b0 + int(pow(2, q));
 
-                        vector < double > e0, e1;
+                        std::vector < double > e0, e1;
                         e0 = ket[b0];
                         e1 = ket[b1];
 
@@ -289,7 +294,7 @@ class Simulator {
                             b0 = i0 + pow(2, l + 1) * i1 + pow(2, h + 1) * i2 + pow(2, s);
                             b1 = b0 + pow(2, t);
 
-                            vector < double > e0, e1;
+                            std::vector < double > e0, e1;
                             e0 = ket[b0];
                             e1 = ket[b1];
 
@@ -319,13 +324,13 @@ class Simulator {
         return ket;
     }
 
-    vector < double > get_probs(QuantumCircuit qc) {
+    std::vector < double > get_probs(QuantumCircuit qc) {
 
         if (!qc.has_measurements()) {
             ERROR("get_probs: The circuit should have a full set of measure gates");
         }
 
-        vector < vector < double >> ket;
+        std::vector < std::vector < double >> ket;
         ket = simulate(qc);
 
         vector < double > probs;
@@ -445,15 +450,15 @@ class Simulator {
         return qiskitPy;
     }
 
-    string get_qasm() {
-        string qasm;
+    std::string get_qasm() {
+        std::string qasm;
         // initial qasm header
         qasm += "OPENQASM 2.0;\ninclude \"qelib1.inc\";\n";
         // qreg
-        qasm += "qreg q[" + to_string(qc.nQubits) + "];\n";
+        qasm += "qreg q[" + std::to_string(qc.nQubits) + "];\n";
         // creg
         if (qc.nBits != 0) { // maybe don't do this and always print it
-            qasm += "creg c[" + to_string(qc.nBits) + "];\n";
+            qasm += "creg c[" + std::to_string(qc.nBits) + "];\n";
         }
         // gates
         for (int g = 0; g < qc.data.size(); g++) {
