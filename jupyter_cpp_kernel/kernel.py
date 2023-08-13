@@ -210,18 +210,18 @@ class CPPKernel(Kernel):
         tmpCode = re.sub(r"//.*", "", code)
         tmpCode = re.sub(r"/\*.*?\*/", "", tmpCode, flags=re.M|re.S)
 
-        # Adding HTML tag
-        tmpCode = re.sub(r'cin>>|cin >>|cin  >>|std::cin>>|std::cin >>|std::cin  >>', 
-                         r'std::cout<<"<inputRequest>";std::cin >>', 
-                          tmpCode)
-        
-        tmpCode = re.sub(r'getline|std::getline|getline |std::getline ',
-                         r'std::cout<<"<inputRequest>";std::getline',
-                         tmpCode)
-
         if not re.search(r"int\s+main\s*\(", tmpCode):
             code = self.main_head + code + self.main_foot
             magics['cflags'] += ['-lm']
+
+
+        #Adding HTML
+        code = re.sub(r'cin>>|cin >>|cin  >>|std::cin>>|std::cin >>|std::cin  >>', 
+                      r'std::cout<<"<inputRequest>";std::cin >>', 
+                      code)
+        code =  re.sub(r'getline|std::getline|getline |std::getline ',
+                       r'std::cout<<"<inputRequest>";std::getline',
+                       code)
 
         return magics, code
 
