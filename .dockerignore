@@ -8,3 +8,9 @@ MANIFEST
 *.egg-info/
 .git
 .gitignore
+*.vs*
+*.exe
+
+*.msi
+*.whl
+*.out
