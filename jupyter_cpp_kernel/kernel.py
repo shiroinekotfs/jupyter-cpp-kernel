@@ -94,7 +94,7 @@ class CPPKernel(Kernel):
                      'file_extension': '.cpp'
                     }
     
-    banner = "C++ 14 kernel for Jupyter (main), version 1.0.0a4\nCopyright (C) 2023 Tsuki Takineko\n\nLegal infomation: https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nGuide notebooks: https://github.com/takinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/takinekotfs"
+    banner = "C++ 14 kernel for Jupyter (main), version 1.0.0a4\nCopyright (C) 2023 Tsuki Takineko\n\nLegal information: https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nGuide notebooks: https://github.com/takinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/takinekotfs"
 
     main_head = "#include <iostream>\n" + "int main(){\n"
 
