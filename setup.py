@@ -14,11 +14,12 @@ setup(name='jupyter_cpp_kernel',
         'Operating System :: Unix',
         'Operating System :: MacOS',
         'Operating System :: POSIX :: Linux',
+        'Operating System :: Microsoft :: Windows'
       ],
       url='https://github.com/takinekotfs/jupyter-cpp-kernel',
       download_url='https://github.com/takinekotfs/jupyter-cpp-kernel',
       packages=['jupyter_cpp_kernel'],
-      keywords=['jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
+      keywords=['windows', 'macos', 'linux', 'jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
       include_package_data=True,
       data_files=[
           ("share/jupyter/kernels/cpp14",
