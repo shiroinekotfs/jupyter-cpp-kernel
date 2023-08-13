@@ -215,7 +215,7 @@ class CPPKernel(Kernel):
                          r'std::cout<<"<inputRequest>";std::cin >>', 
                           tmpCode)
         
-        tmpCode = re.sub(r'getline|std::getline',
+        tmpCode = re.sub(r'getline|std::getline|getline |std::getline ',
                          r'std::cout<<"<inputRequest>";std::getline',
                          tmpCode)
 
