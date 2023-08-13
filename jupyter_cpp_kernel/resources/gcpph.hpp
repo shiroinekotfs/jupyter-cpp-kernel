@@ -2,6 +2,7 @@
 #define _gcpph_hpp
 
 //global
+#include <array>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -9,6 +10,9 @@
 #include <exception>
 #include <typeinfo>
 #include <fstream>
+#include <vector>
+#include <memory>
+#include <stdexcept>
 
 //basicf
 extern "C" {
