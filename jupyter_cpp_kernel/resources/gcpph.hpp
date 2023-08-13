@@ -20,7 +20,7 @@ extern "C" {
     #include <cstdio>
     #include "basicf/rstdio.h" //stdio.h, but recontructed
     #include "basicf/timer.h" //Timer header
-    #include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header
+
     //dlfcn.h is not available on G++ for Windows
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
@@ -28,6 +28,13 @@ extern "C" {
         #include <dlfcn.h> //global
     #endif
 }
+
+//qiskitcpp
+
+#include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header
+
+
+//define global variable
 
 #define GET_INPUT_STREAM_JP "<inputRequest>"
 
