@@ -1,5 +1,5 @@
 include jupyter_cpp_kernel/resources/master.cpp
 include jupyter_cpp_kernel/resources/basicf/dlfcn.h
-include jupyter_cpp_kernel/resources/basicf/riostream.hpp
 include jupyter_cpp_kernel/resources/basicf/rstdio.h
+include jupyter_cpp_kernel/resources/gcpph.hpp
 include README.md LICENSE.txt

@@ -1,6 +1,11 @@
-//test.cpp is only can be used for testing
-//  - By Tsuki Takineko
+#ifndef  _gcpph_hpp
+#define _gcpph_hpp
 
+//global
+
+#include <iostream>
+
+//basicf
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
@@ -13,8 +18,5 @@ extern "C" {
     #endif
 }
 
-int main() {
-    std::string i;
-    cin >> i;
-    std::cout << "The input string is: " << i;
-}
+
+#endif
