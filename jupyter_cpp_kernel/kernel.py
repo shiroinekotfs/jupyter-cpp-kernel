@@ -223,7 +223,7 @@ class CPPKernel(Kernel):
                        r'std::cout<<GET_INPUT_STREAM_JP;std::getline',
                        code)
         
-        global_header = self.resDir + "/gcpph.hpp"
+        global_header = "\"" + self.resDir + "/gcpph.hpp" + "\""
 
         code = global_header + "\n" + code
 
