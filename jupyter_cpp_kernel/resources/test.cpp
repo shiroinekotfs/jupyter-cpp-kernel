@@ -5,6 +5,6 @@
 
 int main() {
     std::string i;
-    cin >> i;
+    std::cin >> i;
     std::cout << "The input string is: " << i;
 }
