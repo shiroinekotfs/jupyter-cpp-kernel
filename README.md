@@ -77,7 +77,7 @@ You can clone, create a fork or import this repo whenever you want.
 
 Please follow the GitHub standards and the license
 
-## Notebook guides
+## Guides (notebook)
 
 <p align="center">
     <b>See more at </b><a href="https://github.com/takinekotfs/jupyter-cpp-kernel/tree/master/notebook_guides">notebook_guides</a>
