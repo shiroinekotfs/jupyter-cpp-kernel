@@ -83,14 +83,14 @@ class QuantumCircuit {
     }
     void h(int q) {
         std::cout << "hello from header" << std::endl;
-        vector < string > gate;
+        std::vector < std::string > gate;
         verify_qubit_range(q, "h gate");
         gate.push_back("h");
-        gate.push_back(to_string(q));
+        gate.push_back(std::to_string(q));
         data.push_back(gate);
     }
     void cx(int s, int t) {
-        vector < string > gate;
+        std::vector < std::string > gate;
         verify_qubit_range(s, "cx gate");
         verify_qubit_range(t, "cx gate");
         gate.push_back("cx");
@@ -100,7 +100,7 @@ class QuantumCircuit {
     }
     //new ch gate
     void ch(int s, int t) {
-        vector < string > gate;
+        std::vector < std::string > gate;
         verify_qubit_range(s, "ch gate");
         verify_qubit_range(t, "ch gate");
         gate.push_back("ch");
@@ -110,17 +110,17 @@ class QuantumCircuit {
     }
     //new crx gate
     void crx(double theta, int s, int t) {
-        vector < string > gate;
+        std::vector < std::string > gate;
         verify_qubit_range(s, "crx gate");
         verify_qubit_range(t, "crx gate");
         gate.push_back("crx");
-        gate.push_back(to_string(theta));
+        gate.push_back(std::to_string(theta));
         gate.push_back(to_string(s));
         gate.push_back(to_string(t));
         data.push_back(gate);
     }
     void measure(int q, int b) {
-        vector < string > gate;
+        std::vector < std::string > gate;
         if (!(q == b)) {
             ERROR("It is only possible to add measure gates of the form measure(j,j) in Qiskit");
         }
@@ -128,8 +128,8 @@ class QuantumCircuit {
         verify_bit_range(b, "measure gate");
 
         gate.push_back("m");
-        gate.push_back(to_string(b));
-        gate.push_back(to_string(q));
+        gate.push_back(std::to_string(b));
+        gate.push_back(std::to_string(q));
         data.push_back(gate);
     }
     void rz(double theta, int q) {
