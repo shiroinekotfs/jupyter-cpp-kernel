@@ -187,6 +187,11 @@ class CPPKernel(Kernel):
                 key, value = magicSplit
                 key = key.strip().lower()
 
+                if key == 'compiler':
+                    self.compiler = value
+                    if "nvcc" in value:
+                        self.file_suffix = '.cu'
+
                 if key in ['ldflags', 'cflags']:
                     for flag in value.split():
                         magics[key] += [flag]
