@@ -215,8 +215,7 @@ class CPPKernel(Kernel):
             code = self.main_head + code + self.main_foot
             magics['cflags'] += ['-lm']
 
-
-        #Adding HTML
+        # User input
         code = re.sub(r'cin>>|cin >>|cin  >>|std::cin>>|std::cin >>|std::cin  >>', 
                       r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', 
                       code)
@@ -225,7 +224,6 @@ class CPPKernel(Kernel):
                        code)
         
         global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
-
         code = global_header + "\n" + code
 
         return magics, code
