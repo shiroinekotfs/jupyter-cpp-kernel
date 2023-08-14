@@ -1,5 +1,5 @@
 /*==============================================================================
-dlfcn header for Windows
+Floating point header for Windows
 
 Copyright (c) 2007 Ramiro Polla
 

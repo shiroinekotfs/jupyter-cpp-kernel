@@ -14,8 +14,8 @@ Help Link: https://github.com/takinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef  _gcpph_hpp
-#define _gcpph_hpp
+#ifndef GCPPH_HPP
+#define GCPPH_HPP
 
 //global, no folder structure
 #include <iostream>
@@ -32,22 +32,17 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 
 //basicf
 #include "basicf/timer.hpp" //Timer header
+#include "basicf/mathdefs.hpp"
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
-    
+    #include "basicf/rstdio.h" //stdio.h, but recontructed
     //dlfcn.h is not available on G++ for Windows
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
     #else
         #include <dlfcn.h> //global
     #endif
-
-    #ifdef _WIN32
-        #include "basicf/corecrt_math_defines.h"
-    #endif
-    
-    #include "basicf/rstdio.h" //stdio.h, but recontructed
 }
 
 //qiskitcpp

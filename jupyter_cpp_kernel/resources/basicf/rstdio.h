@@ -1,5 +1,5 @@
 /*==============================================================================
-Reconstructed stdio header for Jupyter C/C++ kernel
+Reconstructed header for Jupyter C/C++ kernel
 
 Copyright (C) Xaver K
 

@@ -14,8 +14,8 @@ Help Link: https://github.com/Superjomn/jupyter-cpp-kernel
 Report issue: 
 ==============================================================================*/
 
-#ifdef _timer_h
-#define _timer_h
+#ifndef TIMER_HPP
+#define TIMER_HPP
 
 #include <ctime>
 #include <iostream>

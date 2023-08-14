@@ -29,19 +29,11 @@ Report issue: https://github.com/qiskit-community/MicroQiskit/issues
 #include <ctime>
 #include <map>
 
-#define _USE_MATH_DEFINES
-#include <cmath>
-
-#ifdef _WIN32
-    #define _MATH_DEFINES_DEFINED
-    #include "../basicf/corecrt_math_defines.h"
-#endif
+#include "../basicf/mathdefs.hpp"
 
 #define RESET "\033[0m"
 #define RED "\033[31m" /* Red */
 #define ERROR(MESSAGE) error_handler(MESSAGE)
-
-//using namespace std;
 
 void error_handler(const std::string message) {
     std::cout << RED << message << RESET << std::endl;
@@ -49,16 +41,12 @@ void error_handler(const std::string message) {
 }
 
 class QuantumCircuit {
-
     public:
-
         int nQubits,
     nBits;
     std::vector < std::vector < std::string >> data;
 
-    QuantumCircuit() {
-
-    }
+    QuantumCircuit() {}
     QuantumCircuit(int n, int m = 0) {
         set_registers(n, m);
     }
@@ -72,7 +60,6 @@ class QuantumCircuit {
     }
 
     void add(QuantumCircuit qc2) {
-
         nBits = std::max(nBits, qc2.nBits);
         nQubits = std::max(nQubits, qc2.nQubits);
         for (int g = 0; g < qc2.data.size(); g++) {
