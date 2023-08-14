@@ -35,12 +35,18 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
+    
     //dlfcn.h is not available on G++ for Windows
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
     #else
         #include <dlfcn.h> //global
     #endif
+
+    #ifdef _WIN32
+        #include "basicf/corecrt_math_defines.h"
+    #endif
+    
     #include "basicf/rstdio.h" //stdio.h, but recontructed
 }
 

@@ -28,9 +28,15 @@ Report issue: https://github.com/qiskit-community/MicroQiskit/issues
 #include <complex>
 #include <ctime>
 #include <map>
-#include <cmath>
 
 #define _USE_MATH_DEFINES
+#include <cmath>
+
+#ifdef _WIN32
+    #define _MATH_DEFINES_DEFINED
+    #include "../basicf/corecrt_math_defines.h"
+#endif
+
 #define RESET "\033[0m"
 #define RED "\033[31m" /* Red */
 #define ERROR(MESSAGE) error_handler(MESSAGE)
