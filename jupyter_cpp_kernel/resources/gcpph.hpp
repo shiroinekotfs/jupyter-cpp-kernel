@@ -32,7 +32,7 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 
 //basicf
 #include "basicf/timer.hpp" //Timer header
-#include "basicf/mathdefs.hpp"
+#include "basicf/mathdefs.hpp" //Math definitions header
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
