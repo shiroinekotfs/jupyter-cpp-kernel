@@ -5,4 +5,4 @@ include jupyter_cpp_kernel/resources/basicf/rstdio.h
 include jupyter_cpp_kernel/resources/basicf/timer.hpp
 include jupyter_cpp_kernel/resources/qcpp/qiskitcpp.hpp
 include jupyter_cpp_kernel/resources/gcpph.hpp
-include README.md LICENSE
+include README.md LICENSE SECURITY.md
