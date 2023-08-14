@@ -10,9 +10,6 @@ Purpose:   Math Definition Header provides extendable math libary,
 Owner:     Tsuki Takineko (signed-off by Tsuki Takineko)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
 First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
-
-Help Link: https://github.com/qiskit-community/MicroQiskit
-Report issue: https://github.com/qiskit-community/MicroQiskit/issues
 ==============================================================================*/
 
 #ifndef MATHDEFS_HPP
