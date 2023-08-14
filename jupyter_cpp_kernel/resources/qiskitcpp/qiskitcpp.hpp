@@ -1,3 +1,22 @@
+/*==============================================================================
+MicroQiskit - C++ header
+
+Copyright (C) Qiskit Community
+
+Component: Component Header
+
+Purpose:   MicroQiskit is written to be as compatible with Qiskit as possible. 
+           Learning quantum programming with MicroQiskit is therefore a way to 
+           get started with Qiskit. And getting to know Qiskit is a great way 
+           to get started with MicroQiskit.
+Owner:     Qiskit Community
+Platform:  Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
+First created by: James Wootton (signed-off by Tsuki Takineko)
+
+Help Link: https://github.com/qiskit-community/MicroQiskit
+Report issue: https://github.com/qiskit-community/MicroQiskit/issues
+==============================================================================*/
+
 #ifndef QISKITCPP_H
 #define QISKITCPP_H
 
