@@ -64,7 +64,7 @@ void flush_until_newline() {
   long length = strlen(outputBuff);
   for(; i < length; ++i) {
     if(outputBuff[i] == '\n') {
-      char *printBuff = malloc(i+2);
+      char *printBuff = (char*)malloc(i+2);
       strncpy(printBuff, outputBuff, i+1);
       printBuff[i+1] = '\0';
       printf("%s", printBuff);
