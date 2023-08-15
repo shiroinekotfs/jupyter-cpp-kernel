@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='jupyter_cpp_kernel',
+setup(name='jupyter-cpp-kernel',
       version='1.0.0a4',
       description='C++ 14 kernel for Jupyter',
       author='Tsuki Takineko',
@@ -18,7 +18,7 @@ setup(name='jupyter_cpp_kernel',
       ],
       url='https://github.com/takinekotfs/jupyter-cpp-kernel',
       download_url='https://github.com/takinekotfs/jupyter-cpp-kernel',
-      packages=['jupyter_cpp_kernel'],
+      packages=['jupyter-cpp-kernel'],
       keywords=['windows', 'macos', 'linux', 'jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
       include_package_data=True,
       data_files=[

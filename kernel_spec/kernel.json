@@ -2,7 +2,7 @@
     "argv": [
         "python3",
         "-m",
-        "jupyter_cpp_kernel",
+        "jupyter-cpp-kernel",
         "-f",
         "{connection_file}"
     ],

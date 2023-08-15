@@ -5,9 +5,9 @@ USER root
 
 WORKDIR /tmp
 
-COPY ./ jupyter_cpp_kernel/
+COPY ./ jupyter-cpp-kernel/
 
-RUN pip install jupyter_cpp_kernel
+RUN pip install jupyter-cpp-kernel
 
 WORKDIR /home/$NB_USER/
 

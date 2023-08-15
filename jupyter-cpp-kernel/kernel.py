@@ -97,7 +97,7 @@ class RealTimeSubprocess(subprocess.Popen):
 
 
 class CPPKernel(Kernel):
-    implementation = "jupyter_cpp_kernel"
+    implementation = "jupyter-cpp-kernel"
     implementation_version = "1.0"
     language = "cpp"
     language_version = "C++14"
