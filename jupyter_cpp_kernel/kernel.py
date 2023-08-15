@@ -115,7 +115,7 @@ class CPPKernel(Kernel):
     )
     banner = introduction + cp_banner + links_guide + reporting_links
 
-    main_head = "#include <iostream>\n" + "int main(){\n"
+    main_head = "#include <iostream>\n" + "int main() {\n"
 
     main_foot = "\nreturn 0;\n}"
 
