@@ -3,6 +3,6 @@ include jupyter-cpp-kernel/resources/basicf/dlfcn.h
 include jupyter-cpp-kernel/resources/basicf/mathdefs.hpp
 include jupyter-cpp-kernel/resources/basicf/rstdio.h
 include jupyter-cpp-kernel/resources/basicf/timer.hpp
-include jupyter-cpp-kernel/resources/qcpp/qiskitcpp.hpp
+include jupyter-cpp-kernel/resources/qiskitcpp/qiskitcpp.hpp
 include jupyter-cpp-kernel/resources/gcpph.hpp
 include README.md LICENSE SECURITY.md
