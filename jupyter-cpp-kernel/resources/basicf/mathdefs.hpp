@@ -8,7 +8,7 @@ Component: Component Header
 Purpose:   Math Definition Header provides extendable math libary,
            including special math characters in ASCII format
 Owner:     Tsuki Takineko (signed-off by Tsuki Takineko)
-Platform:  Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
+Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
 ==============================================================================*/
 

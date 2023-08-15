@@ -7,7 +7,7 @@ Component: Component Header
 
 Purpose:  Rewrite input method for Jupyter C++ kernel
 Owner:    Xaver K
-Platform: Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
+Platform: Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: Xaver K
 ==============================================================================*/
 

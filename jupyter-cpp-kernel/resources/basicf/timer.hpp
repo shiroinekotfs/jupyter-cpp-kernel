@@ -7,7 +7,7 @@ Component: Component Header
 
 Purpose:   
 Owner:     Yan Chunwei
-Platform:  Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
+Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: Yan Chunwei (signed-off by Tsuki Takineko)
 
 Help Link: https://github.com/Superjomn/jupyter-cpp-kernel

@@ -7,7 +7,7 @@ Component: Global Header
 
 Purpose:   Guidance for C++ kernel to get additional features on the gcc
 Owner:     Tsuki Takineko (signed-off by Tsuki Takineko)
-Platform:  Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
+Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
 
 Help Link: https://github.com/takinekotfs/jupyter-cpp-kernel
@@ -44,6 +44,13 @@ extern "C" {
         #include <dlfcn.h> //global
     #endif
 }
+
+//gzip - GZIP Compression header
+#include "gzip/compress.hpp"
+#include "gzip/config.hpp"
+#include "gzip/decompress.hpp"
+#include "gzip/utils.hpp"
+#include "gzip/version.hpp"
 
 //qiskitcpp
 #include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header

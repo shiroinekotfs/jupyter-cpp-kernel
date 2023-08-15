@@ -10,7 +10,7 @@ Purpose:   MicroQiskit is written to be as compatible with Qiskit as possible.
            get started with Qiskit. And getting to know Qiskit is a great way 
            to get started with MicroQiskit.
 Owner:     Qiskit Community
-Platform:  Windows (WIN32), macOS (X and later), Unix/Linux, SunOS
+Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: James Wootton (signed-off by Tsuki Takineko)
 
 Help Link: https://github.com/qiskit-community/MicroQiskit
