@@ -28,11 +28,13 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <stdexcept>
 #include <typeinfo>
 
 //basicf
 #include "basicf/timer.hpp" //Timer header
 #include "basicf/mathdefs.hpp" //Math definitions header
+#include "basicf/json.hpp" //JSON for C++ header
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
