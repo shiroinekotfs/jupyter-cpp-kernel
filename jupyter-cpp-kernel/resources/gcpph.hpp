@@ -52,6 +52,11 @@ extern "C" {
 #include "gzip/utils.hpp"
 #include "gzip/version.hpp"
 
+extern "C" {
+    #include "gzip/zconf.h"
+    #include "gzip/zlib.h"
+}
+
 //qiskitcpp
 #include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header
 
