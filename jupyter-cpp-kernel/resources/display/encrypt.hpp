@@ -1,5 +1,5 @@
 /*==============================================================================
-Crypt Header for C++ kernel for Jupyter
+Encryption Header for C++ kernel for Jupyter
 
 Copyright (C) 2023 Tsuki Takineko
 
