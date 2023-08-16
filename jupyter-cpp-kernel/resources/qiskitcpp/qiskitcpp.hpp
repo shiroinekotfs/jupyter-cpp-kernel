@@ -197,12 +197,10 @@ class QuantumCircuit {
                 return false;
             }
         }
-
         return true;
     }
 
     private:
-
         void verify_qubit_range(int q, std::string gate) {
             if (!(q >= 0) || !(q < nQubits)) {
                 ERROR(gate + ": Index for qubit out of range");
