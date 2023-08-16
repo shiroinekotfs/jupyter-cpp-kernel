@@ -31,7 +31,7 @@ extern "C" {
 * In a single, no second variable is needed, only logic_a is used
 * 
 * Note: This definition is not finished yet, so see more on
-*       WikiPedia: https://en.wikipedia.org/wiki/Propositional_calculus
+*       Wikipedia: https://en.wikipedia.org/wiki/Propositional_calculus
 *
 * Good luck with that
 * 
@@ -65,5 +65,6 @@ extern "C" {
 #define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
 
 //physics defs (maybe)
+
 
 #endif
