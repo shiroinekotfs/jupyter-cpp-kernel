@@ -38,15 +38,19 @@ extern "C" {
 *   - Tsuki Takineko (C++ kernel for Jupyter developer)
 */
 
-#define LOGIC_NOT                    1 - logic_a                              ///NOT                 
+#define LOGIC_NOT                    1-logic_a                                ///NOT                 
 #define LOGIC_ALWAYS                 logic_a                                  ///ALWAYS
-#define LOGIC_AND                    logic_a * logic_b                        ///AND
-#define LOGIC_NAND                   logic_a + logic_b - logic_a * logic_b    ///NOT AND
-#define LOGIC_MOD_TOL                1 - logic_a * (1 - logic_b)              ///Modus tollens
-#define LOGIC_BIO_INTRO              logic_a *logic_b+(1-logic_a)*(1-logic_b) ///BIO INTRO
+#define LOGIC_AND                    logic_a*logic_b                          ///AND
+#define LOGIC_NAND                   1-logic_a*logic_b                        ///NOT AND
+#define LOGIC_MOD_TOL                1 -logic_a*(1-logic_b)                   ///Modus tollens
+#define LOGIC_BIO_INTRO              logic_a*logic_b+(1-logic_a)*(1-logic_b)  ///BIO INTRO
 
 //constant
+//currently missing lots of math definitions, please help me adding it OwO - Tsuki Takineko
 #define M_E        2.71828182845904523536   // e
+#define M_E_2      1.35914091422952261768   // e/2
+#define M_E_3      0.90609394281968174512   // e/3
+#define M_E_PI     0.86525597943226508722   // e/pi
 #define M_LOG2E    1.44269504088896340736   // log2(e)
 #define M_LOG10E   0.434294481903251827651  // log10(e)
 #define M_LN2      0.693147180559945309417  // ln(2)
@@ -64,7 +68,7 @@ extern "C" {
 #define M_SQRT5    2.2360679774997896964092 // sqrt(5)
 #define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
 
-//physics defs (maybe)
+//physics defs (me dumb at this, OwO - Tsuki Takineko)
 
 
 #endif
