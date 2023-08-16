@@ -23,7 +23,7 @@ First created by: Xaver K
 
 /* Figure out used C standard.
   __STDC_VERSION__ is not always defined until C99.
-  If it is not defined, set standard to C89.
+  If it is not defined, set the standard to C89.
   It is safest to set it by hand, to make sure */
 #ifdef __STDC_VERSION__
 #if __STDC_VERSION__ <= 199409L
@@ -33,7 +33,7 @@ First created by: Xaver K
 #define C89_SUPPORT
 #endif /* __STDC_VERSION__ */
 
-/* output functions to replicate terminal behaviour */
+/* output functions to replicate terminal behavior */
 #ifdef BUFFERED_OUTPUT
 /* buffer for all output */
 /* TODO allocate this dynamically */
