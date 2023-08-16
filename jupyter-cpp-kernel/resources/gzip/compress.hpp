@@ -8,7 +8,7 @@ Component: Component Header
 Purpose:   gzip compression and decompression for C++ programs
 Owner:     Mapbox
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
-First created by: Dane Springmeyer (signed-off by Tsuki Takineko)
+First created by: Dane Springmeyer (signed off by Tsuki Takineko)
 ==============================================================================*/
 
 #ifndef GZIP_COMPRESS_HPP
