@@ -5,8 +5,8 @@ Copyright (C) 2023 Tsuki Takineko
 
 Component: Global Header
 
-Purpose:   Guidance for C++ kernel to get additional features on the gcc
-Owner:     Tsuki Takineko (signed-off by Tsuki Takineko)
+Purpose:   Guidance for C++ kernel to get additional features on the GCC
+Owner:     Tsuki Takineko (signed off by Tsuki Takineko)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
 
