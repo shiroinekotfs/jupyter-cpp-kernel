@@ -15,11 +15,10 @@ First created by: Tsuki Takineko (signed off by Tsuki Takineko)
 #ifndef JDISPLAY_HPP
 #define JDISPLAY_HPP
 
-#include <iostream>
+#include <ostream>
 #include <random>
 
 #include "../basicf/json.hpp"
-#include "encrypt.hpp"
 
 extern "C" {
 #ifdef _WIN32
@@ -29,8 +28,10 @@ extern "C" {
 #endif
 }
 
-namespace display {
+namespace jdisplay {
     
+    
+
 }
 
 #endif
