@@ -6,8 +6,6 @@ import subprocess
 import tempfile
 import os
 import os.path as path
-from sys import platform
-
 
 class RealTimeSubprocess(subprocess.Popen):
 
@@ -54,6 +52,8 @@ class RealTimeSubprocess(subprocess.Popen):
         """
         Add chunks of data from a stream to a queue until the stream is empty.
         """
+
+        # Consider using 4096 = 4k (base 2) buffer
         for line in iter(lambda: stream.read(4096), b""):
             queue.put(line)
         stream.close()
@@ -110,9 +110,8 @@ class CPPKernel(Kernel):
     introduction = "C++ 14 kernel for Jupyter (main), version 1.0.0a4\n\n"
     cp_banner = "Copyright (C) 2023 Tsuki Takineko\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
     links_guide = "Legal information: https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/takinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/takinekotfs\n"
-    reporting_links = (
-        "Reporting the issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues"
-    )
+    reporting_links = "Reporting the issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues"
+
     banner = introduction + cp_banner + links_guide + reporting_links
 
     main_head = "#include <iostream>\n" + "int main() {\n"
@@ -283,12 +282,8 @@ class CPPKernel(Kernel):
 
         return magics, code
 
-    def do_execute(
-        self, code, silent, store_history=True, user_expressions=None, allow_stdin=True
-    ):
-
+    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         magics, code = self._filter_magics(code)
-
         magics, code = self._add_main(magics, code)
 
         with self.new_temp_file(suffix=".cpp") as source_file:
