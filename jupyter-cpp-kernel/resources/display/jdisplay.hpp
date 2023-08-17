@@ -20,6 +20,10 @@ First created by: Tsuki Takineko (signed off by Tsuki Takineko)
 
 #include "../basicf/json.hpp"
 
+//Bits
+#include <bits/requires_hosted.h>
+#include <bits/c++config.h>
+
 extern "C" {
 #ifdef _WIN32
     #include "../basicf/dlfcn.h"
@@ -29,8 +33,8 @@ extern "C" {
 }
 
 namespace jdisplay {
-    
-    
+
+    #define jiframe "<iframe width=\"{width}\" height=\"{height}\" src=\"{src}{params}\" frameborder=\"0\" allowfullscreen {extras}></iframe>"
 
 }
 
