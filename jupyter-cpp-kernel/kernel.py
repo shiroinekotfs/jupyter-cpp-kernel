@@ -6,6 +6,7 @@ import subprocess
 import tempfile
 import os
 import os.path as path
+import cairosvg
 
 class RealTimeSubprocess(subprocess.Popen):
 
@@ -125,7 +126,7 @@ class CPPKernel(Kernel):
         self.bufferedOutput = True
         self.linkMaths = True  # always link math library
         self.wAll = True  # show all warnings by default
-        self.wError = False  # but keep comipiling for warnings
+        self.wError = False  # ignore all compiling warning
         self.standard = "c++14"  # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix=".out")
@@ -314,9 +315,8 @@ class CPPKernel(Kernel):
                         "user_expressions": {},
                     }
 
-        p = self.create_jupyter_subprocess(
-            [self.master_path, binary_file.name] + magics["args"]
-        )
+        p = self.create_jupyter_subprocess([self.master_path, binary_file.name] + magics["args"])
+
         while p.poll() is None:
             p.write_contents()
 
