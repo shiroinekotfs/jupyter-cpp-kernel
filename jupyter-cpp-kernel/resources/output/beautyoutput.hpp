@@ -37,8 +37,8 @@ namespace jdisplay {
         std::cout << "<img src=\"" << data << "\" />" << std::endl;
     }
 
-    void PDF (std::string pdffile) {
-        std::cout << "<object data=\"" << pdffile << "\" type=\"application/pdf\" ><embed src=\"" << pdffile << "\"></embed></object>" << std::endl;
+    void PDF (std::string pdffile, std::string width, std::string height) {
+        std::cout << "<object data=\"" << pdffile << "\" type=\"application/pdf\" width=\"" << width << "\" height=\"" << height << "\" ><embed src=\"" << pdffile << "\"></embed></object>" << std::endl;
     }
 
     void Video (std::string video) {
