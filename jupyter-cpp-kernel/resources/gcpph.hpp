@@ -19,6 +19,7 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 
 //global, no folder structure
 #include <iostream>
+
 #include <array>
 #include <cmath>
 #include <exception>
@@ -52,5 +53,8 @@ extern "C" {
 
 //user input
 #include "input/uinput.hpp"
+
+//output
+#include "output/beautyoutput.hpp"
 
 #endif
