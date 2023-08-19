@@ -4,13 +4,7 @@ include jupyter-cpp-kernel/resources/basicf/mathdefs.hpp
 include jupyter-cpp-kernel/resources/basicf/json.hpp
 include jupyter-cpp-kernel/resources/basicf/rstdio.h
 include jupyter-cpp-kernel/resources/basicf/timer.hpp
-include jupyter-cpp-kernel/resources/gzip/compress.hpp
-include jupyter-cpp-kernel/resources/gzip/config.hpp
-include jupyter-cpp-kernel/resources/gzip/decompress.hpp
-include jupyter-cpp-kernel/resources/gzip/utils.hpp
-include jupyter-cpp-kernel/resources/gzip/version.hpp
-include jupyter-cpp-kernel/resources/gzip/zconf.h
-include jupyter-cpp-kernel/resources/gzip/zlib.h
+include jupyter-cpp-kernel/resources/input/uinput.hpp
 include jupyter-cpp-kernel/resources/qiskitcpp/qiskitcpp.hpp
 include jupyter-cpp-kernel/resources/gcpph.hpp
 include README.md LICENSE SECURITY.md
