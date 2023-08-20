@@ -51,7 +51,7 @@ namespace jdisplay {
         token = jdisplayyt::YouTubeLinkExtractor(token);
 
         if (token == "NULL") {
-            std::cout << "<br>The input YouTube link is invalid</br>. Please check your link. Either you're performed a crashed request" << std::endl;
+            std::cout << "<br>The input YouTube link is invalid</br>. Please check your link. Either you're performed a crashed request." << std::endl;
         } else if (token == "ERROR") {
             std::cout << "<br>The input link isn't come from YouTube</br>. Please consider to use `jdisplay::IFrame()`, or other Jupyter Display method to display this." << std::endl;
         } else {
