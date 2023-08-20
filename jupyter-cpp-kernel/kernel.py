@@ -251,7 +251,7 @@ class CPPKernel(Kernel):
             magics['cflags'] += ['-lm']
 
         # User input
-        code = re.sub(r'cin>>|cin >>|cin  >>|std::cin>>|std::cin >>|std::cin  >>', 
+        code = re.sub(r'cin>>|cin >>|cin  >>|cin   >>|cin    >>|cin     >>|std::cin>>|std::cin >>|std::cin  >>|std::cin   >>|std::cin    >>', 
                       r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', 
                       code)
         code =  re.sub(r'getline|std::getline|getline |std::getline ',
