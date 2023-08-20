@@ -24,11 +24,11 @@ namespace jdisplayyt {
     std::string YouTubeLinkExtractor (std::string link) {
         if (link.find("youtube.com") != std::string::npos || link.find("youtu.be") != std::string::npos) {
             if (link.find("youtube.com/watch?v=")) {
-                return link.substr(link.find("youtube.com/watch?v="));
+                return link.substr(link.find("youtube.com/watch?v=") + 1);
             } else if (link.find("youtu.be/")) {
-                return link.substr(link.find("youtu.be/"));
+                return link.substr(link.find("youtu.be/") + 1);
             } else if (link.find("youtube.com/embed/")) {
-                return link.substr(link.find("youtube.com/embed/"));
+                return link.substr(link.find("youtube.com/embed/") + 1);
             } else {
                 return "NULL";
             }
