@@ -26,7 +26,7 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 
 namespace jdisplay {
     
-    void IFrame (std::string url, std::string width, std::string height) {
+    void IFrame (std::string url, std::string width = "auto", std::string height = "auto") {
         std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>" << std::endl;
     }
 
@@ -38,19 +38,19 @@ namespace jdisplay {
         std::cout << "```\n" << code << "\n```" << std::endl;
     }
 
-    void Image (std::string data, std::string width, std::string height) {
+    void Image (std::string data, std::string width = "auto", std::string height = "auto") {
         std::cout << "<img src=\"" << data << "\" width=\"" << width<< "\" height=\"" << height << "\" />" << std::endl;
     }
 
-    void PDF (std::string pdffile, std::string width, std::string height) {
+    void PDF (std::string pdffile, std::string width = "auto", std::string height = "auto") {
         std::cout << "<object data=\"" << pdffile << "\" type=\"application/pdf\" width=\"" << width << "\" height=\"" << height << "\" ><embed src=\"" << pdffile << "\"></embed></object>" << std::endl;
     }
 
-    void Video (std::string video, std::string width, std::string height) {
+    void Video (std::string video, std::string width = "auto", std::string height = "auto") {
         std::cout << "<video width=\"" << width << "\" height=\"" << height << "\" controls src=\"" << video << "\">animation</video>" << std::endl;
     }
 
-    void YouTubePlayer (std::string token, std::string width, std::string height) {
+    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {
         token = jdisplayyt::YouTubeLinkExtractor(token);
 
         if (token == "ERROR") {
