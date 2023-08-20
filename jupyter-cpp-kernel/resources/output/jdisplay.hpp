@@ -50,7 +50,7 @@ namespace jdisplay {
         std::cout << "<video width=\"" << width << "\" height=\"" << height << "\" controls src=\"" << video << "\">animation</video>" << std::endl;
     }
 
-    void YouTuberPlayer (std::string token, std::string width, std::string height) {
+    void YouTubePlayer (std::string token, std::string width, std::string height) {
         token = jdisplayyt::YouTubeLinkExtractor(token);
 
         if (token == "ERROR") {
