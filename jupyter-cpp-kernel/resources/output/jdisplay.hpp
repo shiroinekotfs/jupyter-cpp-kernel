@@ -1,13 +1,13 @@
 /*==============================================================================
-Beauty Ouput - C++ header
+Jupyter Display Handler - C++ header
 
 Copyright (C) 2023 Tsuki Takineko
 
 Component: Component Header
 
-Purpose:   Beauty Output provides functions within `jdisplay` namespace, helping
-           people interacting with Jupyter web-based engine. Allows displaying 
-           beautiful outputs, using HTML/CSS, JavaScript, and Markdown.
+Purpose:   Jupyter Display Handler provides functions within `jdisplay` namespace, 
+           helping people interacting with Jupyter web-based engine. Allows 
+           displaying beautiful outputs, using HTML/CSS, JavaScript, and Markdown.
 Owner:     Tsuki Takineko
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
@@ -18,6 +18,8 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 
 #include <iostream>
 #include <string>
+
+#include "ytlinkpro.hpp"
 
 namespace jdisplay {
     
@@ -43,5 +45,9 @@ namespace jdisplay {
 
     void Video (std::string video, std::string width, std::string height) {
         std::cout << "<video width=\"" << width << "\" height=\"" << height << "\" controls src=\"" << video << "\">animation</video>" << std::endl;
+    }
+
+    void YouTuberPlayer (std::string token, std::string width, std::string height) {
+
     }
 }
