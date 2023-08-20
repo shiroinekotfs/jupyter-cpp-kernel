@@ -55,6 +55,6 @@ extern "C" {
 #include "input/uinput.hpp"
 
 //output
-#include "output/beautyoutput.hpp"
+#include "output/jdisplay.hpp"
 
 #endif
