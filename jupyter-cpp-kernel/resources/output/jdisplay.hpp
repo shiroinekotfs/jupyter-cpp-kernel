@@ -35,7 +35,7 @@ namespace jdisplay {
     }
 
     void CodeString (std::string code) {
-        std::cout << "```\n" << code << "\n```" << std::endl;
+        std::cout << "```" << std::endl << code << std::endl << "```" << std::endl;
     }
 
     void Image (std::string data, std::string width = "auto", std::string height = "auto") {
