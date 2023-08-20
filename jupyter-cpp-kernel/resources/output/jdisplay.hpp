@@ -54,7 +54,7 @@ namespace jdisplay {
         token = jdisplayyt::YouTubeLinkExtractor(token);
 
         if (token == "ERROR") {
-            std::cout << "<br>The input YouTube link is invalid</br>. Please check your link. Either you're performed a crashed request." << std::endl;
+            std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;
         } else {
             std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << token << "\" allowfullscreen></iframe>" << std::endl;
         }
