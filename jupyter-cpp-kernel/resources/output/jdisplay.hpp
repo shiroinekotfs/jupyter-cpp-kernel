@@ -16,6 +16,9 @@ Help Link: https://github.com/takinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
+#ifndef JDISPLAY_HPP
+#define JDISPLAY_HPP
+
 #include <iostream>
 #include <string>
 
@@ -59,3 +62,5 @@ namespace jdisplay {
         }
     }
 }
+
+#endif
