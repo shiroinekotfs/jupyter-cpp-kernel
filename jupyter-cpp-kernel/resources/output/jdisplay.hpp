@@ -48,6 +48,14 @@ namespace jdisplay {
     }
 
     void YouTuberPlayer (std::string token, std::string width, std::string height) {
+        token = jdisplayyt::YouTubeLinkExtractor(token);
 
+        if (token == "NULL") {
+            std::cout << "<br>The input YouTube link is invalid</br>. Please check your link. Either you're performed a crashed request" << std::endl;
+        } else if (token == "ERROR") {
+            std::cout << "<br>The input link isn't come from YouTube</br>. Please consider to use `jdisplay::IFrame()`, or other Jupyter Display method to display this." << std::endl;
+        } else {
+            std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << token << "\" allowfullscreen></iframe>" << std::endl;
+        }
     }
 }
