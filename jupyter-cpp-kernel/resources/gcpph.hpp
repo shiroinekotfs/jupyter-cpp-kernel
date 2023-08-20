@@ -56,5 +56,6 @@ extern "C" {
 
 //output
 #include "output/jdisplay.hpp"
+#include "output/ytlinkpro.hpp"
 
 #endif
