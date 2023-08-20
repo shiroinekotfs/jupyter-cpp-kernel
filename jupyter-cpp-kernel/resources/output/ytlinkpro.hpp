@@ -21,20 +21,16 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 
 #include <iostream>
 #include <string>
+#include <regex>
 
 namespace jdisplayyt {
 
-    std::string YouTubeLinkExtractor (std::string link) {
-        if (link.find("youtube.com") != std::string::npos || link.find("youtu.be") != std::string::npos) {
-            if (link.find("youtube.com/watch?v=")) {
-                return link.substr(link.find("youtube.com/watch?v=") + 1);
-            } else if (link.find("youtu.be/")) {
-                return link.substr(link.find("youtu.be/") + 1);
-            } else if (link.find("youtube.com/embed/")) {
-                return link.substr(link.find("youtube.com/embed/") + 1);
-            } else {
-                return "NULL";
-            }
+    std::string YouTubeLinkExtractor(std::string url) {
+        std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
+        std::smatch match;
+        if (std::regex_match(url, match, regExp) && match[7].length() == 11) {
+            std::string b = match[7];
+            return b;
         } else {
             return "ERROR";
         }
