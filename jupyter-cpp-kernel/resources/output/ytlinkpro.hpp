@@ -16,6 +16,9 @@ Help Link: https://github.com/takinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
+#ifndef YTLINKPRO_HPP
+#define YTLINKPRO_HPP
+
 #include <iostream>
 #include <string>
 
@@ -37,3 +40,5 @@ namespace jdisplayyt {
         }
     }
 }
+
+#endif
