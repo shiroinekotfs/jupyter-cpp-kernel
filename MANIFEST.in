@@ -6,6 +6,7 @@ include jupyter-cpp-kernel/resources/basicf/rstdio.h
 include jupyter-cpp-kernel/resources/basicf/timer.hpp
 include jupyter-cpp-kernel/resources/input/uinput.hpp
 include jupyter-cpp-kernel/resources/output/jdisplay.hpp
+include jupyter-cpp-kernel/resources/output/ytlinkpro.hpp
 include jupyter-cpp-kernel/resources/qiskitcpp/qiskitcpp.hpp
 include jupyter-cpp-kernel/resources/gcpph.hpp
 include README.md LICENSE SECURITY.md
