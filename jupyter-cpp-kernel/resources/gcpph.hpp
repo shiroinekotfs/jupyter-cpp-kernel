@@ -29,7 +29,6 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <stdexcept>
 #include <typeinfo>
 
 //basicf
