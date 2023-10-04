@@ -32,9 +32,7 @@ Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
 #include <typeinfo>
 
 //basicf
-#include "basicf/timer.hpp" //Timer header
 #include "basicf/mathdefs.hpp" //Math definitions header
-#include "basicf/json.hpp" //JSON for C++ header
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
@@ -46,9 +44,6 @@ extern "C" {
         #include <dlfcn.h> //global
     #endif
 }
-
-//qiskitcpp
-#include "qiskitcpp/qiskitcpp.hpp" //Qiskit Quantum Computer Header
 
 //user input
 #include "input/uinput.hpp"
