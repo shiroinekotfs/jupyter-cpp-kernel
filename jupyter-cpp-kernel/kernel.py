@@ -97,7 +97,7 @@ class CPPKernel(Kernel):
                      'file_extension': '.cpp'
                     }
     
-    introduction = "C++ 14 kernel for Jupyter (main), version 1.0.0a4\n\n"
+    introduction = "C++ 14 kernel for Jupyter (main), version 1.0.0a5\n\n"
     cp_banner = "Copyright (C) 2023 Tsuki Takineko\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
     links_guide = "Legal information: https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/takinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/takinekotfs\n"
     reporting_links = "Reporting the issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues"
@@ -107,27 +107,6 @@ class CPPKernel(Kernel):
     main_head = "#include <iostream>\n" + "int main(){\n"
 
     main_foot = "\nreturn 0;\n}"
-
-    help_links = List(
-        [
-            {
-                "text": "C++ Kernel Legal Information",
-                "url": "http://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/LICENSE",
-            },
-            {
-                "text": "Download Notebook tutorial for C++ kernel",
-                "url": "http://github.com/takinekotfs/jupyter-cpp-kernel-doc",
-            },
-            {
-                "text": "View Author GitHub Profile",
-                "url": "http://github.com/takinekotfs",
-            },
-            {
-                "text": "Report bugs, or suggest new feature for C++ kernel",
-                "url": "http://github.com/takinekotfs/jupyter-cpp-kernel/issues",
-            }
-        ]
-    ).tag(config=True)
 
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
