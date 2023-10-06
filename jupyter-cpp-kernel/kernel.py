@@ -6,10 +6,6 @@ import subprocess
 import tempfile
 import os
 import os.path as path
-from sys import platform
-
-from traitlets import List
-
 
 class RealTimeSubprocess(subprocess.Popen):
 
@@ -84,7 +80,6 @@ class RealTimeSubprocess(subprocess.Popen):
                 self.stdin.write(readLine.encode())
             else:
                 self._write_to_stdout(contents)
-
 
 class CPPKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
@@ -221,22 +216,15 @@ class CPPKernel(Kernel):
     # check whether int main() is specified, if not add it around the code
     # also add common magics like -lm
     def _add_main(self, magics, code):
-        # remove comments
-        tmpCode = re.sub(r"//.*", "", code)
-        tmpCode = re.sub(r"/\*.*?\*/", "", tmpCode, flags=re.M|re.S)
 
-        if not re.search(r"int\s+main\s*\(", tmpCode):
-            code = self.main_head + code + self.main_foot
-            magics['cflags'] += ['-lm']
+        if "int main(" not in code:
+            code = self.main_head + "\n" + code + "\n" + self.main_foot
 
         # User input
-        code = re.sub(r'cin>>|cin >>|cin  >>|cin   >>|cin    >>|cin     >>|std::cin>>|std::cin >>|std::cin  >>|std::cin   >>|std::cin    >>', 
-                      r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', 
-                      code)
-        code =  re.sub(r'getline|std::getline|getline |std::getline ',
-                       r'std::cout<<GET_INPUT_STREAM_JP;std::getline',
-                       code)
-        
+        code = re.sub(r'(std::)?cin *>>', r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', code)
+        code =  re.sub(r'(std::)?getline *', r'std::cout<<GET_INPUT_STREAM_JP;std::getline ', code)
+
+        # Include Global header
         global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
         code = global_header + "\n" + code
 
