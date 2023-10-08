@@ -15,7 +15,7 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed
 
 > :warning:
 >
-> If you want to use it on Windows, please installing the [GNU Compiler Collection for Windows](https://github.com/takinekotfs/jupyter-cpp-kernel/releases/tag/gcc-13.2.0)
+> If you want to use it on Windows, please installing the [GNU Compiler Collection for Windows](https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
 
 Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
 
