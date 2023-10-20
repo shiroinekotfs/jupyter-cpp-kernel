@@ -110,7 +110,7 @@ class CPPKernel(Kernel):
         self.bufferedOutput = True
         self.linkMaths = True # always link math library
         self.wAll = True # show all warnings by default
-        self.wError = False # but keep comipiling for warnings
+        self.wError = False # but keep compiling for warnings
         self.standard = "c++14" # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
@@ -197,8 +197,7 @@ class CPPKernel(Kernel):
                         magics[key] += [flag]
                 elif key == "args":
                     # Split arguments respecting quotes
-                    for argument in re.findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', value):
-                        magics['args'] += [argument.strip('"')]
+                    magics['args'] = [argument.strip('"') for argument in re.findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', value)]
 
                 # always add empty line, so line numbers don't change
                 actualCode += '\n'
