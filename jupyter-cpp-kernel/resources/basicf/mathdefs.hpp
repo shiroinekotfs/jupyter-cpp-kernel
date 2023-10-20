@@ -1,16 +1,16 @@
 /*==============================================================================
 Math Definitions Header
 
-Copyright (C) 2023 Tsuki Takineko
+Copyright (C) 2023 shiroinekotfs
 
 Component: Component Header
 
 Purpose:   Math Definition Header provides an extendable math library,
            including special math characters in ASCII format, basic
            functions and special calculation
-Owner:     Tsuki Takineko (signed off by Tsuki Takineko)
+Owner:     shiroinekotfs (signed off by shiroinekotfs)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
-First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
+First created by: shiroinekotfs (signed-off by shiroinekotfs)
 ==============================================================================*/
 
 #ifndef MATHDEFS_HPP
@@ -35,7 +35,7 @@ extern "C" {
 *
 * Good luck with that
 * 
-*   - Tsuki Takineko (C++ kernel for Jupyter developer)
+*   - shiroinekotfs (C++ kernel for Jupyter developer)
 */
 
 #define LOGIC_NOT                    1-logic_a                                ///NOT                 
@@ -46,7 +46,7 @@ extern "C" {
 #define LOGIC_BIO_INTRO              logic_a*logic_b+(1-logic_a)*(1-logic_b)  ///BIO INTRO
 
 //constant
-//currently missing lots of math definitions, please help me adding it OwO - Tsuki Takineko
+//currently missing lots of math definitions, please help me adding it OwO - shiroinekotfs
 #define M_E        2.71828182845904523536   // e
 #define M_E_2      1.35914091422952261768   // e/2
 #define M_E_3      0.90609394281968174512   // e/3
@@ -68,7 +68,7 @@ extern "C" {
 #define M_SQRT5    2.2360679774997896964092 // sqrt(5)
 #define M_SQRT1_2  0.707106781186547524401  // 1/sqrt(2)
 
-//physics defs (me dumb at this, OwO - Tsuki Takineko)
+//physics defs (me dumb at this, OwO - shiroinekotfs)
 
 
 #endif

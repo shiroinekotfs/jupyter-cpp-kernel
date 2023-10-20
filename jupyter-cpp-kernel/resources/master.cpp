@@ -1,18 +1,18 @@
 /*==============================================================================
 Pre-kernel "master.cpp"
 
-Copyright (C) 2023 Tsuki Takineko
+Copyright (C) 2023 shiroinekotfs
 Copyright (C) Brendan Rius
 
 Component: Pre-kernel
 
 Purpose:   Pre compiling and collecting headers for the C++ interpreter
-Owner:     Tsuki Takineko (signed-off by Tsuki Takineko)
+Owner:     shiroinekotfs (signed-off by shiroinekotfs)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
-First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
+First created by: shiroinekotfs (signed-off by shiroinekotfs)
 
-Help Link: https://github.com/takinekotfs/jupyter-cpp-kernel
-Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
+Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
+Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
 #include "gcpph.hpp"

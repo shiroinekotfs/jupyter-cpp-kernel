@@ -6,7 +6,7 @@ Copyright (c) 2007 Ramiro Polla
 Component: Component Header
 
 Purpose:   Alternative of dlfcn header on Linux for Windows
-Owner:     Ramiro Polla (signed-off by Tsuki Takineko)
+Owner:     Ramiro Polla (signed-off by shiroinekotfs)
 Platform:  Windows (WIN32)
 First created by: Ramiro Polla
 

@@ -1,5 +1,5 @@
 FROM jupyter/minimal-notebook
-MAINTAINER Tsuki Takineko <systakineko.tfs@gmail.com>
+MAINTAINER shiroinekotfs <shiroineko.tfs@gmail.com>
 
 USER root
 

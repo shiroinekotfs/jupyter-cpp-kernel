@@ -1,17 +1,17 @@
 /*==============================================================================
 GC++ Header for Jupyter C++ kernel
 
-Copyright (C) 2023 Tsuki Takineko
+Copyright (C) 2023 shiroinekotfs
 
 Component: Global Header
 
 Purpose:   Guidance for C++ kernel to get additional features on the GCC
-Owner:     Tsuki Takineko (signed off by Tsuki Takineko)
+Owner:     shiroinekotfs (signed off by shiroinekotfs)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
-First created by: Tsuki Takineko (signed-off by Tsuki Takineko)
+First created by: shiroinekotfs (signed-off by shiroinekotfs)
 
-Help Link: https://github.com/takinekotfs/jupyter-cpp-kernel
-Report issue: https://github.com/takinekotfs/jupyter-cpp-kernel/issues
+Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
+Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
 #ifndef GCPPH_HPP

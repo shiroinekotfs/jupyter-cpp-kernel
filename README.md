@@ -7,7 +7,7 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed
 (or not, who knows 😅)
 ```
 
-[![CodeQL](https://github.com/takinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/takinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
 
 # C++ 14 kernel for Jupyter
 
@@ -15,7 +15,7 @@ Plus, this C++ kernel only uses C++ 14. The others are being developed
 
 > :warning:
 >
-> If you want to use it on Windows, please installing the [GNU Compiler Collection for Windows](https://github.com/takinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
+> If you want to use it on Windows, please installing the [GNU Compiler Collection for Windows](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
 
 Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
 
@@ -57,7 +57,7 @@ sudo pip install jupyter-cpp-kernel # Can be `sudo`, but using it with caution. 
 > After that, you can copy this script and install the kernel
 
 ```shell
-pip install git+https://github.com/takinekotfs/jupyter-cpp-kernel.git
+pip install git+https://github.com/shiroinekotfs/jupyter-cpp-kernel.git
 ```
 
 #### Installing on Debian/Ubuntu
@@ -68,7 +68,7 @@ sudo apt install -y g++
 sudo apt install -y python3 python3-pip
 sudo pip install --upgrade pip
 sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
-sudo pip install git+https://github.com/takinekotfs/jupyter-cpp-kernel.git 
+sudo pip install git+https://github.com/shiroinekotfs/jupyter-cpp-kernel.git 
 ```
 
 ## Contributing
@@ -80,6 +80,6 @@ Please follow the GitHub standards and the license
 ## Guides (notebook)
 
 <p align="center">
-    <b>See more at </b><a href="https://github.com/takinekotfs/jupyter-cpp-kernel-doc">here</a>
-    <img src="https://github.com/takinekotfs/jupyter-cpp-kernel/assets/115929530/201d3f51-fa4c-44d4-bc2b-4ea2a252f13c" />
+    <b>See more at </b><a href="https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc">here</a>
+    <img src="https://github.com/shiroinekotfs/jupyter-cpp-kernel/assets/115929530/201d3f51-fa4c-44d4-bc2b-4ea2a252f13c" />
 </p>
