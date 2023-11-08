@@ -237,7 +237,10 @@ class CPPKernel(Kernel):
         DATA_FILES_PATH = self._find_local_header()
         for file in os.listdir(DATA_FILES_PATH):
             path_to_header = DATA_FILES_PATH + "/" + file
-            code = "#include" + "\"" + path_to_header + "\"" + "\n" + code
+            if os.path.isfile(path_to_header): 
+                code = "#include " + "\"" + path_to_header + "\"" + "\n" + code
+            elif os.path.isdir(path_to_header):
+                pass
         return code
 
     # check whether int main() is specified, if not add it around the code
