@@ -1,6 +1,7 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
+import sys
 import re
 import subprocess
 import tempfile
@@ -212,6 +213,33 @@ class CPPKernel(Kernel):
 
         return magics, actualCode
 
+
+    # Supported by using Jupyter 
+    def _find_local_header(self):
+        
+        import sys
+        from os.path import abspath, dirname, exists, join, split
+        
+        path = abspath(dirname(__file__))
+        starting_points = [path]
+        if not path.startswith(sys.prefix):
+            starting_points.append(sys.prefix)
+        for path in starting_points:
+            while path != '/':
+                share_jupyterhub = join(path, 'share', 'cpp_header')
+                if all(exists(join(share_jupyterhub, f)) for f in ['check_cpp.hpp']):
+                    return share_jupyterhub
+                path, _ = split(path)
+        # didn't find it, give up
+        return ''
+    
+    def _support_external_header(self, code):
+        DATA_FILES_PATH = self._find_local_header()
+        for file in os.listdir(DATA_FILES_PATH):
+            path_to_header = DATA_FILES_PATH + "/" + file
+            code = "#include" + "\"" + path_to_header + "\"" + "\n" + code
+        return code
+
     # check whether int main() is specified, if not add it around the code
     # also add common magics like -lm
     def _add_main(self, magics, code):
@@ -227,12 +255,15 @@ class CPPKernel(Kernel):
         global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
         code = global_header + "\n" + code
 
+        # Support External C/C++ header
+        code = self._support_external_header(code)
+        
         return magics, code
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
 
         magics, code = self._filter_magics(code)
-
+        
         magics, code = self._add_main(magics, code)
         
         with self.new_temp_file(suffix='.cpp') as source_file:
