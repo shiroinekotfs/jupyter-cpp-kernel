@@ -16,8 +16,8 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef YTLINKPRO_HPP
-#define YTLINKPRO_HPP
+#ifndef _YTLINKPRO_HPP
+#define _YTLINKPRO_HPP
 
 #include <iostream>
 #include <string>

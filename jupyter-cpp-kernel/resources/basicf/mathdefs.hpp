@@ -13,8 +13,8 @@ Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: shiroinekotfs (signed-off by shiroinekotfs)
 ==============================================================================*/
 
-#ifndef MATHDEFS_HPP
-#define MATHDEFS_HPP
+#ifndef _MATHDEFS_HPP
+#define _MATHDEFS_HPP
 
 #include <cmath>
 
