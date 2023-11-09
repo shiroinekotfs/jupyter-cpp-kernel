@@ -1,6 +1,5 @@
 ```markdown
-This C++ kernel only uses C++ 14. The others are being developed
-(or not, who knows 😅)
+For C/C++ header add-on development, try this template: https://github.com/shiroinekotfs/jupyter-cpp-header-template
 ```
 
 [![CodeQL](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
