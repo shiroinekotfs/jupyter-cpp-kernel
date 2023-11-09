@@ -12,8 +12,8 @@ First created by: Xaver K
 ==============================================================================*/
 
 
-#ifndef RSTDIO_H
-#define RSTDIO_H
+#ifndef _RSTDIO_H
+#define _RSTDIO_H
 
 #include <stdio.h>
 #include <stdarg.h>

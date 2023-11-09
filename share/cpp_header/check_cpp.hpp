@@ -1,11 +1,14 @@
 /*==============================================================================
-User input method for Jupyter C++ kernel
+Check C++ header for Jupyter C++ kernel
+
+DO NOT OVERWRITE
 
 Copyright (C) 2023 shiroinekotfs
 
-Component: Component Header
+Component: Global Header
 
-Purpose:   Provides user input method for Jupyter C++ kernel
+Purpose:   This header is used to provide checking script for externalization C++
+            header
 Owner:     shiroinekotfs (signed off by shiroinekotfs)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: shiroinekotfs (signed-off by shiroinekotfs)
@@ -14,9 +17,15 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef UINPUT_HPP
-#define UINPUT_HPP
+#ifndef _CHECKCPP_CPPKERNEL
+#define _CHECKCPP_CPPKERNEL
 
-#define GET_INPUT_STREAM_JP "<inputRequest>"
+#include <iostream>
+
+namespace _IS_CPP_KERNEL_ENABLED {
+    void check() {
+        std::cout << "C++ kernel with external header is enabled and working properly.\n" << std::endl;
+    }
+}
 
 #endif

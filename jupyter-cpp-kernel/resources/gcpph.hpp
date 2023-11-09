@@ -14,8 +14,8 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef GCPPH_HPP
-#define GCPPH_HPP
+#ifndef _GCPPH_HPP
+#define _GCPPH_HPP
 
 //global, no folder structure
 #include <iostream>
@@ -46,7 +46,7 @@ extern "C" {
 }
 
 //user input
-#include "input/uinput.hpp"
+#define GET_INPUT_STREAM_JP "<inputRequest>"
 
 //output
 #include "output/jdisplay.hpp"

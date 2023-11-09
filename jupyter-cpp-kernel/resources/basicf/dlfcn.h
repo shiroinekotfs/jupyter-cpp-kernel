@@ -33,8 +33,8 @@ License:
 * THE SOFTWARE.
 ==============================================================================*/
 
-#ifndef DLFCN_H
-#define DLFCN_H
+#ifndef _DLFCN_H
+#define _DLFCN_H
 
 #ifdef __cplusplus
 extern "C" {

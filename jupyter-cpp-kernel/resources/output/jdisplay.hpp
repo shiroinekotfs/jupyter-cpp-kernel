@@ -16,8 +16,8 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef JDISPLAY_HPP
-#define JDISPLAY_HPP
+#ifndef _JDISPLAY_HPP
+#define _JDISPLAY_HPP
 
 #include <iostream>
 #include <string>
