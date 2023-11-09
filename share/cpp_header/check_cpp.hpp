@@ -24,7 +24,7 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 
 namespace _IS_CPP_KERNEL_ENABLED {
     void check() {
-        std::cout << "C++ kernel with external header is enabled and working properly." << std::endl;
+        std::cout << "C++ kernel with external header is enabled and working properly.\n" << std::endl;
     }
 }
 
