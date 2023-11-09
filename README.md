@@ -21,50 +21,23 @@ Normally, your target machine must meet these requirement packages before instal
 
 ### Install from PyPI
 
-#### Installing on macOS and Windows
-
 > :warning:
 >
-> You must all requirements above before doing anything else.
-> After that, you can copy this script and install the kernel
+> For Windows User: Please follow [this instruction](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md) to install GCC properly.
 
 ```shell
 pip install jupyter-cpp-kernel
 ```
 
-#### Installing on Debian/Ubuntu
-
-```shell
-sudo apt update && sudo apt full-upgrade -y 
-sudo apt install -y g++
-sudo apt install -y python3 python3-pip
-sudo pip install --upgrade pip
-sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
-sudo pip install jupyter-cpp-kernel # Can be `sudo`, but using it with caution. Only for large deployment Jupyter server
-```
-
 ### Install from GitHub repo
 
-#### Installing on macOS and Windows
 
 > :warning:
 >
-> You must all requirements above before doing anything else.\
-> After that, you can copy this script and install the kernel
+> For Windows User: Please follow [this instruction](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md) to install GCC properly.
 
 ```shell
 pip install git+https://github.com/shiroinekotfs/jupyter-cpp-kernel.git
-```
-
-#### Installing on Debian/Ubuntu
-
-```shell
-sudo apt update && sudo apt full-upgrade -y 
-sudo apt install -y g++
-sudo apt install -y python3 python3-pip
-sudo pip install --upgrade pip
-sudo pip install jupyter # Or jupyterlab. Using `sudo` to install to the main packge
-sudo pip install git+https://github.com/shiroinekotfs/jupyter-cpp-kernel.git 
 ```
 
 ## Contributing
@@ -77,5 +50,6 @@ Please follow the GitHub standards and the license
 
 <p align="center">
     <b>See more at </b><a href="https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc">here</a>
+    <br><br>
     <img src="https://github.com/shiroinekotfs/jupyter-cpp-kernel/assets/115929530/201d3f51-fa4c-44d4-bc2b-4ea2a252f13c" />
 </p>
