@@ -198,7 +198,7 @@ class CPPKernel(Kernel):
                         magics[key] += [flag]
                 elif key == "args":
                     # Split arguments respecting quotes
-                    magics['args'] = [argument.strip('"') for argument in re.findall(r'(?:[^\s,"]|"(?:\\.|[^"])*")+', value)]
+                    magics['args'] = [argument.strip('"') for argument in re.findall(r'(?:[\s,"]|"(?:\.|["])*")+', value, timeout=1)]
 
                 # always add empty line, so line numbers don't change
                 actualCode += '\n'
