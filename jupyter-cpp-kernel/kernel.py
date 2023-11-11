@@ -92,11 +92,17 @@ class CPPKernel(Kernel):
                      'mimetype': 'text/markdown',
                      'file_extension': '.cpp'
                     }
+    
+    introduction = "C++ 14 kernel for Jupyter (main), version 1.0.0a5\n\n"
+    cp_banner = "Copyright (C) 2023 shiroinekotfs\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
+    links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
+    reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
 
-    banner = "C++ 14 kernel for Jupyter (main), version 1.0.0a5\n\n" 
-    + "Copyright (C) 2023 shiroinekotfs\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n" 
-    + "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n" 
-    + "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
+    banner = introduction + cp_banner + links_guide + reporting_links
+
+    main_head = "#include <iostream>\n" + "int main(){\n"
+
+    main_foot = "\nreturn 0;\n}"
 
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
@@ -142,7 +148,8 @@ class CPPKernel(Kernel):
                                'text/markdown': contents
                                 },
                             'metadata': {}
-                           })
+                           }
+                          )
 
     def _write_to_stderr(self, contents):
         self.send_response(self.iopub_socket, 'stream', {'name': 'stderr', 'text': contents})
@@ -240,14 +247,15 @@ class CPPKernel(Kernel):
     def _add_main(self, magics, code):
 
         if "int main(" not in code:
-            code = "#include <iostream>\n" + "int main(){\n\n" + code + "\n\nreturn 0;\n}"
+            code = self.main_head + "\n" + code + "\n" + self.main_foot
 
         # User input
         code = re.sub(r'(std::)?cin *>>', r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', code)
         code =  re.sub(r'(std::)?getline *', r'std::cout<<GET_INPUT_STREAM_JP;std::getline ', code)
 
         # Include Global header
-        code = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\" \n" + code
+        global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
+        code = global_header + "\n" + code
 
         # Support External C/C++ header
         code = self._support_external_header(code)
