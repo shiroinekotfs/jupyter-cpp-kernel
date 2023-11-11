@@ -216,24 +216,27 @@ class CPPKernel(Kernel):
 
     # Supported by using Jupyter 
     def _find_local_header(self):
-        path = path.abspath(path.dirname(__file__))
+        
+        import sys
+        from os.path import abspath, dirname, exists, join, split
+        
+        path = abspath(dirname(__file__))
         starting_points = [path]
         if not path.startswith(sys.prefix):
             starting_points.append(sys.prefix)
         for path in starting_points:
             while path != '/':
-                share_jupyterhub = path.join(path, 'share', 'cpp_header')
-                if all(path.exists(path.join(share_jupyterhub, f)) for f in ['check_cpp.hpp']):
+                share_jupyterhub = join(path, 'share', 'cpp_header')
+                if all(exists(join(share_jupyterhub, f)) for f in ['check_cpp.hpp']):
                     return share_jupyterhub
-                path, _ = path.split(path)
+                path, _ = split(path)
         # didn't find it, give up
         return ''
     
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
-        code = ""
         for file in os.listdir(DATA_FILES_PATH):
-            path_to_header = os.path.join(DATA_FILES_PATH, file)
+            path_to_header = DATA_FILES_PATH + "/" + file
             if os.path.isdir(path_to_header): 
                 pass
             elif os.path.isfile(path_to_header):
