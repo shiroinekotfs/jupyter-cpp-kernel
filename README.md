@@ -9,6 +9,8 @@ For C/C++ header add-on development, try this template: https://github.com/shiro
 ![GitHub repo size](https://img.shields.io/github/repo-size/shiroinekotfs/jupyter-cpp-kernel)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shiroinekotfs/jupyter-cpp-kernel)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/jupyter-cpp-kernel?logo=pypi)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jupyter-cpp-kernel)
+
 
 # C++ 14 kernel for Jupyter
 
