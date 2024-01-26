@@ -1,7 +1,7 @@
 /*==============================================================================
 Pre-kernel "master.cpp"
 
-Copyright (C) 2023 shiroinekotfs
+Copyright (C) 2024 shiroinekotfs
 Copyright (C) Brendan Rius
 
 Component: Pre-kernel

@@ -3,7 +3,7 @@ Check C++ header for Jupyter C++ kernel
 
 DO NOT OVERWRITE
 
-Copyright (C) 2023 shiroinekotfs
+Copyright (C) 2024 shiroinekotfs
 
 Component: Global Header
 
