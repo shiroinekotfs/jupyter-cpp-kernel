@@ -136,7 +136,7 @@ class CPPKernel(Kernel):
         return file
 
     def _write_to_stdout(self, contents):
-        contents = contents.replace("\r\n", " <br> ")
+        contents = contents.replace("\r\n", "\r\n\r\n")
         self.send_response(self.iopub_socket, 
                            'display_data',
                            {
