@@ -1,9 +1,11 @@
+import asyncio
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
 import re
 import subprocess
 import tempfile
+from tempfile import NamedTemporaryFile
 import os
 import os.path as path
 
@@ -52,32 +54,35 @@ class RealTimeSubprocess(subprocess.Popen):
 
         def read_all_from_queue(queue):
             res = b''
-            size = queue.qsize()
-            while size != 0:
+            while not queue.empty():
                 res += queue.get_nowait()
-                size -= 1
             return res
 
         stderr_contents = read_all_from_queue(self._stderr_queue)
         if stderr_contents:
-            self._write_to_stderr(stderr_contents.decode())
+            self._write_to_stderr(stderr_contents)
 
         stdout_contents = read_all_from_queue(self._stdout_queue)
         if stdout_contents:
             contents = stdout_contents.decode()
-            # if there is input request, make output and then
-            # ask frontend for input
-            start = contents.find(self.__class__.inputRequest)
-            if(start >= 0):
-                contents = contents.replace(self.__class__.inputRequest, '')
-                if(len(contents) > 0):
-                    self._write_to_stdout(contents)
-                readLine = ""
-                while(len(readLine) == 0):
-                    readLine = self._read_from_stdin()
-                # need to add newline since it is not captured by frontend
-                readLine += "\n"
-                self.stdin.write(readLine.encode())
+
+            input_request_index = contents.find(self.__class__.inputRequest)
+            if input_request_index >= 0:
+                pre_input = contents[:input_request_index]
+                post_input = contents[input_request_index + len(self.__class__.inputRequest):]
+                
+                if pre_input:
+                    self._write_to_stdout(pre_input)
+
+                read_line = ""
+                while not read_line:
+                    read_line = self._read_from_stdin()
+
+                read_line += "\n"
+                self.stdin.write(read_line.encode())
+
+                if post_input:
+                    self._write_to_stdout(post_input)
             else:
                 self._write_to_stdout(contents)
 
@@ -157,18 +162,22 @@ class CPPKernel(Kernel):
         return RealTimeSubprocess(cmd, self._write_to_stdout, self._write_to_stderr, self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-std=c++14', '-w', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
+        cflags = cflags or []
+        cflags += ['-pedantic', '-fPIC', '-std=c++14', '-w', '-shared', 
+                '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable']
+
         if self.linkMaths:
-            cflags = cflags + ['-lm']
+            cflags.append('-lm')
         if self.wError:
-            cflags = cflags + ['-Werror']
+            cflags.append('-Werror')
         if self.wAll:
-            cflags = cflags + ['-Wall']
+            cflags.append('-Wall')
         if self.readOnlyFileSystem:
             cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
         if self.bufferedOutput:
             cflags = ['-DBUFFERED_OUTPUT'] + cflags
-        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
+
+        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + (ldflags or [])
         return self.create_jupyter_subprocess(args)
 
     def _filter_magics(self, code):
@@ -209,7 +218,6 @@ class CPPKernel(Kernel):
 
         return magics, actualCode
 
-
     def _find_local_header(self):
         import sys
         from os.path import abspath, dirname, exists, join
@@ -227,7 +235,6 @@ class CPPKernel(Kernel):
         # didn't find it, give up
         return ''
 
-    
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
         for file in os.listdir(DATA_FILES_PATH):
@@ -248,42 +255,52 @@ class CPPKernel(Kernel):
         code = self._support_external_header(code)
         return magics, code
 
-    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
+    async def async_compile_with_gpp(self, source_file, binary_file, cflags, ldflags):
+        # Asynchronously compile the source file
+        command = ["g++", source_file, "-o", binary_file] + cflags + ldflags
+        process = await asyncio.create_subprocess_exec(*command)
+        await process.wait()
 
+    async def async_execute_binary(self, binary_file, args):
+        # Asynchronously execute the binary file
+        command = [binary_file] + args
+        process = await asyncio.create_subprocess_exec(*command)
+        await process.wait()
+
+    async def run_async_code(self, code, magics):
+        with NamedTemporaryFile(suffix='.cpp', delete=False) as source_file:
+            source_file.write(code.encode('utf-8'))
+
+        with NamedTemporaryFile(suffix='.out', delete=False) as binary_file:
+            source_filename = source_file.name
+            binary_filename = binary_file.name
+
+        try:
+            # Asynchronously compile the source file
+            compile_task = asyncio.ensure_future(
+                self.async_compile_with_gpp(source_filename, binary_filename, magics['cflags'], magics['ldflags'])
+            )
+
+            # Asynchronously execute the binary file
+            execute_task = asyncio.ensure_future(
+                self.async_execute_binary(binary_filename, magics['args'])
+            )
+
+            # Wait for both tasks to complete
+            await asyncio.gather(compile_task, execute_task)
+
+        finally:
+            # Remove temporary files
+            os.remove(source_filename)
+            os.remove(binary_filename)
+
+    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         magics, code = self._filter_magics(code)
         magics, code = self._add_main(magics, code)
-        
-        with self.new_temp_file(suffix='.cpp') as source_file:
-            source_file.write(code)
-            source_file.flush()
-            with self.new_temp_file(suffix='.out') as binary_file:
-                p = self.compile_with_gpp(source_file.name, binary_file.name, magics['cflags'], magics['ldflags'])
-                while p.poll() is None:
-                    p.write_contents()
-                p.write_contents()
-                if p.returncode != 0:  # Compilation failed
-                    self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
-                    os.remove(source_file.name)
-                    os.remove(binary_file.name)
-                    return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
-        p = self.create_jupyter_subprocess([self.master_path, binary_file.name] + magics['args'])
-        while p.poll() is None:
-            p.write_contents()
+        # Get the current event loop and run the async code
+        asyncio.get_event_loop().run_until_complete(self.run_async_code(code, magics))
 
-        # wait for threads to finish, so output is always shown
-        p._stdout_thread.join()
-        p._stderr_thread.join()
-
-        p.write_contents()
-
-        # now remove the files we have just created
-        os.remove(source_file.name)
-        os.remove(binary_file.name)
-
-        if p.returncode != 0:
-            self._write_to_stderr("\n[C++ 14 Error] Executable exited with code {}".format(p.returncode))
-        
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
