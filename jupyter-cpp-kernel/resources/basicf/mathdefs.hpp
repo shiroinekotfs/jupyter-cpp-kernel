@@ -1,7 +1,7 @@
 /*==============================================================================
 Math Definitions Header
 
-Copyright (C) 2023 shiroinekotfs
+Copyright (C) 2024 shiroinekotfs
 
 Component: Component Header
 
