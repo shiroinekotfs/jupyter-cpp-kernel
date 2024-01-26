@@ -4,13 +4,9 @@
 
 [![CodeQL](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
 
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/shiroinekotfs/jupyter-cpp-kernel/total)
-![GitHub language count](https://img.shields.io/github/languages/count/shiroinekotfs/jupyter-cpp-kernel)
 ![GitHub repo size](https://img.shields.io/github/repo-size/shiroinekotfs/jupyter-cpp-kernel)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shiroinekotfs/jupyter-cpp-kernel)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/jupyter-cpp-kernel?logo=pypi)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jupyter-cpp-kernel)
-
 
 # C++ 14 kernel for Jupyter
 
