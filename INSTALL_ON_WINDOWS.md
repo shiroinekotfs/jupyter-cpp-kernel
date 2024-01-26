@@ -34,7 +34,7 @@ Click on the `Environment Variables...`, and you will see the `Environment Varia
 
 ![image](https://github.com/shiroinekotfs/jupyter-cpp-kernel/assets/115929530/744ef024-2151-4a94-913e-a56501a0ea6f)
 
-In the `System variables, scroll down to see `Path` Variable, then click `Edit`
+In the `System variables`, scroll down to see `Path` Variable, then click `Edit`
 
 Add `New` variable, copy the GCC `bin` path to the variable, then paste it into the variable
 
