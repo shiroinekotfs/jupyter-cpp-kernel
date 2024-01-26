@@ -1,7 +1,6 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
-import sys
 import re
 import subprocess
 import tempfile
@@ -93,7 +92,7 @@ class CPPKernel(Kernel):
                      'file_extension': '.cpp'
                     }
     
-    introduction = "C++ 14 kernel for Jupyter (main), version 1.0.0a5\n\n"
+    introduction = "C++ 14 kernel for Jupyter (master), version 1.0.0a6\n\n"
     cp_banner = "Copyright (C) 2023 shiroinekotfs\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
     links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
     reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
@@ -131,16 +130,13 @@ class CPPKernel(Kernel):
         os.remove(self.master_path)
 
     def new_temp_file(self, **kwargs):
-        """Create a new temp file to be deleted when the kernel shuts down"""
         # We don't want the file to be deleted when closed, but only when the kernel stops
-        kwargs['delete'] = False
-        kwargs['mode'] = 'w'
-        file = tempfile.NamedTemporaryFile(**kwargs)
+        file = tempfile.NamedTemporaryFile(delete=False, mode='w', **kwargs)
         self.files.append(file.name)
         return file
 
     def _write_to_stdout(self, contents):
-        # Markdown supported
+        contents = contents.replace("\r\n", "<br>")
         self.send_response(self.iopub_socket, 
                            'display_data',
                            {
@@ -214,61 +210,47 @@ class CPPKernel(Kernel):
         return magics, actualCode
 
 
-    # Supported by using Jupyter 
     def _find_local_header(self):
-        
         import sys
-        from os.path import abspath, dirname, exists, join, split
-        
+        from os.path import abspath, dirname, exists, join
+
         path = abspath(dirname(__file__))
-        starting_points = [path]
-        if not path.startswith(sys.prefix):
-            starting_points.append(sys.prefix)
+        starting_points = [path, sys.prefix]
+
         for path in starting_points:
             while path != '/':
                 share_jupyterhub = join(path, 'share', 'cpp_header')
                 if all(exists(join(share_jupyterhub, f)) for f in ['check_cpp.hpp']):
                     return share_jupyterhub
-                path, _ = split(path)
+                path = dirname(path)
+
         # didn't find it, give up
         return ''
+
     
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
         for file in os.listdir(DATA_FILES_PATH):
-            path_to_header = DATA_FILES_PATH + "/" + file
-            if os.path.isdir(path_to_header): 
-                pass
-            elif os.path.isfile(path_to_header):
-                code = "#include " + "\"" + path_to_header + "\"" + "\n" + code
-            else:
-                pass
+            path_to_header = os.path.join(DATA_FILES_PATH, file)
+            if os.path.isfile(path_to_header):
+                code = "#include \"" + path_to_header + "\"\n" + code
         return code
 
     # check whether int main() is specified, if not add it around the code
     # also add common magics like -lm
     def _add_main(self, magics, code):
-
         if "int main(" not in code:
             code = self.main_head + "\n" + code + "\n" + self.main_foot
-
-        # User input
         code = re.sub(r'(std::)?cin *>>', r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', code)
         code =  re.sub(r'(std::)?getline *', r'std::cout<<GET_INPUT_STREAM_JP;std::getline ', code)
-
-        # Include Global header
         global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
         code = global_header + "\n" + code
-
-        # Support External C/C++ header
         code = self._support_external_header(code)
-        
         return magics, code
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
 
         magics, code = self._filter_magics(code)
-        
         magics, code = self._add_main(magics, code)
         
         with self.new_temp_file(suffix='.cpp') as source_file:
@@ -300,7 +282,8 @@ class CPPKernel(Kernel):
         os.remove(binary_file.name)
 
         if p.returncode != 0:
-            self._write_to_stderr("\n[C++ 14 kernel] Executable exited with code {}".format(p.returncode))
+            self._write_to_stderr("\n[C++ 14 Error] Executable exited with code {}".format(p.returncode))
+        
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
     def do_shutdown(self, restart):
