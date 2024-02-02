@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='jupyter-cpp-kernel',
-      version='1.0.0a6',
+      version='1.0.0a7',
       description='C++ 14 kernel for Jupyter',
       author='shiroinekotfs',
       author_email='shiroineko.tfs@gmail.com',
