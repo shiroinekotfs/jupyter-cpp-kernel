@@ -92,7 +92,7 @@ class CPPKernel(Kernel):
                      'file_extension': '.cpp'
                     }
     
-    introduction = "C++ 14 kernel for Jupyter (master), version 1.0.0a6\n\n"
+    introduction = "C++ 14 kernel for Jupyter (master), version 1.0.0a7\n\n"
     cp_banner = "Copyright (C) 2024 shiroinekotfs\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
     links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
     reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
@@ -136,7 +136,10 @@ class CPPKernel(Kernel):
         return file
 
     def _write_to_stdout(self, contents):
-        contents = contents.replace("\r\n", "\r\n\r\n")
+        if os.name == 'nt':
+            contents = contents.replace("\r\n", "\r\n\r\n")
+        else:
+            contents = contents.replace("\n", "\n\n")
         self.send_response(self.iopub_socket, 
                            'display_data',
                            {
