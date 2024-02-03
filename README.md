@@ -1,12 +1,14 @@
-> :warning:
+> ℹ️
 > * For C/C++ header add-on development, [try this template](https://github.com/shiroinekotfs/jupyter-cpp-header-template)
 > * [Security issue with Jupyter Notebooks](https://github.com/shiroinekotfs/jupyter-cpp-kernel/discussions/20)
+> * [Track `jupyter-cpp-kernel` on PePY](https://www.pepy.tech/projects/jupyter-cpp-kernel?versions=1.0.0a7&versions=1.0.0a6&versions=1.0.0a5&versions=1.0.0a4&versions=1.0.0a3&versions=1.0.0a2&versions=1.0.0a1&versions=1.0.0a0)
 
 [![CodeQL](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
 
 ![GitHub repo size](https://img.shields.io/github/repo-size/shiroinekotfs/jupyter-cpp-kernel)
 ![GitHub Repo stars](https://img.shields.io/github/stars/shiroinekotfs/jupyter-cpp-kernel)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/jupyter-cpp-kernel?logo=pypi)
+[![Total Downloads](https://static.pepy.tech/badge/jupyter-cpp-kernel)](https://pepy.tech/project/jupyter-cpp-kernel)
+[![Downloads](https://static.pepy.tech/badge/jupyter-cpp-kernel/month)](https://pepy.tech/project/jupyter-cpp-kernel)
 
 # C++ 14 kernel for Jupyter
 
