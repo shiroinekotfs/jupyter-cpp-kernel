@@ -1,7 +1,7 @@
 > ℹ️
 > * For C/C++ header add-on development, [try this template](https://github.com/shiroinekotfs/jupyter-cpp-header-template)
 > * [Security issue with Jupyter Notebooks](https://github.com/shiroinekotfs/jupyter-cpp-kernel/discussions/20)
-> * [Track `jupyter-cpp-kernel` on PePY](https://www.pepy.tech/projects/jupyter-cpp-kernel?versions=1.0.0a7&versions=1.0.0a6&versions=1.0.0a5&versions=1.0.0a4&versions=1.0.0a3&versions=1.0.0a2&versions=1.0.0a1&versions=1.0.0a0)
+> * [Track `jupyter-cpp-kernel` on PePY](https://www.pepy.tech/projects/jupyter-cpp-kernel)
 
 [![CodeQL](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml/badge.svg)](https://github.com/shiroinekotfs/jupyter-cpp-kernel/actions/workflows/codeql.yml)
 
