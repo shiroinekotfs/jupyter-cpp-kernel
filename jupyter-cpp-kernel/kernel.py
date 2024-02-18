@@ -12,9 +12,7 @@ import sys
 import shlex
 
 class RealTimeSubprocess(subprocess.Popen):
-
     inputRequest = "<inputRequest>"
-
     def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
 
         """
@@ -26,14 +24,11 @@ class RealTimeSubprocess(subprocess.Popen):
         self._write_to_stdout = write_to_stdout
         self._write_to_stderr = write_to_stderr
         self._read_from_stdin = read_from_stdin
-
         super().__init__(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, bufsize=0)
-
         self._stdout_queue = Queue()
         self._stdout_thread = Thread(target=RealTimeSubprocess._enqueue_output, args=(self.stdout, self._stdout_queue))
         self._stdout_thread.daemon = True
         self._stdout_thread.start()
-
         self._stderr_queue = Queue()
         self._stderr_thread = Thread(target=RealTimeSubprocess._enqueue_output, args=(self.stderr, self._stderr_queue))
         self._stderr_thread.daemon = True
@@ -51,15 +46,11 @@ class RealTimeSubprocess(subprocess.Popen):
     def write_contents(self):
         """
         Write the available content from stdin and stderr where specified when the instance was created
-        :return:
         """
-
         def read_all_from_queue(queue):
             res = b''
-            size = queue.qsize()
-            while size != 0:
+            while not queue.empty():
                 res += queue.get_nowait()
-                size -= 1
             return res
 
         stderr_contents = read_all_from_queue(self._stderr_queue)
@@ -69,19 +60,16 @@ class RealTimeSubprocess(subprocess.Popen):
         stdout_contents = read_all_from_queue(self._stdout_queue)
         if stdout_contents:
             contents = stdout_contents.decode()
-            # if there is input request, make output and then
-            # ask frontend for input
             start = contents.find(self.__class__.inputRequest)
-            if(start >= 0):
-                contents = contents.replace(self.__class__.inputRequest, '')
-                if(len(contents) > 0):
-                    self._write_to_stdout(contents)
-                readLine = ""
-                while(len(readLine) == 0):
-                    readLine = self._read_from_stdin()
-                # need to add newline since it is not captured by frontend
-                readLine += "\n"
-                self.stdin.write(readLine.encode())
+            if start >= 0:
+                output = contents[:start]
+                input_request = contents[start + len(self.__class__.inputRequest):]
+                if output:
+                    self._write_to_stdout(output)
+                read_line = ""
+                while not read_line.strip():
+                    read_line = self._read_from_stdin()
+                self.stdin.write((read_line + "\n").encode())
             else:
                 self._write_to_stdout(contents)
 
@@ -100,11 +88,8 @@ class CPPKernel(Kernel):
     cp_banner = "Copyright (C) 2024 shiroinekotfs\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
     links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
     reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
-
     banner = introduction + cp_banner + links_guide + reporting_links
-
     main_head = "#include <iostream>\n" + "int main(){\n"
-
     main_foot = "\nreturn 0;\n}"
 
     def __init__(self, *args, **kwargs):
@@ -234,18 +219,15 @@ class CPPKernel(Kernel):
     def _add_main(self, magics, code):
         if not re.search(r'int\s+main\s*\(', code):
             code = f"{self.main_head}\n{code}\n{self.main_foot}"
-
         code = re.sub(
             r'(std::)?cin *>>|'
             r'(std::)?getline *',
             r'std::cout << GET_INPUT_STREAM_JP;',
             code
         )
-
         code = self._support_external_header(code)
         global_header = f"#include \"{self.resDir}/gcpph.hpp\""
         code = f"{code}\n{global_header}"
-
         return magics, code
 
 
@@ -257,25 +239,20 @@ class CPPKernel(Kernel):
             self.new_temp_file(suffix='.out') as binary_file:
             source_file.write(code)
             source_file.flush()
-            
             p = self.compile_with_gpp(source_file.name, binary_file.name, magics['cflags'], magics['ldflags'])
             while p.poll() is None:
                 p.write_contents()
             p.write_contents()
-            
             if p.returncode != 0:  # Compilation failed
                 self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
                 return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
-
             p = self.create_jupyter_subprocess([self.master_path, binary_file.name] + magics['args'])
             while p.poll() is None:
                 p.write_contents()
-
             # wait for threads to finish, so output is always shown
             p._stdout_thread.join()
             p._stderr_thread.join()
             p.write_contents()
-
             if p.returncode != 0:
                 self._write_to_stderr("\n[C++ 14 Error] Executable exited with code {}".format(p.returncode))
 
