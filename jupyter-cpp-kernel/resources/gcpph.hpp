@@ -21,10 +21,12 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #include <iostream>
 
 #include <array>
+#include <algorithm>
 #include <cmath>
 #include <exception>
 #include <fstream>
 #include <memory>
+#include <iomanip>
 #include <vector>
 #include <sstream>
 #include <stdexcept>
