@@ -1,11 +1,15 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
+from os.path import abspath, dirname, exists, join
+
 import re
 import subprocess
 import tempfile
 import os
 import os.path as path
+import sys
+import shlex
 
 class RealTimeSubprocess(subprocess.Popen):
 
@@ -160,134 +164,123 @@ class CPPKernel(Kernel):
         return RealTimeSubprocess(cmd, self._write_to_stdout, self._write_to_stderr, self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-std=c++14', '-w', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
+        default_cflags = ['-pedantic', '-fPIC', '-std=c++14', '-w', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable']
         if self.linkMaths:
-            cflags = cflags + ['-lm']
+            default_cflags.append('-lm')
         if self.wError:
-            cflags = cflags + ['-Werror']
+            default_cflags.append('-Werror')
         if self.wAll:
-            cflags = cflags + ['-Wall']
+            default_cflags.append('-Wall')
         if self.readOnlyFileSystem:
-            cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
+            default_cflags.insert(0, '-DREAD_ONLY_FILE_SYSTEM')
         if self.bufferedOutput:
-            cflags = ['-DBUFFERED_OUTPUT'] + cflags
-        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
+            default_cflags.insert(0, '-DBUFFERED_OUTPUT')
+
+        cflags = default_cflags + (cflags if cflags else [])
+        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + (ldflags if ldflags else [])
+        
         return self.create_jupyter_subprocess(args)
 
+
     def _filter_magics(self, code):
-
         magics = {'cflags': [],
-                  'ldflags': [],
-                  'args': []}
-
-        actualCode = ''
-
+                'ldflags': [],
+                'args': []}
+        actual_code_lines = []
         for line in code.splitlines():
             if line.startswith('//%'):
-                magicSplit = line[3:].split(":", 2)
-                if(len(magicSplit) < 2):
-                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
+                magic_line = line[3:].strip()
+                magic_split = magic_line.split(":", 1)
+                if len(magic_split) != 2:
+                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a colon, ignoring.")
                     continue
-
-                key, value = magicSplit
-                key = key.strip().lower()
-
+                key, value = map(str.strip, magic_split)
+                key = key.lower()
                 if key in ['ldflags', 'cflags']:
-                    for flag in value.split():
-                        magics[key] += [flag]
+                    magics[key].extend(value.split())
                 elif key == "args":
-                    # Split arguments respecting quotes
-                    magics['args'] = [argument.strip('"') for argument in re.findall(r'(?:[\s,"]|"(?:\.|["])*")+', value, timeout=1)]
-
-                # always add empty line, so line numbers don't change
-                actualCode += '\n'
-
-            # keep lines which did not contain magics
+                    magics['args'] = shlex.split(value)
+                actual_code_lines.append('')  # Add an empty line to maintain line numbers
             else:
-                actualCode += line + '\n'
-
-        # add default standard if cflags does not contain one
+                actual_code_lines.append(line)
+        # Add default standard if cflags does not contain one
         if not any(item.startswith('-std=') for item in magics["cflags"]):
-            magics["cflags"] += ["-std=" + self.standard]
-
-        return magics, actualCode
+            magics["cflags"].append(f"-std={self.standard}")
+        return magics, '\n'.join(actual_code_lines)
 
 
     def _find_local_header(self):
-        import sys
-        from os.path import abspath, dirname, exists, join
-
         path = abspath(dirname(__file__))
         starting_points = [path, sys.prefix]
-
         for path in starting_points:
             while path != '/':
                 share_jupyterhub = join(path, 'share', 'cpp_header')
                 if all(exists(join(share_jupyterhub, f)) for f in ['check_cpp.hpp']):
                     return share_jupyterhub
                 path = dirname(path)
-
         # didn't find it, give up
         return ''
 
-    
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
-        for file in os.listdir(DATA_FILES_PATH):
-            path_to_header = os.path.join(DATA_FILES_PATH, file)
-            if os.path.isfile(path_to_header):
-                code = "#include \"" + path_to_header + "\"\n" + code
+        for entry in os.scandir(DATA_FILES_PATH):
+            if entry.is_file():
+                path_to_header = os.path.join(DATA_FILES_PATH, entry.name)
+                code = f'#include "{path_to_header}"\n{code}'
         return code
 
     # check whether int main() is specified, if not add it around the code
     # also add common magics like -lm
     def _add_main(self, magics, code):
-        if "int main(" not in code:
-            code = self.main_head + "\n" + code + "\n" + self.main_foot
-        code = re.sub(r'(std::)?cin *>>', r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', code)
-        code =  re.sub(r'(std::)?getline *', r'std::cout<<GET_INPUT_STREAM_JP;std::getline ', code)
-        global_header = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\""
-        code = global_header + "\n" + code
+        if not re.search(r'int\s+main\s*\(', code):
+            code = f"{self.main_head}\n{code}\n{self.main_foot}"
+
+        code = re.sub(
+            r'(std::)?cin *>>|'
+            r'(std::)?getline *',
+            r'std::cout << GET_INPUT_STREAM_JP;',
+            code
+        )
+
         code = self._support_external_header(code)
+        global_header = f"#include \"{self.resDir}/gcpph.hpp\""
+        code = f"{code}\n{global_header}"
+
         return magics, code
 
-    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
 
+    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         magics, code = self._filter_magics(code)
         magics, code = self._add_main(magics, code)
         
-        with self.new_temp_file(suffix='.cpp') as source_file:
+        with self.new_temp_file(suffix='.cpp') as source_file, \
+            self.new_temp_file(suffix='.out') as binary_file:
             source_file.write(code)
             source_file.flush()
-            with self.new_temp_file(suffix='.out') as binary_file:
-                p = self.compile_with_gpp(source_file.name, binary_file.name, magics['cflags'], magics['ldflags'])
-                while p.poll() is None:
-                    p.write_contents()
+            
+            p = self.compile_with_gpp(source_file.name, binary_file.name, magics['cflags'], magics['ldflags'])
+            while p.poll() is None:
                 p.write_contents()
-                if p.returncode != 0:  # Compilation failed
-                    self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
-                    os.remove(source_file.name)
-                    os.remove(binary_file.name)
-                    return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
+            p.write_contents()
+            
+            if p.returncode != 0:  # Compilation failed
+                self._write_to_stderr("\n[C++ 14 kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
+                return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
 
-        p = self.create_jupyter_subprocess([self.master_path, binary_file.name] + magics['args'])
-        while p.poll() is None:
+            p = self.create_jupyter_subprocess([self.master_path, binary_file.name] + magics['args'])
+            while p.poll() is None:
+                p.write_contents()
+
+            # wait for threads to finish, so output is always shown
+            p._stdout_thread.join()
+            p._stderr_thread.join()
             p.write_contents()
 
-        # wait for threads to finish, so output is always shown
-        p._stdout_thread.join()
-        p._stderr_thread.join()
+            if p.returncode != 0:
+                self._write_to_stderr("\n[C++ 14 Error] Executable exited with code {}".format(p.returncode))
 
-        p.write_contents()
-
-        # now remove the files we have just created
-        os.remove(source_file.name)
-        os.remove(binary_file.name)
-
-        if p.returncode != 0:
-            self._write_to_stderr("\n[C++ 14 Error] Executable exited with code {}".format(p.returncode))
-        
         return {'status': 'ok', 'execution_count': self.execution_count, 'payload': [], 'user_expressions': {}}
+
 
     def do_shutdown(self, restart):
         self.cleanup_files()
