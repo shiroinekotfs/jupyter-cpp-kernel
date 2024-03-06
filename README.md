@@ -1,3 +1,9 @@
+```markdown
+A random quote of this repo:
+[CsehRafin]@[Harvard Community Hub] 
+"Bro us literally launches a new gender every month. If Joe Biden sees the "Harvard president's name" he will make a new gender"
+```
+
 > ℹ️
 > * For C/C++ header add-on development, [try this template](https://github.com/shiroinekotfs/jupyter-cpp-header-template)
 > * [Security issue with Jupyter Notebooks](https://github.com/shiroinekotfs/jupyter-cpp-kernel/discussions/20)
