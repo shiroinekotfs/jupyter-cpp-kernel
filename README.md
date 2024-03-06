@@ -1,6 +1,5 @@
 ```markdown
-A random quote of this repo:
-[CsehRafin]@[Harvard Community Hub] 
+A random quote of this repo: [CsehRafin]@[Harvard Community Hub] 
 "Bro us literally launches a new gender every month. If Joe Biden sees the "Harvard president's name" he will make a new gender"
 ```
 
