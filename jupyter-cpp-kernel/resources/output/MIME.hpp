@@ -16,15 +16,15 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef _JDISPLAY_HPP
-#define _JDISPLAY_HPP
+#ifndef _MIME_type
+#define _MIME_type
 
 #include <iostream>
 #include <string>
 
-#include "ytlinkpro.hpp"
+#include "MIME_YouTube.hpp"
 
-namespace jdisplay {
+namespace _MIME_display {
     
     void IFrame (std::string url, std::string width = "auto", std::string height = "auto") {
         std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>" << std::endl;
@@ -51,7 +51,7 @@ namespace jdisplay {
     }
 
     void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {
-        token = jdisplayyt::YouTubeLinkExtractor(token);
+        token = MIME_YouTube::YouTubeLinkExtractor(token);
 
         if (token == "ERROR") {
             std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;

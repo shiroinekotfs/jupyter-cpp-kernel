@@ -51,6 +51,6 @@ extern "C" {
 #define GET_INPUT_STREAM_JP "<inputRequest>"
 
 //output
-#include "output/jdisplay.hpp"
+#include "output/MIME.hpp"
 
 #endif

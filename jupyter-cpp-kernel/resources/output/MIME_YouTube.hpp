@@ -1,13 +1,12 @@
 /*==============================================================================
-YouTube Token Extractor - C++ header
+YouTuber App Handler - C++ header
 
 Copyright (C) 2024 shiroinekotfs
 
 Component: Component Header
 
-Purpose:   Jupyter Display Handler provides functions within `jdisplay` namespace, 
-           helping people interacting with Jupyter web-based engine. Allows 
-           displaying beautiful outputs, using HTML/CSS, JavaScript, and Markdown.
+Purpose:   YouTube App (Video) Handler for MIME types on C++ kernel for
+           Jupyter.
 Owner:     shiroinekotfs
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: shiroinekotfs (signed-off by shiroinekotfs)
@@ -16,14 +15,14 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef _YTLINKPRO_HPP
-#define _YTLINKPRO_HPP
+#ifndef _MIME_YouTube
+#define _MIME_YouTube
 
 #include <iostream>
 #include <string>
 #include <regex>
 
-namespace jdisplayyt {
+namespace MIME_YouTube {
 
     std::string YouTubeLinkExtractor(std::string url) {
         std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
