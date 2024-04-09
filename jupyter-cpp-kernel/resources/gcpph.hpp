@@ -39,7 +39,9 @@ extern "C" {
     #include <cstdlib>
     #include <cstdio>
     #include "basicf/rstdio.h" //stdio.h, but recontructed
+
     //dlfcn.h is not available on G++ for Windows
+    //Make sure you have installed dl-lib onto the Windows first
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
     #else
