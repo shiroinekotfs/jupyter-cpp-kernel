@@ -16,49 +16,79 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef _MIME_type
-#define _MIME_type
+/*
+BASIC INTRO
+===========
+
+These are MIME type groups provided by IANA:
+    application
+    audio
+    font
+    example
+    image
+    message
+    model
+    multipart
+    text
+    video
+*/
+
+#ifndef _MIME_TYPE_H
+#define _MIME_TYPE_H
 
 #include <iostream>
 #include <string>
 
-#include "MIME_YouTube.hpp"
+namespace MIME {
 
-namespace _MIME_display {
-    
-    void IFrame (std::string url, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>" << std::endl;
-    }
-
-    void Audio (std::string source) {
-        std::cout << "<figure><audio controls src=\"" << source << "\"><a href=\"" << source << "\"></a></audio></figure>" << std::endl;
-    }
-
-    void CodeString (std::string code) {
-        std::cout << "```\n" << std::endl << code << std::endl << "\n```\n" << std::endl;
-    }
-
-    void Image (std::string data, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<img src=\"" << data << "\" width=\"" << width<< "\" height=\"" << height << "\" />" << std::endl;
-    }
-
-    void PDF (std::string pdffile, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<embed src=\"" << pdffile << "\" width=\"" << width << "\" height=\"" << height << "\" type=\"application/pdf\" >" << std::endl;
-    }
-
-    void Video (std::string video, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<video width=\"" << width << "\" height=\"" << height << "\" controls src=\"" << video << "\">animation</video>" << std::endl;
-    }
-
-    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {
-        token = MIME_YouTube::YouTubeLinkExtractor(token);
-
-        if (token == "ERROR") {
-            std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;
-        } else {
-            std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << token << "\" allowfullscreen></iframe>" << std::endl;
+    class MimeHandler {
+    public:
+        void _jupyter_application(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("application", type, source, width, height);
         }
-    }
+
+        void _jupyter_audio(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("audio", type, source, width, height);
+        }
+
+        void _jupyter_font(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("font", type, source, width, height);
+        }
+
+        void _jupyter_example(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("example", type, source, width, height);
+        }
+
+        void _jupyter_image(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("image", type, source, width, height);
+        }
+
+        void _jupyter_message(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("message", type, source, width, height);
+        }
+
+        void _jupyter_model(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("model", type, source, width, height);
+        }  
+
+        void _jupyter_multipart(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("multipart", type, source, width, height);
+        }
+
+        void _jupyter_text(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("text", type, source, width, height);
+        }
+
+        void _jupyter_video(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
+            __embed__("video", type, source, width, height);
+        }
+
+    private:
+        void __embed__(const std::string& category, const std::string& type, const std::string& source, const std::string& width, const std::string& height) {
+            std::cout << "<embed src=\"" << source << "\" width=\"" << width << "\" height=\"" << height << "\" type=\"" << category << "/" << type << "\" >" << std::endl;
+        }
+    };
+
 }
 
 #endif
