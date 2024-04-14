@@ -54,5 +54,6 @@ extern "C" {
 
 //output
 #include "output/MIME.hpp"
+#include "output/display_core.hpp"
 
 #endif
