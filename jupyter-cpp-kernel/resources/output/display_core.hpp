@@ -21,8 +21,21 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 
 #include <iostream>
 #include <string>
+#include <regex>
 
-#include "MIME_YouTube.hpp"
+namespace _MIME_YouTube {
+
+    std::string YouTubeLinkExtractor(std::string url) {
+        std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
+        std::smatch match;
+        if (std::regex_match(url, match, regExp) && match[7].length() == 11) {
+            std::string b = match[7];
+            return b;
+        } else {
+            return "ERROR";
+        }
+    }
+}
 
 namespace _Jupyter_Display {
 
@@ -107,7 +120,7 @@ namespace _Jupyter_Display {
     }
 
     void ProgressBar(std::string html_width = "auto",  std::string maxvalue = "100", std::string progress ) {
-        "<progress style='width:" + html_width + "' max='" + maxvalue + "' value='" + progress + "'></progress>"
+        "<progress style='width:" + html_width + "' max='" + maxvalue + "' value='" + progress + "'></progress>";
     }
 
     /*
