@@ -22,7 +22,7 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #include <string>
 #include <regex>
 
-namespace MIME_YouTube {
+namespace _MIME_YouTube {
 
     std::string YouTubeLinkExtractor(std::string url) {
         std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
