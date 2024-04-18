@@ -38,12 +38,12 @@ Logic Gates
 *   - shiroinekotfs (C++ kernel for Jupyter developer)
 */
 
-#define LOGIC_NOT                    1-logic_a                                ///NOT                 
-#define LOGIC_ALWAYS                 logic_a                                  ///ALWAYS
-#define LOGIC_AND                    logic_a*logic_b                          ///AND
-#define LOGIC_NAND                   1-logic_a*logic_b                        ///NOT AND
-#define LOGIC_MOD_TOL                1 -logic_a*(1-logic_b)                   ///Modus tollens
-#define LOGIC_BIO_INTRO              logic_a*logic_b+(1-logic_a)*(1-logic_b)  ///BIO INTRO
+#define LOGIC_NOT                    1 - logic_a                                          // NOT                 
+#define LOGIC_ALWAYS                 logic_a                                              // ALWAYS
+#define LOGIC_AND                    logic_a * logic_b                                    // AND
+#define LOGIC_NAND                   1 - logic_a * logic_b                                // NOT AND
+#define LOGIC_MOD_TOL                1 - logic_a * (1 - logic_b)                          // Modus tollens
+#define LOGIC_BIO_INTRO              logic_a * logic_b + (1 - logic_a) * (1 - logic_b)    // BIO INTRO
 
 /*
 Math constants
