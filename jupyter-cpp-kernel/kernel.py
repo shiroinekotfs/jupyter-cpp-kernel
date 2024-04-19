@@ -204,18 +204,16 @@ class CPPKernel(Kernel):
     def _add_main(self, magics, code):
         if not re.search(r'int\s+main\s*\(\s*\)', code):
             code = f"{self.main_head}\n{code}\n{self.main_foot}"
-        code = re.sub(r'(std::)?cin\s*>>', r'std::cout << GET_INPUT_STREAM_JP; std::cin >>', code)
-        code = re.sub(r'(std::)?getline\s*', r'std::cout << GET_INPUT_STREAM_JP; std::getline ', code)
+        code = re.sub(r'(std::)?cin\s*>>', r'std::cout << __GET_INPUT_STREAM_JP; std::cin >>', code)
+        code = re.sub(r'(std::)?getline\s*', r'std::cout << __GET_INPUT_STREAM_JP; std::getline', code)
         global_header = f"#include \"{self.resDir}/gcpph.hpp\""
         code = f"{global_header}\n{code}"
         code = self._support_external_header(code)
         return magics, code
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
-
         magics, code = self._filter_magics(code)
         magics, code = self._add_main(magics, code)
-        
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
             source_file.flush()
