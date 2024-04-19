@@ -84,7 +84,7 @@ class CPPKernel(Kernel):
                      'file_extension': '.cpp'
                     }
     
-    introduction = "C++ 14 kernel for Jupyter (master), version 1.0.0a7\n\n"
+    introduction = "C++ 14 kernel for Jupyter (master), version 1.0.0a8\n\n"
     cp_banner = "Copyright (C) 2024 shiroinekotfs\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
     links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
     reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
@@ -222,7 +222,7 @@ class CPPKernel(Kernel):
         code = re.sub(
             r'(std::)?cin *>>|'
             r'(std::)?getline *',
-            r'std::cout << GET_INPUT_STREAM_JP;',
+            r'std::cout << __GET_INPUT_STREAM_JP;',
             code
         )
         code = self._support_external_header(code)

@@ -50,7 +50,7 @@ extern "C" {
 }
 
 //user input
-#define GET_INPUT_STREAM_JP "<inputRequest>"
+#define __GET_INPUT_STREAM_JP "<inputRequest>"
 
 //output
 #include "output/display_core.hpp"
