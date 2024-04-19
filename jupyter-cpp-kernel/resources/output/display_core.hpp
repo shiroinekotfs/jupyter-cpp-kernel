@@ -67,18 +67,7 @@ namespace _Jupyter_Display {
             static void _jupyter_video(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
                 __embed__("video", type, source, width, height);
             }
-
-            static std::string YouTubeLinkExtractor(std::string url) {
-                std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
-                std::smatch match;
-                if (std::regex_match(url, match, regExp) && match[7].length() == 11) {
-                    std::string b = match[7];
-                    return b;
-                } else {
-                    return "ERROR";
-                }
-            }
-
+        
         private:
             static void __embed__(const std::string& category, const std::string& type, const std::string& source, const std::string& width, const std::string& height) {
                 std::cout << "<embed src=\"" << source << "\" width=\"" << width << "\" height=\"" << height << "\" type=\"" << category << "/" << type << "\">" << std::endl;
@@ -91,10 +80,8 @@ namespace _Jupyter_Display {
     }
 
     void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {      
-        std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
-        std::smatch match;
+        std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"); std::smatch match;
         if (std::regex_match(token, match, regExp) && match[7].length() == 11) {
-            //std::string token = ;
             std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << match[7] << "\" allowfullscreen></iframe>" << std::endl;
         } else {
             std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;
@@ -180,7 +167,6 @@ namespace _Jupyter_Display {
     void HTML (std::string htmlfile, std::string width="auto", std::string height = "auto") {
         MimeHandler::_jupyter_text("html", htmlfile, width, height);
     }
-
 }
 
 #endif
