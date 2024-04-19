@@ -23,19 +23,6 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #include <string>
 #include <regex>
 
-namespace _MIME_YouTube {
-
-    std::string YouTubeLinkExtractor(std::string url) {
-        std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
-        std::smatch match;
-        if (std::regex_match(url, match, regExp) && match[7].length() == 11) {
-            std::string b = match[7];
-            return b;
-        } else {
-            return "ERROR";
-        }
-    }
-}
 
 namespace _Jupyter_Display {
 
@@ -81,6 +68,17 @@ namespace _Jupyter_Display {
                 __embed__("video", type, source, width, height);
             }
 
+            static std::string YouTubeLinkExtractor(std::string url) {
+                std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
+                std::smatch match;
+                if (std::regex_match(url, match, regExp) && match[7].length() == 11) {
+                    std::string b = match[7];
+                    return b;
+                } else {
+                    return "ERROR";
+                }
+            }
+
         private:
             static void __embed__(const std::string& category, const std::string& type, const std::string& source, const std::string& width, const std::string& height) {
                 std::cout << "<embed src=\"" << source << "\" width=\"" << width << "\" height=\"" << height << "\" type=\"" << category << "/" << type << "\">" << std::endl;
@@ -92,8 +90,15 @@ namespace _Jupyter_Display {
         std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>" << std::endl;
     }
 
-    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {
-        token = _MIME_YouTube::YouTubeLinkExtractor(token);
+    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {      
+        std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
+        std::smatch match;
+        if (std::regex_match(token, match, regExp) && match[7].length() == 11) {
+            std::string b = match[7];
+            token = b;
+        } else {
+            token = "ERROR";
+        }
 
         if (token == "ERROR") {
             std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;
@@ -120,7 +125,7 @@ namespace _Jupyter_Display {
     }
 
     void ProgressBar(std::string html_width = "auto",  std::string maxvalue = "100", std::string progress ) {
-        "<progress style='width:" + html_width + "' max='" + maxvalue + "' value='" + progress + "'></progress>";
+        std::cout << "<progress style='width:" + html_width + "' max='" + maxvalue + "' value='" + progress + "'></progress>" << std::endl;
     }
 
     /*
@@ -168,8 +173,6 @@ namespace _Jupyter_Display {
     void U3D (std::string u3dfile, std::string width = "auto", std::string height = "auto") {
         MimeHandler::_jupyter_model("u3d", u3dfile, width, height);
     }
-
-
 
     //text
     void PlainText (std::string plaintextfile, std::string width="auto", std::string height = "auto") {
