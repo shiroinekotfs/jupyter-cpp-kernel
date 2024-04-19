@@ -84,7 +84,7 @@ class CPPKernel(Kernel):
 
     banner = introduction + cp_banner + links_guide + reporting_links
 
-    main_head = "#include <iostream>\n" + "int main(){\n"
+    main_head = "#include <iostream>\n" + "int main() {\n"
 
     main_foot = "\nreturn 0;\n}"
 
@@ -204,10 +204,9 @@ class CPPKernel(Kernel):
     def _add_main(self, magics, code):
         if not re.search(r'int\s+main\s*\(\s*\)', code):
             code = f"{self.main_head}\n{code}\n{self.main_foot}"
-        code = re.sub(r'(std::)?cin\s*>>', r'std::cout << __GET_INPUT_STREAM_JP; std::cin >>', code)
-        code = re.sub(r'(std::)?getline\s*', r'std::cout << __GET_INPUT_STREAM_JP; std::getline', code)
-        global_header = f"#include \"{self.resDir}/gcpph.hpp\""
-        code = f"{global_header}\n{code}"
+        code = re.sub(r'(std::)?cin *>>', r'std::cout<<GET_INPUT_STREAM_JP;std::cin >>', code)
+        code =  re.sub(r'(std::)?getline *', r'std::cout<<GET_INPUT_STREAM_JP;std::getline ', code)
+        code = "#include" + "\"" + self.resDir + "/gcpph.hpp" + "\"" + "\n" + code
         code = self._support_external_header(code)
         return magics, code
 
