@@ -23,7 +23,6 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #include <string>
 #include <regex>
 
-
 namespace _Jupyter_Display {
 
     class MimeHandler {
@@ -105,8 +104,8 @@ namespace _Jupyter_Display {
         std::cout << "<img src=\"" << data << "\" width=\"" << width<< "\" height=\"" << height << "\" />" << std::endl;
     }
 
-    void ProgressBar(std::string html_width = "auto",  std::string maxvalue = "100", std::string progress ) {
-        std::cout << "<progress style='width:" + html_width + "' max='" + maxvalue + "' value='" + progress + "'></progress>" << std::endl;
+    void ProgressBar(std::string progress, std::string html_width = "auto",  std::string maxvalue = "100") {
+        std::cout << "<progress style=\"width:" + html_width + "\" max=\"" + maxvalue + "\" value=\"" + progress + "\"></progress>" << std::endl;
     }
 
     /*
