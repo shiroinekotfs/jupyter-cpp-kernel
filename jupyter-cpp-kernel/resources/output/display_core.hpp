@@ -94,16 +94,10 @@ namespace _Jupyter_Display {
         std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*");
         std::smatch match;
         if (std::regex_match(token, match, regExp) && match[7].length() == 11) {
-            std::string b = match[7];
-            token = b;
+            //std::string token = ;
+            std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << match[7] << "\" allowfullscreen></iframe>" << std::endl;
         } else {
-            token = "ERROR";
-        }
-
-        if (token == "ERROR") {
             std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;
-        } else {
-            std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << token << "\" allowfullscreen></iframe>" << std::endl;
         }
     }
 
