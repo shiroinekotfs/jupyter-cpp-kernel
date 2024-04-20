@@ -69,7 +69,7 @@ class RealTimeSubprocess(subprocess.Popen):
 class CPPKernel(Kernel):
     implementation = 'jupyter_cpp_kernel'
     implementation_version = '1.0'
-    language = 'cpp'
+    language = 'c++'
     language_version = 'C++14'
     language_info = {
                      'name': 'text/markdown',

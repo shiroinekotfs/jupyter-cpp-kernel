@@ -7,5 +7,5 @@
         "{connection_file}"
     ],
     "display_name": "C++ 14",
-    "language": "cpp"
+    "language": "c++"
 }

@@ -104,10 +104,6 @@ namespace _Jupyter_Display {
         std::cout << "<img src=\"" << data << "\" width=\"" << width<< "\" height=\"" << height << "\" />" << std::endl;
     }
 
-    void ProgressBar(std::string progress, std::string html_width = "auto",  std::string maxvalue = "100") {
-        std::cout << "<progress style=\"width:" + html_width + "\" max=\"" + maxvalue + "\" value=\"" + progress + "\"></progress>" << std::endl;
-    }
-
     /*
     These 'embed' are sorted by this method
     1.      application
@@ -146,14 +142,6 @@ namespace _Jupyter_Display {
         MimeHandler::_jupyter_model("obj", objfile, width, height);
     }
 
-    void STL (std::string stlfile, std::string width = "auto", std::string height = "auto") {
-        MimeHandler::_jupyter_model("stl", stlfile, width, height);
-    }
-
-    void U3D (std::string u3dfile, std::string width = "auto", std::string height = "auto") {
-        MimeHandler::_jupyter_model("u3d", u3dfile, width, height);
-    }
-
     //text
     void PlainText (std::string plaintextfile, std::string width="auto", std::string height = "auto") {
         MimeHandler::_jupyter_text("plain", plaintextfile, width, height);
@@ -165,6 +153,10 @@ namespace _Jupyter_Display {
 
     void HTML (std::string htmlfile, std::string width="auto", std::string height = "auto") {
         MimeHandler::_jupyter_text("html", htmlfile, width, height);
+    }
+
+    void CSV (std::string csvfile, std::string width="auto", std::string height="auto") {
+        MimeHandler::_jupyter_text("csv", csvfile, width, height);
     }
 }
 
