@@ -91,11 +91,6 @@ class CPPKernel(Kernel):
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
         self._allow_stdin = True
-        self.readOnlyFileSystem = False
-        self.bufferedOutput = True
-        self.linkMaths = True # always link math library
-        self.wAll = True # show all warnings by default
-        self.wError = False # but keep compiling for warnings
         self.standard = "c++14" # default standard if none is specified
         self.files = []
         mastertemp = tempfile.mkstemp(suffix='.out')
@@ -145,43 +140,22 @@ class CPPKernel(Kernel):
         return RealTimeSubprocess(cmd, self._write_to_stdout, self._write_to_stderr, self._read_from_stdin)
 
     def compile_with_gpp(self, source_filename, binary_filename, cflags=None, ldflags=None):
-        cflags = ['-pedantic', '-fPIC', '-std=c++14', '-w', '-shared', '-Wno-unused-but-set-variable', '-Wno-unused-parameter', '-Wno-unused-variable'] + cflags
-        if self.linkMaths:
-            cflags = cflags + ['-lm']
-        if self.wError:
-            cflags = cflags + ['-Werror']
-        if self.wAll:
-            cflags = cflags + ['-Wall']
-        if self.readOnlyFileSystem:
-            cflags = ['-DREAD_ONLY_FILE_SYSTEM'] + cflags
-        if self.bufferedOutput:
-            cflags = ['-DBUFFERED_OUTPUT'] + cflags
-        args = ['g++', source_filename] + cflags + ['-o', binary_filename] + ldflags
-        return self.create_jupyter_subprocess(args)
-
-    def _filter_magics(self, code):
-        magics = {'cflags': [],'ldflags': [], 'args': []}; actualCode = ''
-
-        for line in code.splitlines():
-            if line.startswith('//%'):
-                magicSplit = line[3:].split(":", 2)
-                if(len(magicSplit) < 2):
-                    self._write_to_stderr("\n[C++ 14 kernel] Magic line starting with '//%' is missing a semicolon, ignoring.")
-                    continue
-                key, value = magicSplit
-                key = key.strip().lower()
-                if key in ['ldflags', 'cflags']:
-                    for flag in value.split():
-                        magics[key] += [flag]
-                elif key == "args":
-                    magics['args'] = [argument.strip('"') for argument in re.findall(r'(?:[\s,"]|"(?:\.|["])*")+', value, timeout=1)]
-                actualCode += '\n'
-            else:
-                actualCode += line + '\n'
-        if not any(item.startswith('-std=') for item in magics["cflags"]):
-            magics["cflags"] += ["-std=" + self.standard]
-
-        return magics, actualCode
+        return self.create_jupyter_subprocess(
+            ['g++', source_filename] + 
+            ['-pedantic', 
+             '-fPIC', 
+             '-std=c++14', 
+             '-w', '-shared', 
+             '-Wno-unused-but-set-variable', 
+             '-Wno-unused-parameter', 
+             '-Wno-unused-variable', 
+             '-lm', 
+             '-Wall', 
+             '-DBUFFERED_OUTPUT'
+             ] + cflags + 
+             ['-o', binary_filename] + 
+             ldflags
+            )
 
     def _find_local_header(self):
         search_paths = [os.path.abspath(os.path.dirname(__file__)), sys.prefix]
@@ -211,7 +185,6 @@ class CPPKernel(Kernel):
         return magics, code
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
-        magics, code = self._filter_magics(code)
         magics, code = self._add_main(magics, code)
         with self.new_temp_file(suffix='.cpp') as source_file:
             source_file.write(code)
