@@ -5,9 +5,10 @@ Copyright (C) 2024 shiroinekotfs
 
 Component: Component Header
 
-Purpose:   Jupyter Display Handler provides functions within `jdisplay` namespace, 
-           helping people interacting with Jupyter web-based engine. Allows 
-           displaying beautiful outputs, using HTML/CSS, JavaScript, and Markdown.
+Purpose:   Jupyter Display Handler provides functions within `_Jupyter_Display` 
+           namespace, helping people interacting with Jupyter web-based engine. 
+           Allows displaying beautiful outputs, using HTML/CSS, JavaScript, 
+           Markdown, and even more.
 Owner:     shiroinekotfs
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: shiroinekotfs (signed-off by shiroinekotfs)
