@@ -1,3 +1,5 @@
 from ipykernel.kernelapp import IPKernelApp
 from .kernel import CPPKernel
-IPKernelApp.launch_instance(kernel_class=CPPKernel)
+
+if __name__ == '__main__':
+    IPKernelApp.launch_instance(kernel_class=CPPKernel)

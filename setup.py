@@ -1,8 +1,9 @@
 from setuptools import setup
 
-setup(name='jupyter-cpp-kernel',
-      version='1.0.0a7',
-      description='C++ 14 kernel for Jupyter',
+setup(
+      name='jupyter-cpp-kernel',
+      version='1.0.0a8',
+      description='C++ kernel for Jupyter',
       author='shiroinekotfs',
       author_email='shiroineko.tfs@gmail.com',
       license='MIT',
@@ -22,7 +23,7 @@ setup(name='jupyter-cpp-kernel',
       include_package_data=True,
       data_files=[
           ("share/jupyter/kernels/cpp14",
-           ["kernel_spec/logo-64x64.png", "kernel_spec/kernel.json", "kernel_spec/logo-32x32.png", "kernel_spec/logo-svg.svg"]),
+           ["kernel_spec/cpp14/logo-64x64.png", "kernel_spec/cpp14/kernel.json", "kernel_spec/cpp14/logo-32x32.png", "kernel_spec/cpp14/logo-svg.svg"]),
           ("share/cpp_header",
            ["share/cpp_header/check_cpp.hpp"])
       ]

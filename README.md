@@ -10,7 +10,9 @@
 [![Total Downloads](https://static.pepy.tech/badge/jupyter-cpp-kernel)](https://pepy.tech/project/jupyter-cpp-kernel)
 [![Downloads](https://static.pepy.tech/badge/jupyter-cpp-kernel/month)](https://pepy.tech/project/jupyter-cpp-kernel)
 
-# C++ 14 kernel for Jupyter
+# C++ (General) kernel for Jupyter
+
+> Started from version 1.0.0a8, the C++ kernel supports C++03, C++11, C++14, C++17, C++20
 
 ## Installation
 

@@ -21,10 +21,12 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #include <iostream>
 
 #include <array>
+#include <algorithm>
 #include <cmath>
 #include <exception>
 #include <fstream>
 #include <memory>
+#include <iomanip>
 #include <vector>
 #include <sstream>
 #include <stdexcept>
@@ -37,7 +39,9 @@ extern "C" {
     #include <cstdlib>
     #include <cstdio>
     #include "basicf/rstdio.h" //stdio.h, but recontructed
+
     //dlfcn.h is not available on G++ for Windows
+    //Make sure you have installed dl-lib onto the Windows first
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
     #else
@@ -46,9 +50,9 @@ extern "C" {
 }
 
 //user input
-#define GET_INPUT_STREAM_JP "<inputRequest>"
+#define __GET_INPUT_STREAM_JP "<inputRequest>"
 
 //output
-#include "output/jdisplay.hpp"
+#include "output/display_core.hpp"
 
 #endif
