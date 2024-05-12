@@ -18,7 +18,7 @@
 
 > :warning:
 >
-> If you want to use it on Windows, please installing the [GNU Compiler Collection for Windows](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
+> If you want to use it on Windows, please install the [GNU Compiler Collection for Windows](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
 
 Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
 
@@ -36,7 +36,7 @@ Normally, your target machine must meet these requirement packages before instal
 pip install jupyter-cpp-kernel
 ```
 
-### Install from GitHub repo
+### Install from the GitHub repo
 
 
 > :warning:
@@ -49,7 +49,7 @@ pip install git+https://github.com/shiroinekotfs/jupyter-cpp-kernel.git
 
 ## Contributing
 
-You can clone, create a fork or import this repo whenever you want.
+You can clone, create a fork, or import this repo whenever possible.
 
 Please follow the GitHub standards and the license
 
