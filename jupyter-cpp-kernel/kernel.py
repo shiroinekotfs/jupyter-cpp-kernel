@@ -63,10 +63,10 @@ class CPPKernel(Kernel):
         "file_extension": ".cpp",
     }
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super(CPPKernel, self).__init__(*args, **kwargs)
         self.main_head = "#include <iostream>\n" + "int main() {\n"
         self.main_foot = "\nreturn 0;\n}"
-        super(CPPKernel, self).__init__()
         self._allow_stdin = True
         self.standard = "c++14"
         self.files = []
