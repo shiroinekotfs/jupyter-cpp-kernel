@@ -107,8 +107,9 @@ class CPPKernel(Kernel):
 
     def create_jupyter_subprocess(self, cmd): return RealTimeSubprocess(cmd, self._write_to_stdout, self._write_to_stderr, self._read_from_stdin)
 
-    def compile_with_gpp(self, source_filename, binary_filename): return self.create_jupyter_subprocess(["g++", source_filename, "-pedantic", "-fPIC", f"-std={self.standard}", "-w", "-shared", 
-             "-Wno-unused-but-set-variable", "-Wno-unused-parameter", "-Wno-unused-variable", "-lm", "-Wall","-DBUFFERED_OUTPUT","-o",binary_filename,])
+    def compile_with_gpp(self, source_filename, binary_filename): return self.create_jupyter_subprocess(["g++", source_filename, "-pedantic", "-fPIC", 
+                        f"-std={self.standard}", "-w", "-shared", "-Wno-unused-but-set-variable", "-Wno-unused-parameter", "-Wno-unused-variable", "-lm", 
+                        "-Wall","-DBUFFERED_OUTPUT","-o",binary_filename,])
 
     def _find_local_header(self):
         search_paths = [os.path.abspath(os.path.dirname(__file__)), sys.prefix]
@@ -129,7 +130,7 @@ class CPPKernel(Kernel):
     def _add_main(self, code):
         if not re.search(r"int\s+main\s*\(\s*\)", code): code = f"{self.main_head}\n{code}\n{self.main_foot}"
         code = re.sub( r"(std::)?cin *>>", r"std::cout << __GET_INPUT_STREAM_JP;std::cin >>", code)
-        code = re.sub(r"(std::)?getline *", r"std::cout << __GET_INPUT_STREAM_JP;std::getline ", code)
+        code = re.sub(r'(std::)?getline\s*\(\s*(std::\s*)?cin\s*,', r'std::cout << __GET_INPUT_STREAM_JP; std::getline(\2cin,', code)
         code = "#include" + '"' + self.resDir + "/gcpph.hpp" + '"' + "\n" + code
         code = self._support_external_header(code)
         return code
