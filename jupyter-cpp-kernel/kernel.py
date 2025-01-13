@@ -57,8 +57,14 @@ class CPPKernel(Kernel):
     implementation_version = "1.0"
     language = "C++"
     language_version = "C++"
+    help_links = [
+        {'text': "License", 'url': "https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE"},
+        {'text': "Notebook tutorial", 'url': "https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc"},
+        {'text': "Reporting the issue", 'url': "https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"}
+    ]
     language_info = {
-        "name": "text/markdown",
+        "name": "C++14",
+        'version': '1.0.0a9',
         "mimetype": "text/markdown",
         "file_extension": ".cpp",
     }
@@ -70,17 +76,17 @@ class CPPKernel(Kernel):
         self._allow_stdin = True
         self.standard = "c++14"
         self.files = []
-        mastertemp = tempfile.mkstemp(suffix=".out")
-        os.close(mastertemp[0])
-        self.master_path = mastertemp[1]
+        master_temp = tempfile.mkstemp(suffix=".out")
+        os.close(master_temp[0])
+        self.master_path = master_temp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), "resources")
         filepath = path.join(self.resDir, "master.cpp")
         subprocess.call([ "g++", filepath, f"-std={self.standard}", "-Wno-unused-but-set-variable", "-Wno-unused-parameter", "-Wno-unused-variable", "-ldl", "-w", "-o", self.master_path, ])
 
     @property
     def banner(self):
-        introduction = (f"({self.standard}) kernel for Jupyter (master), version 1.0.0a8\n\n")
-        cp_banner = "Copyright (C) Shiroi Neko (Tiểu Bạch Miêu)\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
+        introduction = (f"({self.standard}) kernel for Jupyter (master), version 1.0.0a9\n\n")
+        cp_banner = "Copyright (C) Shiroi Neko\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
         links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
         reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
         banner = f"{introduction}{cp_banner}{links_guide}{reporting_links}"
@@ -97,8 +103,10 @@ class CPPKernel(Kernel):
         return file
 
     def _write_to_stdout(self, contents):
-        if os.name == "nt": contents = contents.replace("\r\n", "\r\n\r\n")
-        else: contents = contents.replace("\n", "\n\n")
+        if os.name == "nt": 
+            contents = contents.replace("\r\n", "\r\n\r\n")
+        else: 
+            contents = contents.replace("\n", "\n\n")
         self.send_response( self.iopub_socket, "display_data", {"data": {"text/markdown": contents}, "metadata": {}})
 
     def _write_to_stderr(self, contents): self.send_response(self.iopub_socket, "stream", {"name": "stderr", "text": contents})
