@@ -1,9 +1,8 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
-from os.path import abspath, dirname, exists, join
+from os import path, remove, listdir, close as fsclose, name as ostype
 import re, subprocess, tempfile, sys
-import os, os.path as path
 
 class RealTimeSubprocess(subprocess.Popen):
     inputRequest = "<inputRequest>"
@@ -77,7 +76,7 @@ class CPPKernel(Kernel):
         self.standard = "c++14"
         self.files = []
         master_temp = tempfile.mkstemp(suffix=".out")
-        os.close(master_temp[0])
+        fsclose(master_temp[0])
         self.master_path = master_temp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), "resources")
         filepath = path.join(self.resDir, "master.cpp")
@@ -94,8 +93,8 @@ class CPPKernel(Kernel):
 
     def cleanup_files(self):
         for file in self.files:
-            if os.path.exists(file): os.remove(file)
-        os.remove(self.master_path)
+            if path.exists(file): remove(file)
+        remove(self.master_path)
 
     def new_temp_file(self, **kwargs):
         file = tempfile.NamedTemporaryFile(delete=False, mode="w", **kwargs)
@@ -103,7 +102,7 @@ class CPPKernel(Kernel):
         return file
 
     def _write_to_stdout(self, contents):
-        if os.name == "nt": 
+        if ostype == "nt":
             contents = contents.replace("\r\n", "\r\n\r\n")
         else: 
             contents = contents.replace("\n", "\n\n")
@@ -120,29 +119,33 @@ class CPPKernel(Kernel):
                         "-Wall","-DBUFFERED_OUTPUT","-o",binary_filename,])
 
     def _find_local_header(self):
-        search_paths = [os.path.abspath(os.path.dirname(__file__)), sys.prefix]
+        search_paths = [path.abspath(path.dirname(__file__)), sys.prefix]
         for path in search_paths:
             while path != "/":
-                cpp_header_path = os.path.join(path, "share", "cpp_header")
-                if os.path.exists(os.path.join(cpp_header_path, "check_cpp.hpp")): return cpp_header_path
-                path = os.path.dirname(path)
+                cpp_header_path = path.join(path, "share", "cpp_header")
+                if path.exists(path.join(cpp_header_path, "check_cpp.hpp")): return cpp_header_path
+                path = path.dirname(path)
         return ""
 
+    
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
-        for file in os.listdir(DATA_FILES_PATH):
-            path_to_header = os.path.join(DATA_FILES_PATH, file)
-            if os.path.isfile(path_to_header): code = '#include "' + path_to_header + '"\n' + code
+        for file in listdir(DATA_FILES_PATH):
+            path_to_header = path.join(DATA_FILES_PATH, file)
+            if path.isfile(path_to_header): code = '#include "' + path_to_header + '"\n' + code
         return code
-
+    
     def _add_main(self, code):
-        if not re.search(r"int\s+main\s*\(\s*\)", code): code = f"{self.main_head}\n{code}\n{self.main_foot}"
-        code = re.sub( r"(std::)?cin *>>", r"std::cout << __GET_INPUT_STREAM_JP;std::cin >>", code)
+        if not re.search(r"int\s+main\s*\(\s*\)", code): 
+            code = f"{self.main_head}\n{code}\n{self.main_foot}"
+        
+        code = re.sub(r"(std::)?cin *>>", r"std::cout << __GET_INPUT_STREAM_JP;std::cin >>", code)
         code = re.sub(r'(std::)?getline\s*\(\s*(std::\s*)?cin\s*,', r'std::cout << __GET_INPUT_STREAM_JP; std::getline(\2cin,', code)
         code = "#include" + '"' + self.resDir + "/gcpph.hpp" + '"' + "\n" + code
         code = self._support_external_header(code)
         return code
 
+    
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         code = self._add_main(code)
         with self.new_temp_file(suffix=".cpp") as source_file:
@@ -154,8 +157,8 @@ class CPPKernel(Kernel):
                 p.write_contents()
                 if p.returncode != 0:  # Compilation failed
                     self._write_to_stderr("\n[C++ kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
-                    os.remove(source_file.name)
-                    os.remove(binary_file.name)
+                    remove(source_file.name)
+                    remove(binary_file.name)
                     return {"status": "ok", "execution_count": self.execution_count, "payload": [], "user_expressions": {}}
 
         p = self.create_jupyter_subprocess([self.master_path, binary_file.name])
@@ -168,8 +171,8 @@ class CPPKernel(Kernel):
         p.write_contents()
 
         # now remove the files we have just created
-        os.remove(source_file.name)
-        os.remove(binary_file.name)
+        remove(source_file.name)
+        remove(binary_file.name)
 
         if p.returncode != 0: self._write_to_stderr("\n[C++ kernel] Error: Executable exited with code {}".format(p.returncode))
 
