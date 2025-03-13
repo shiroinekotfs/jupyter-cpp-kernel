@@ -13,3 +13,5 @@ venv/
 *.msi
 *.whl
 *.out
+
+.tmp
