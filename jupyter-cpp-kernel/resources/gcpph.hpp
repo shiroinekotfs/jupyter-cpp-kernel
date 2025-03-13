@@ -1,5 +1,5 @@
 /*==============================================================================
-GC++ Header for Jupyter C++ kernel
+C++ Header for Jupyter C++ kernel
 
 Copyright (C) 2024 shiroinekotfs
 
@@ -17,7 +17,14 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #ifndef _GCPPH_HPP
 #define _GCPPH_HPP
 
-//global, no folder structure
+/*
+Global Headers
+
+* Must place in first place, before C++ kernel customized header
+* Since C/C++ is procedural programming language, as the later headers will 
+*   override certain values that global define, for compatibilities
+*/
+
 #include <iostream>
 
 #include <array>
@@ -33,15 +40,10 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #include <string>
 #include <typeinfo>
 
-//basicf
-#include "basicf/mathdefs.hpp" //Math definitions header
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
-    #include "basicf/rstdio.h" //stdio.h, but recontructed
 
-    //dlfcn.h is not available on G++ for Windows
-    //Make sure you have installed dl-lib onto the Windows first
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
     #else
@@ -49,10 +51,20 @@ extern "C" {
     #endif
 }
 
-//user input
-#define __GET_INPUT_STREAM_JP "<inputRequest>"
+/*
+Customized Headers
 
-//output
-#include "output/display_core.hpp"
+* These headers include certain parameters and compatibilities, that 
+*   help C++ kernel run smoothly on Jupyter Platforms
+*/
+
+#include "basicf/mathdefs.hpp" // Math definitions header
+
+extern "C" {
+    #include "basicf/rstdio.h" // stdio.h, but recontructed
+}
+
+#include "cppio/cppin.hpp" // Input
+#include "cppio/cppout.hpp" // Output
 
 #endif

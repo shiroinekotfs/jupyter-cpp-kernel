@@ -17,8 +17,8 @@ Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
 
-#ifndef _DISPLAY_CORE_H_
-#define _DISPLAY_CORE_H_
+#ifndef _CPPOUT_HPP
+#define _CPPOUT_HPP
 
 #include <iostream>
 #include <string>
