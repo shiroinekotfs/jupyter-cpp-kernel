@@ -2,6 +2,7 @@ from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
 from os import path, remove, listdir, close as fsclose, name as ostype
+from functools import lru_cache
 import re, subprocess, tempfile, sys
 
 class RealTimeSubprocess(subprocess.Popen):
@@ -118,34 +119,36 @@ class CPPKernel(Kernel):
                         f"-std={self.standard}", "-w", "-shared", "-Wno-unused-but-set-variable", "-Wno-unused-parameter", "-Wno-unused-variable", "-lm", 
                         "-Wall","-DBUFFERED_OUTPUT","-o",binary_filename,])
 
+    @lru_cache(maxsize=1)
     def _find_local_header(self):
         search_paths = [path.abspath(path.dirname(__file__)), sys.prefix]
-        for path in search_paths:
-            while path != "/":
-                cpp_header_path = path.join(path, "share", "cpp_header")
-                if path.exists(path.join(cpp_header_path, "check_cpp.hpp")): return cpp_header_path
-                path = path.dirname(path)
+        for base in search_paths:
+            current = base
+            while current != "/":
+                cpp_header_path = path.join(current, "share", "cpp_header")
+                check_file = path.join(cpp_header_path, "check_cpp.hpp")
+                if path.exists(check_file):
+                    return cpp_header_path
+                current = path.dirname(current)
         return ""
-
     
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
+        includes = []
         for file in listdir(DATA_FILES_PATH):
-            path_to_header = path.join(DATA_FILES_PATH, file)
-            if path.isfile(path_to_header): code = '#include "' + path_to_header + '"\n' + code
-        return code
+            header = path.join(DATA_FILES_PATH, file)
+            if path.isfile(header):
+                includes.append(f'#include "{header}"\n')
+        return "".join(includes) + code
     
     def _add_main(self, code):
-        if not re.search(r"int\s+main\s*\(\s*\)", code): 
-            code = f"{self.main_head}\n{code}\n{self.main_foot}"
-        
-        code = re.sub(r"(std::)?cin *>>", r"std::cout << __GET_INPUT_STREAM_JP;std::cin >>", code)
-        code = re.sub(r'(std::)?getline\s*\(\s*(std::\s*)?cin\s*,', r'std::cout << __GET_INPUT_STREAM_JP; std::getline(\2cin,', code)
+        if not re.search(r"int\s+main\s*\(\s*\)", code): code = f"{self.main_head}\n{code}\n{self.main_foot}"
+        #code = re.sub(r"(std::)?cin *>>", r"std::cout << __GET_INPUT_STREAM_JP;std::cin >>", code)
+        #code = re.sub(r'(std::)?getline\s*\(\s*(std::\s*)?cin\s*,', r'std::cout << __GET_INPUT_STREAM_JP; std::getline(\2cin,', code)
         code = "#include" + '"' + self.resDir + "/gcpph.hpp" + '"' + "\n" + code
         code = self._support_external_header(code)
         return code
 
-    
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         code = self._add_main(code)
         with self.new_temp_file(suffix=".cpp") as source_file:
