@@ -1,9 +1,11 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
-from os import path, remove, listdir, close as fsclose, name as ostype
-from functools import lru_cache
-import re, subprocess, tempfile, sys
+from os import path, remove, listdir, close as fsclose, name as ostype, scandir
+from sys import prefix
+from tempfile import mkstemp, NamedTemporaryFile
+from re import search as code_search
+import subprocess
 
 class RealTimeSubprocess(subprocess.Popen):
     inputRequest = "<inputRequest>"
@@ -76,7 +78,7 @@ class CPPKernel(Kernel):
         self._allow_stdin = True
         self.standard = "c++14"
         self.files = []
-        master_temp = tempfile.mkstemp(suffix=".out")
+        master_temp = mkstemp(suffix=".out")
         fsclose(master_temp[0])
         self.master_path = master_temp[1]
         self.resDir = path.join(path.dirname(path.realpath(__file__)), "resources")
@@ -98,7 +100,7 @@ class CPPKernel(Kernel):
         remove(self.master_path)
 
     def new_temp_file(self, **kwargs):
-        file = tempfile.NamedTemporaryFile(delete=False, mode="w", **kwargs)
+        file = NamedTemporaryFile(delete=False, mode="w", **kwargs)
         self.files.append(file.name)
         return file
 
@@ -119,67 +121,72 @@ class CPPKernel(Kernel):
                         f"-std={self.standard}", "-w", "-shared", "-Wno-unused-but-set-variable", "-Wno-unused-parameter", "-Wno-unused-variable", "-lm", 
                         "-Wall","-DBUFFERED_OUTPUT","-o",binary_filename,])
 
-    @lru_cache(maxsize=1)
     def _find_local_header(self):
-        search_paths = [path.abspath(path.dirname(__file__)), sys.prefix]
+        if hasattr(self, '_cached_local_header'):
+            return self._cached_local_header
+        search_paths = [path.abspath(path.dirname(__file__)), prefix]
         for base in search_paths:
             current = base
-            while current != "/":
+            while current != path.sep:
                 cpp_header_path = path.join(current, "share", "cpp_header")
-                check_file = path.join(cpp_header_path, "check_cpp.hpp")
-                if path.exists(check_file):
+                if path.exists(path.join(cpp_header_path, "check_cpp.hpp")):
+                    self._cached_local_header = cpp_header_path
                     return cpp_header_path
-                current = path.dirname(current)
+                new_current = path.dirname(current)
+                if new_current == current:
+                    break
+                current = new_current
+        self._cached_local_header = ""
         return ""
-    
+
     def _support_external_header(self, code):
         DATA_FILES_PATH = self._find_local_header()
         includes = []
-        for file in listdir(DATA_FILES_PATH):
-            header = path.join(DATA_FILES_PATH, file)
-            if path.isfile(header):
-                includes.append(f'#include "{header}"\n')
+        try:
+            with scandir(DATA_FILES_PATH) as entries:
+                for entry in entries:
+                    if entry.is_file():
+                        includes.append(f'#include "{entry.path}"\n')
+        except FileNotFoundError:
+            pass
         return "".join(includes) + code
-    
-    def _add_main(self, code):
-        if not re.search(r"int\s+main\s*\(\s*\)", code): code = f"{self.main_head}\n{code}\n{self.main_foot}"
-        #code = re.sub(r"(std::)?cin *>>", r"std::cout << __GET_INPUT_STREAM_JP;std::cin >>", code)
-        #code = re.sub(r'(std::)?getline\s*\(\s*(std::\s*)?cin\s*,', r'std::cout << __GET_INPUT_STREAM_JP; std::getline(\2cin,', code)
-        code = "#include" + '"' + self.resDir + "/gcpph.hpp" + '"' + "\n" + code
+
+    def _add_code_compat(self, code, cpp_res_path):
+        if not code_search(r"int\s+main\s*\(\s*\)", code):
+            code = f"{self.main_head}\n{code}\n{self.main_foot}"
+        code = "#include" + cpp_res_path + "\n" + code
         code = self._support_external_header(code)
         return code
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
-        code = self._add_main(code)
-        with self.new_temp_file(suffix=".cpp") as source_file:
+        cpp_res_path = f'"{self.resDir}/gcpph.hpp"'
+        code = self._add_code_compat(code, cpp_res_path)
+        
+        with self.new_temp_file(suffix=".cpp") as source_file, self.new_temp_file(suffix=".out") as binary_file:
             source_file.write(code)
             source_file.flush()
-            with self.new_temp_file(suffix=".out") as binary_file:
-                p = self.compile_with_gpp(source_file.name, binary_file.name)
-                while p.poll() is None: p.write_contents()
+            
+            p = self.compile_with_gpp(source_file.name, binary_file.name)
+            while p.poll() is None:
                 p.write_contents()
-                if p.returncode != 0:  # Compilation failed
-                    self._write_to_stderr("\n[C++ kernel] Interpreter exited with code {}. The executable cannot be executed".format(p.returncode))
-                    remove(source_file.name)
-                    remove(binary_file.name)
-                    return {"status": "ok", "execution_count": self.execution_count, "payload": [], "user_expressions": {}}
-
+            p.write_contents()
+            
+            if p.returncode != 0:
+                self._write_to_stderr(f"\n[C++ kernel] Interpreter exited with code {p.returncode}. The executable cannot be executed")
+                return {"status": "ok", "execution_count": self.execution_count, "payload": [], "user_expressions": {}}
+        
         p = self.create_jupyter_subprocess([self.master_path, binary_file.name])
-        while p.poll() is None: p.write_contents()
-
-        # wait for threads to finish, so output is always shown
+        while p.poll() is None:
+            p.write_contents()
+        
         p._stdout_thread.join()
         p._stderr_thread.join()
-
         p.write_contents()
-
-        # now remove the files we have just created
-        remove(source_file.name)
-        remove(binary_file.name)
-
-        if p.returncode != 0: self._write_to_stderr("\n[C++ kernel] Error: Executable exited with code {}".format(p.returncode))
-
-        return {"status": "ok", "execution_count": self.execution_count, "payload": [],"user_expressions": {}}
+        
+        if p.returncode != 0:
+            self._write_to_stderr(f"\n[C++ kernel] Error: Executable exited with code {p.returncode}")
+        
+        return {"status": "ok", "execution_count": self.execution_count, "payload": [], "user_expressions": {}}
 
     def do_shutdown(self, restart):
         self.cleanup_files()

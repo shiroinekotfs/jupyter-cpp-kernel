@@ -1,2 +1,7 @@
-*.c linguist-language=C++
-*.h linguist-language=C++
+*.c linguist-language=C eol=lf
+*.h linguist-language=C eol=lf
+*.cpp linguist-language=C++ eol=lf
+*.hpp linguist-language=C++ eol=lf
+*.py linguist-language=Python eol=lf
+*.json language-language=JSON eol=lf
+*.md eol=lf

@@ -43,6 +43,11 @@ Global Headers
 extern "C" {
     #include <cstdlib>
     #include <cstdio>
+    #include <stdint.h>
+    #include <stdbool.h>
+    #include <stdbit.h>
+    #include <stdfloat>
+    #include <stdlib.h>
 
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
@@ -55,13 +60,13 @@ extern "C" {
 Customized Headers
 
 * These headers include certain parameters and compatibilities, that 
-*   help C++ kernel run smoothly on Jupyter Platforms
+*   help C++ kernel runs smoothly on Jupyter Platforms
 */
 
 #include "basicf/mathdefs.hpp" // Math definitions header
 
 extern "C" {
-    #include "basicf/rstdio.h" // stdio.h, but recontructed
+    #include "basicf/rstdio.h" // stdio.h, but recontructed for C
 }
 
 #include "cppio/cppin.hpp" // Input
