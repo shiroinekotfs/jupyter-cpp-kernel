@@ -1,0 +1,11 @@
+{
+    "argv": [
+        "python3",
+        "-m",
+        "jupyter-cpp-kernel-03",
+        "-f",
+        "{connection_file}"
+    ],
+    "display_name": "C++ 03",
+    "language": "c++"
+}
