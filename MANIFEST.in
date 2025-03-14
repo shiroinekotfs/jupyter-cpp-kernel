@@ -1,8 +1,8 @@
-include jupyter-cpp-kernel/resources/master.cpp
-include jupyter-cpp-kernel/resources/basicf/dlfcn.h
-include jupyter-cpp-kernel/resources/basicf/mathdefs.hpp
-include jupyter-cpp-kernel/resources/basicf/rstdio.h
-include jupyter-cpp-kernel/resources/cppio/cppout.hpp
-include jupyter-cpp-kernel/resources/cppio/cppin.hpp
-include jupyter-cpp-kernel/resources/gcpph.hpp
+include jcppkernel/resources/master.cpp
+include jcppkernel/resources/basicf/dlfcn.h
+include jcppkernel/resources/basicf/mathdefs.hpp
+include jcppkernel/resources/basicf/rstdio.h
+include jcppkernel/resources/cppio/cppout.hpp
+include jcppkernel/resources/cppio/cppin.hpp
+include jcppkernel/resources/gcpph.hpp
 include README.md LICENSE SECURITY.md
