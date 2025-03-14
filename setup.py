@@ -23,6 +23,7 @@ setup(
                 'jupyter-cpp-kernel-03',
                 'jupyter-cpp-kernel-11',
                 'jupyter-cpp-kernel-14',
+                'jupyter-cpp-kernel-17',
                 ],
       keywords=['windows', 'macos', 'linux', 'jupyter', 'cpp', 'jupyter-kernels', 'pip'],
       include_package_data=True,
