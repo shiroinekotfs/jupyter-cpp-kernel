@@ -23,31 +23,22 @@ Global Headers
 * Must place in first place, before C++ kernel customized header
 * Since C/C++ is procedural programming language, as the later headers will 
 *   override certain values that global define, for compatibilities
+* 
+* Note that the classic C headers must place onto the top, except the 
+*   <iostream> 
 */
 
 #include <iostream>
 
-#include <array>
-#include <algorithm>
-#include <cmath>
-#include <exception>
-#include <fstream>
-#include <memory>
-#include <iomanip>
-#include <vector>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <typeinfo>
-
 extern "C" {
-    #include <cstdlib>
-    #include <cstdio>
+    #include <stdio.h> // c standard io (stdio.h)
     #include <stdint.h>
     #include <stdbool.h>
     #include <stdbit.h>
-    #include <stdfloat>
     #include <stdlib.h>
+    #include <ctype.h>
+    #include <memory.h>
+    #include <stdarg.h>
 
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
@@ -55,6 +46,25 @@ extern "C" {
         #include <dlfcn.h> //global
     #endif
 }
+
+
+#if __cplusplus >= 201103L
+#include <array>
+#else
+#define nullptr ((char*)0)
+#endif
+
+#include <algorithm>
+#include <cmath>
+#include <memory>
+#include <typeinfo>
+#include <exception>
+#include <fstream>
+#include <iomanip>
+#include <vector>
+#include <sstream>
+#include <stdexcept>
+#include <string>
 
 /*
 Customized Headers

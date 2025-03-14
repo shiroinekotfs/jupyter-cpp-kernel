@@ -22,8 +22,9 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 
 #include <iostream>
 #include <string>
+#if __cplusplus >= 201103L
 #include <regex>
-
+#endif
 namespace _Jupyter_Display {
 
     class MimeHandler {
@@ -79,7 +80,8 @@ namespace _Jupyter_Display {
         std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>" << std::endl;
     }
 
-    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {      
+    #if __cplusplus >= 201103L
+    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") {
         std::regex regExp("^.*((youtu.be\\/)|(v\\/)|(\\/u\\/\\w\\/)|(embed\\/)|(watch\\?))\\??v?=?([^#\\&\\?]*).*"); std::smatch match;
         if (std::regex_match(token, match, regExp) && match[7].length() == 11) {
             std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << "https://youtube.com/embed/" << match[7] << "\" allowfullscreen></iframe>" << std::endl;
@@ -87,6 +89,11 @@ namespace _Jupyter_Display {
             std::cout << "<b>The input YouTube link is invalid.</b> Please check your link. Either you're performed a crashed request." << std::endl;
         }
     }
+    #else
+    void YouTubePlayer (std::string token, std::string width = "auto", std::string height = "auto") { 
+        std::cout << "This function is not supported, since it requires C++11 or above to execute." << std::endl;
+    }
+    #endif
 
     //Browser-based types (Audio, PDF, Video, ProgressBar)
     void Audio (std::string source) {
