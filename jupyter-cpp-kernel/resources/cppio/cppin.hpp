@@ -80,11 +80,8 @@ namespace cpp_in_ns {
             return result;
         }
     };
+}
 
-} // namespace cpp_in_ns
-
-// Automatically initialize our custom input behavior.
-// Just include this header and your std::cin is now prompt-enabled like it used to be.
 struct cpp_in_ns_Initializer {
     cpp_in_ns::PromptedStreambuf * psb;
     std::streambuf * orig;
