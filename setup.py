@@ -21,6 +21,7 @@ setup(
       packages=['jcppkernel',
                 'jupyter-cpp-kernel-98',
                 'jupyter-cpp-kernel-03',
+                'jupyter-cpp-kernel-11',
                 'jupyter-cpp-kernel-14',
                 ],
       keywords=['windows', 'macos', 'linux', 'jupyter', 'cpp', 'jupyter-kernels', 'pip'],
