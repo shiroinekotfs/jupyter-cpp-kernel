@@ -1,7 +1,8 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
-from os import path, remove, listdir, close as fsclose, name as ostype, scandir
+from ipykernel.kernelapp import IPKernelApp
+from os import path, remove, close as fsclose, name as ostype, scandir
 from sys import prefix
 from tempfile import mkstemp, NamedTemporaryFile
 from re import search as code_search
@@ -76,7 +77,6 @@ class CPPKernel(Kernel):
         self.main_head = "#include <iostream>\n" + "int main() {\n"
         self.main_foot = "\nreturn 0;\n}"
         self._allow_stdin = True
-        self.standard = "c++14"
         self.files = []
         master_temp = mkstemp(suffix=".out")
         fsclose(master_temp[0])
@@ -87,11 +87,11 @@ class CPPKernel(Kernel):
 
     @property
     def banner(self):
-        introduction = (f"({self.standard}) kernel for Jupyter (master), version 1.0.0a9\n\n")
-        cp_banner = "Copyright (C) Shiroi Neko\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc\n\n"
-        links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs\n"
+        introduction = (f"({self.standard}) kernel for Jupyter (master), version 1.0.0a9")
+        cp_banner = "Copyright (C) Shiroi Neko\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc"
+        links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs"
         reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
-        banner = f"{introduction}{cp_banner}{links_guide}{reporting_links}"
+        banner = f"{introduction}\n\n{cp_banner}\n\n{links_guide}\n{reporting_links}"
         return banner
 
     def cleanup_files(self):

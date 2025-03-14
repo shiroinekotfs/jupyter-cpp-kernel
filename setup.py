@@ -18,13 +18,11 @@ setup(
       ],
       url='https://github.com/shiroinekotfs/jupyter-cpp-kernel',
       download_url='https://github.com/shiroinekotfs/jupyter-cpp-kernel/releases',
-      packages=['jupyter-cpp-kernel'],
-      keywords=['windows', 'macos', 'linux', 'jupyter', 'cpp', 'cpp14', 'jupyter-kernels', 'pip'],
+      packages=['jcppkernel', 'jupyter-cpp-kernel-14'],
+      keywords=['windows', 'macos', 'linux', 'jupyter', 'cpp', 'jupyter-kernels', 'pip'],
       include_package_data=True,
       data_files=[
-          ("share/jupyter/kernels/cpp14",
-           ["kernel_spec/cpp14/logo-64x64.png", "kernel_spec/cpp14/kernel.json", "kernel_spec/cpp14/logo-32x32.png", "kernel_spec/cpp14/logo-svg.svg"]),
-          ("share/cpp_header",
-           ["share/cpp_header/check_cpp.hpp"])
+          ("share/jupyter/kernels/cpp14", ["jupyter-cpp-kernel-14/kernel_spec/logo-64x64.png", "jupyter-cpp-kernel-14/kernel_spec/kernel.json", "jupyter-cpp-kernel-14/kernel_spec/logo-32x32.png", "jupyter-cpp-kernel-14/kernel_spec/logo-svg.svg"]),
+          ("share/cpp_header", ["share/cpp_header/check_cpp.hpp"])
       ]
 )

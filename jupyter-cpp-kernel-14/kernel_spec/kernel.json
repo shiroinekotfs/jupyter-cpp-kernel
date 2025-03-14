@@ -2,10 +2,10 @@
     "argv": [
         "python3",
         "-m",
-        "jupyter-cpp-kernel",
+        "jupyter-cpp-kernel-14",
         "-f",
         "{connection_file}"
     ],
-    "display_name": "C++14",
+    "display_name": "C++ 14",
     "language": "c++"
 }
