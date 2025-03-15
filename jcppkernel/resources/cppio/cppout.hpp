@@ -35,30 +35,10 @@ namespace _Jupyter_Display {
                 __embed__("audio", type, source, width, height);
             }
 
-            static void _jupyter_font(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
-                __embed__("font", type, source, width, height);
-            }
-
-            static void _jupyter_example(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
-                __embed__("example", type, source, width, height);
-            }
-
             static void _jupyter_image(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
                 __embed__("image", type, source, width, height);
             }
-
-            static void _jupyter_message(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
-                __embed__("message", type, source, width, height);
-            }
-
-            static void _jupyter_model(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
-                __embed__("model", type, source, width, height);
-            }  
-
-            static void _jupyter_multipart(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
-                __embed__("multipart", type, source, width, height);
-            }
-
+           
             static void _jupyter_text(const std::string& type, const std::string& source, const std::string& width = "auto", const std::string& height = "auto") {
                 __embed__("text", type, source, width, height);
             }
@@ -128,11 +108,6 @@ namespace _Jupyter_Display {
     }
 
 
-    //model
-    void OBJ (std::string objfile, std::string width = "auto", std::string height = "auto") {
-        MimeHandler::_jupyter_model("obj", objfile, width, height);
-    }
-
     //text
     void PlainText (std::string plaintextfile, std::string width="auto", std::string height = "auto") {
         MimeHandler::_jupyter_text("plain", plaintextfile, width, height);
@@ -144,10 +119,6 @@ namespace _Jupyter_Display {
 
     void HTML (std::string htmlfile, std::string width="auto", std::string height = "auto") {
         MimeHandler::_jupyter_text("html", htmlfile, width, height);
-    }
-
-    void CSV (std::string csvfile, std::string width="auto", std::string height="auto") {
-        MimeHandler::_jupyter_text("csv", csvfile, width, height);
     }
 }
 
