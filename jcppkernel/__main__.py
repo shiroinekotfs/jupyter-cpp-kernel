@@ -1,7 +1,6 @@
 from queue import Queue
 from threading import Thread
 from ipykernel.kernelbase import Kernel
-from ipykernel.kernelapp import IPKernelApp
 from os import path, remove, close as fsclose, name as ostype, scandir
 from sys import prefix
 from tempfile import mkstemp, NamedTemporaryFile
@@ -88,7 +87,7 @@ class CPPKernel(Kernel):
     @property
     def banner(self):
         introduction = (f"({self.standard}) kernel for Jupyter (master), version 1.0.0a9")
-        cp_banner = "Copyright (C) Shiroi Neko\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc"
+        cp_banner = "Copyright (C) Shiroi Neko\nCopyright (C) Vo Luu Tuong Anh\nCopyright (C) Brendan Rius\nCopyright (C) Free Software Foundation, Inc"
         links_guide = "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\nNotebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc\n\nAuthor GitHub profile: https://github.com/shiroinekotfs"
         reporting_links = "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues"
         banner = f"{introduction}\n\n{cp_banner}\n\n{links_guide}\n{reporting_links}"
@@ -172,7 +171,7 @@ class CPPKernel(Kernel):
             p.write_contents()
             
             if p.returncode != 0:
-                self._write_to_stderr(f"\n[C++ kernel] Interpreter exited with code {p.returncode}. The executable cannot be executed")
+                self._write_to_stderr(f"\n[C++ kernel] Error: Executable exited with code {p.returncode}.")
                 return {"status": "ok", "execution_count": self.execution_count, "payload": [], "user_expressions": {}}
         
         p = self.create_jupyter_subprocess([self.master_path, binary_file.name])
@@ -184,7 +183,7 @@ class CPPKernel(Kernel):
         p.write_contents()
         
         if p.returncode != 0:
-            self._write_to_stderr(f"\n[C++ kernel] Error: Executable exited with code {p.returncode}")
+            self._write_to_stderr(f"\n[C++ kernel] Error: Executable exited with code {p.returncode}.")
         
         return {"status": "ok", "execution_count": self.execution_count, "payload": [], "user_expressions": {}}
 
