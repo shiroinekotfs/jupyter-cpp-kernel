@@ -119,33 +119,18 @@ namespace _Jupyter_Display {
         MimeHandler::_jupyter_application("json", jsonfile, width, height);
     }
 
-    static void Javascript(const std::string& jsfile) {
-        std::cout << "<script src='" << jsfile << "'></script>" << std::endl;
+    void Javascript (std::string jsfile, std::string width = "auto", std::string height = "auto") {
+        MimeHandler::_jupyter_application("javascript", jsfile, width, height);
     }
 
-    static void GeoJSON(const std::string& geojsonfile) {
-        std::cout << "<div id='map' style='height:400px;'></div>\n";
-        std::cout << "<script src='https://unpkg.com/leaflet/dist/leaflet.js'></script>\n";
-        std::cout << "<script>\nvar map = L.map('map').setView([0, 0], 2);\n"
-                  "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);\n"
-                  "fetch('" << geojsonfile << "').then(res => res.json()).then(data => L.geoJSON(data).addTo(map));\n"
-                  "</script>" << std::endl;
+    void GeoJSON (std::string geojsonfile, std::string width = "auto", std::string height = "auto") {
+        MimeHandler::_jupyter_application("geo+json", geojsonfile, width, height);
     }
 
 
     //model
-    static void OBJ(const std::string& objfile) {
-        std::cout << "<script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'></script>\n";
-        std::cout << "<script src='https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/OBJLoader.js'></script>\n";
-        std::cout << "<div id='obj-container' style='width:600px; height:400px;'></div>\n";
-        std::cout << "<script>\nvar scene = new THREE.Scene();\n"
-                  "var camera = new THREE.PerspectiveCamera(75, 600/400, 0.1, 1000);\n"
-                  "var renderer = new THREE.WebGLRenderer();\n"
-                  "renderer.setSize(600, 400);\n"
-                  "document.getElementById('obj-container').appendChild(renderer.domElement);\n"
-                  "var loader = new THREE.OBJLoader();\n"
-                  "loader.load('" << objfile << "', function(object){ scene.add(object); renderer.render(scene, camera); });\n"
-                  "</script>" << std::endl;
+    void OBJ (std::string objfile, std::string width = "auto", std::string height = "auto") {
+        MimeHandler::_jupyter_model("obj", objfile, width, height);
     }
 
     //text
@@ -153,25 +138,16 @@ namespace _Jupyter_Display {
         MimeHandler::_jupyter_text("plain", plaintextfile, width, height);
     }
 
-    static void LaTex(const std::string& latexcode) {
-        std::cout << "<script src='https://polyfill.io/v3/polyfill.min.js?features=es6'></script>\n";
-        std::cout << "<script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>\n";
-        std::cout << "<p>\\(" << latexcode << "\\)</p>" << std::endl;
+    void LaTex (std::string plaintextfile, std::string width="auto", std::string height = "auto") {
+        MimeHandler::_jupyter_text("latex", plaintextfile, width, height);
     }
 
     void HTML (std::string htmlfile, std::string width="auto", std::string height = "auto") {
         MimeHandler::_jupyter_text("html", htmlfile, width, height);
     }
 
-    static void CSV(const std::string& csvfile) {
-        std::cout << "<script>\nfetch('" << csvfile << "').then(response => response.text()).then(csv => {\n"
-                  "let rows = csv.split('\n');\n"
-                  "let table = '<table border=\"1\">';\n"
-                  "rows.forEach(row => { table += '<tr>' + row.split(',').map(cell => '<td>' + cell + '</td>').join('') + '</tr>'; });\n"
-                  "table += '</table>';\n"
-                  "document.write(table);\n"
-                  "});\n"
-                  "</script>" << std::endl;
+    void CSV (std::string csvfile, std::string width="auto", std::string height="auto") {
+        MimeHandler::_jupyter_text("csv", csvfile, width, height);
     }
 }
 
