@@ -71,7 +71,6 @@ class RealTimeSubprocess(subprocess.Popen):
             else:
                 self._write_to_stdout(contents)
 
-
 class CPPKernel(Kernel):
     implementation = "jupyter_cpp_kernel"
     implementation_version = "1.0"
@@ -100,7 +99,7 @@ class CPPKernel(Kernel):
 
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
-        self.main_head = "#include <iostream>\n" + "int main() {\n"
+        self.main_head = "#include <iostream>\nint main() {\n"
         self.main_foot = "\nreturn 0;\n}"
         self._allow_stdin = True
         self.files = []
