@@ -34,7 +34,6 @@ extern "C" {
     #include <stdio.h> // c standard io (stdio.h)
     #include <stdint.h>
     #include <stdbool.h>
-    #include <stdbit.h>
     #include <stdlib.h>
     #include <ctype.h>
     #include <memory.h>
