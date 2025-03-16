@@ -92,7 +92,7 @@ class CPPKernel(Kernel):
         },
     ]
     language_info = {
-        "name": "C++14",
+        "name": "C++",
         "version": "1.0.0a9",
         "mimetype": "text/markdown",
         "file_extension": ".cpp",
@@ -127,7 +127,7 @@ class CPPKernel(Kernel):
     @property
     def banner(self):
         return (
-            f"({self.standard}) kernel for Jupyter (master), version 1.0.0a9\n"
+            f"C++ kernel (Standard: {self.standard}) for Jupyter (master), version 1.0.0a9\n\n"
             "Copyright (C) Shiroi Neko\n"
             "Copyright (C) Vo Luu Tuong Anh\n"
             "Copyright (C) Brendan Rius\n\n"
@@ -250,7 +250,7 @@ class CPPKernel(Kernel):
 
             if p.returncode != 0:
                 self._write_to_stderr(
-                    f"\n[C++ kernel] Error: Executable exited with code {p.returncode}."
+                    f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {p.returncode}."
                 )
                 return {
                     "status": "ok",
