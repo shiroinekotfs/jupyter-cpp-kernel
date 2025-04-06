@@ -20,9 +20,6 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #ifndef _CPPOUT_HPP
 #define _CPPOUT_HPP
 
-#include <iostream>
-#include <string>
-
 namespace _Jupyter_Display {
 
     class MimeHandler {
@@ -49,30 +46,26 @@ namespace _Jupyter_Display {
         
         private:
             static void __embed__(const std::string& category, const std::string& type, const std::string& source, const std::string& width, const std::string& height) {
-                std::cout << "<embed src=\"" << source << "\" width=\"" << width << "\" height=\"" << height << "\" type=\"" << category << "/" << type << "\">" << std::endl;
+                std::cout << "<embed src=\"" << source << "\" width=\"" << width << "\" height=\"" << height << "\" type=\"" << category << "/" << type << "\">\n";
             }
     };
 
     //IFrame types
     void IFrame (std::string url, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>" << std::endl;
+        std::cout << "<iframe width=\"" << width << "\" height=\"" << height << "\" src=\"" << url << "\" allowfullscreen></iframe>\n";
     }
 
     //Browser-based types (Audio, PDF, Video, ProgressBar)
     void Audio (std::string source) {
-        std::cout << "<figure><audio controls src=\"" << source << "\"><a href=\"" << source << "\"></a></audio></figure>" << std::endl;
+        std::cout << "<figure><audio controls src=\"" << source << "\"><a href=\"" << source << "\"></a></audio></figure>\n";
     }
 
     void Video (std::string video, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<video width=\"" << width << "\" height=\"" << height << "\" controls src=\"" << video << "\">animation</video>" << std::endl;
-    }
-
-    void CodeString (std::string code) {
-        std::cout << "```\n" << std::endl << code << std::endl << "\n```\n" << std::endl;
+        std::cout << "<video width=\"" << width << "\" height=\"" << height << "\" controls src=\"" << video << "\">animation</video>\n";
     }
 
     void Image (std::string data, std::string width = "auto", std::string height = "auto") {
-        std::cout << "<img src=\"" << data << "\" width=\"" << width<< "\" height=\"" << height << "\" />" << std::endl;
+        std::cout << "<img src=\"" << data << "\" width=\"" << width<< "\" height=\"" << height << "\" />\n";
     }
 
     /*

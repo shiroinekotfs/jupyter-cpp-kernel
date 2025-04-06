@@ -17,23 +17,14 @@ First created by: shiroinekotfs (signed-off by shiroinekotfs)
 #ifndef _MATHDEFS_HPP
 #define _MATHDEFS_HPP
 
-#include <cmath>
-
-extern "C" {
-    #include <stdbool.h>
-}
-
 /*
 Logic Gates
-
+*
 * These logic gates are defined as the boolean input value, 
 * whereas a and b, and getting its result
 *
 * In a single, no second variable is needed, only a is used
 * 
-* Note: This definition is not finished yet, so see more on
-*       Wikipedia: https://en.wikipedia.org/wiki/Propositional_calculus
-*
 * Good luck with that
 */
 
@@ -52,35 +43,22 @@ Logic Gates
 
 /*
 Math constants
-
+*
 * Whatever ends with (*) it just added for correction and functionality
 */
 
-#define M_E        2.71828182845904523536   // e
 #define M_E_2      1.35914091422952261768   // e/2          (*)
 #define M_E_3      0.90609394281968174512   // e/3          (*)
 #define M_E_5      0.54365636569180897375   // e/5          (*)
 #define M_E_7      0.38832597549414932248   // e/7          (*)
 #define M_E_PI     0.86525597943226508722   // e/pi         (*)
-#define M_LOG2E    1.44269504088896340736   // log2(e)
-#define M_LOG10E   0.43429448190325182765   // log10(e)
-#define M_LN2      0.69314718055994530941   // ln(2)
-#define M_LN10     2.30258509299404568402   // ln(10)
-#define M_PI       3.14159265358979323846   // pi
 #define M_POW2PI   9.86960440108935799230   // pi^2         (*)
-#define M_PI_2     1.57079632679489661923   // pi/2
 #define M_PI_3     1.04719755119659774615   // pi/3         (*)
-#define M_PI_4     0.78539816339744830961   // pi/4         
 #define M_PI_5     0.62831853071795864769   // pi/5         (*)
 #define M_PI_7     0.44879895051282758800   // pi/7         (*)
-#define M_1_PI     0.31830988618379067153   // 1/pi
-#define M_2_PI     0.63661977236758134307   // 2/pi  
-#define M_2_SQRTPI 1.12837916709551257390   // 2/sqrt(pi)
-#define M_SQRT2    1.41421356237309504880   // sqrt(2)
 #define M_SQRT3    1.73205080756887729352   // sqrt(3)      (*)
 #define M_SQRT5    2.23606797749978969640   // sqrt(5)      (*)
 #define M_SQRT7    2.64575131106459071617   // sqrt(7)      (*)
-#define M_SQRT1_2  0.70710678118654752440   // 1/sqrt(2)
 
 /*
 Trigonometry measurements
