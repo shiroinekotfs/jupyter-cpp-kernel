@@ -21,6 +21,8 @@ class RealTimeSubprocess(subprocess.Popen):
             stdin=subprocess.PIPE,
             bufsize=0,
         )
+        self._stdout_buffer = ""
+        self._stderr_buffer = ""
         self._stdout_queue = Queue()
         self._stdout_thread = Thread(
             target=RealTimeSubprocess._enqueue_output,
@@ -38,38 +40,49 @@ class RealTimeSubprocess(subprocess.Popen):
 
     @staticmethod
     def _enqueue_output(stream, queue):
-        for line in iter(lambda: stream.read(4096), b""):
-            queue.put(line)
+        while True:
+            data = stream.read(4096)
+            if not data:
+                break
+            queue.put(data)
         stream.close()
 
     def write_contents(self):
-        def read_all_from_queue(queue):
-            res = b""
-            size = queue.qsize()
-            while size != 0:
-                res += queue.get_nowait()
-                size -= 1
-            return res
+        def read_all_from_queue(queue, buffer):
+            # Append new data to the existing buffer
+            while not queue.empty():
+                buffer += queue.get_nowait().decode()
+            return buffer
 
-        stderr_contents = read_all_from_queue(self._stderr_queue)
-        if stderr_contents:
-            self._write_to_stderr(stderr_contents.decode())
+        self._stderr_buffer = read_all_from_queue(self._stderr_queue, self._stderr_buffer)
+        if self._stderr_buffer:
+            self._write_to_stderr(self._stderr_buffer)
+            self._stderr_buffer = ""  # reset after writing
 
-        stdout_contents = read_all_from_queue(self._stdout_queue)
-        if stdout_contents:
-            contents = stdout_contents.decode()
-            start = contents.find(self.__class__.inputRequest)
-            if start >= 0:
-                contents = contents.replace(self.__class__.inputRequest, "")
-                if len(contents) > 0:
-                    self._write_to_stdout(contents)
-                readLine = ""
-                while len(readLine) == 0:
-                    readLine = self._read_from_stdin()
-                readLine += "\n"
-                self.stdin.write(readLine.encode())
-            else:
-                self._write_to_stdout(contents)
+        self._stdout_buffer = read_all_from_queue(self._stdout_queue, self._stdout_buffer)
+        # Check if the full token is present in the accumulated output
+        token_index = self._stdout_buffer.find(self.__class__.inputRequest)
+        if token_index >= 0:
+            # Remove the token from the output
+            before_token = self._stdout_buffer[:token_index]
+            after_token = self._stdout_buffer[token_index + len(self.__class__.inputRequest):]
+            if before_token:
+                self._write_to_stdout(before_token)
+            # Update the buffer with the remaining data after the token
+            self._stdout_buffer = after_token
+
+            # Read input from the user until non-empty
+            readLine = ""
+            while not readLine:
+                readLine = self._read_from_stdin()
+            readLine += "\n"
+            self.stdin.write(readLine.encode())
+            self.stdin.flush()  # Ensure it's sent immediately
+        else:
+            # If no complete token is found, flush whatever is available
+            if self._stdout_buffer:
+                self._write_to_stdout(self._stdout_buffer)
+                self._stdout_buffer = ""
 
 class CPPKernel(Kernel):
     implementation = "jupyter_cpp_kernel"
@@ -127,9 +140,9 @@ class CPPKernel(Kernel):
     def banner(self):
         return (
             f"C++ kernel (Standard: {self.standard}) for Jupyter (master), version 1.0.0a9\n\n"
+            "Copyright (C) Brendan Rius\n\n"
             "Copyright (C) Shiroi Neko\n"
             "Copyright (C) Vo Luu Tuong Anh\n"
-            "Copyright (C) Brendan Rius\n\n"
             "Project Main Page: https://github.com/shiroinekotfs/jupyter-cpp-kernel\n"
             "Track Project Status: https://github.com/users/shiroinekotfs/projects/1\n"
             "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues\n"
@@ -224,7 +237,7 @@ class CPPKernel(Kernel):
         return "".join(includes) + code
 
     def _add_code_compat(self, code, cpp_res_path):
-        if not code_search(r"int\s+main\s*\(\s*\)", code):
+        if not code_search(r"\b(?:[a-zA-Z_][\w\s\*]*\s+)+main\s*\(\s*([^)]*)\s*\)", code):
             code = f"{self.main_head}\n{code}\n{self.main_foot}"
         code = "#include" + cpp_res_path + "\n" + code
         code = self._support_external_header(code)
