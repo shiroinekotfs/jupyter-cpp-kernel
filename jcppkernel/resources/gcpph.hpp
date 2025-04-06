@@ -31,13 +31,14 @@ Global Headers
 #include <iostream>
 
 extern "C" {
-    #include <stdio.h> // c standard io (stdio.h)
+    #include <stdio.h>
     #include <stdint.h>
     #include <stdbool.h>
     #include <stdlib.h>
     #include <ctype.h>
     #include <memory.h>
     #include <stdarg.h>
+    #include <string.h>
 
     #ifdef _WIN32
         #include "basicf/dlfcn.h" //local
@@ -45,7 +46,6 @@ extern "C" {
         #include <dlfcn.h> //global
     #endif
 }
-
 
 #if __cplusplus >= 201103L
 #include <array>

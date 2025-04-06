@@ -20,14 +20,7 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 #ifndef _CPPIN_HPP
 #define _CPPIN_HPP
 
-#include <iostream>
-
-extern "C" {
-    #include <stdbool.h>
-}
-
 #define __GET_INPUT_STREAM_JP "<inputRequest>"
-
 namespace cpp_in_ns {
 
     // Custom streambuf that prints the prompt at the beginning of each new input line.
