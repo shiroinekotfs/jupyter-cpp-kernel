@@ -140,9 +140,9 @@ class CPPKernel(Kernel):
     def banner(self):
         return (
             f"C++ kernel (Standard: {self.standard}) for Jupyter (master), version 1.0.0a9\n\n"
-            "Copyright (C) Brendan Rius\n\n"
+            "Copyright (C) Brendan Rius\n"
             "Copyright (C) Shiroi Neko\n"
-            "Copyright (C) Vo Luu Tuong Anh\n"
+            "Copyright (C) Vo Luu Tuong Anh\n\n"
             "Project Main Page: https://github.com/shiroinekotfs/jupyter-cpp-kernel\n"
             "Track Project Status: https://github.com/users/shiroinekotfs/projects/1\n"
             "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues\n"
