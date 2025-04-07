@@ -237,7 +237,7 @@ class CPPKernel(Kernel):
         return "".join(includes) + code
 
     def _add_code_compat(self, code, cpp_res_path):
-        if not code_search(r"\b(?:[a-zA-Z_][\w\s\*]*\s+)+main\s*\(\s*([^)]*)\s*\)", code):
+        if not code_search(r"\b(?:[a-zA-Z_]\w*(?:\s*\*+\s*)?\s+)+main\s*\(\s*([^)]*)\s*\)", code):
             code = f"{self.main_head}\n{code}\n{self.main_foot}"
         code = "#include" + cpp_res_path + "\n" + code
         code = self._support_external_header(code)
