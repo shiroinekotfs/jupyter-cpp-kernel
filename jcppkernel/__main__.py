@@ -4,7 +4,7 @@ from ipykernel.kernelbase import Kernel
 from os import path, remove, close as fsclose, name as ostype, scandir
 from sys import prefix
 from tempfile import mkstemp, NamedTemporaryFile
-from re import search as code_search
+from re import search as code_search, compile
 import subprocess
 
 class RealTimeSubprocess(subprocess.Popen):
@@ -112,7 +112,7 @@ class CPPKernel(Kernel):
 
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
-        self.main_head = "#include <iostream>\nint main() {\n"
+        self.main_head = "int main() {\n"
         self.main_foot = "\nreturn 0;\n}"
         self._allow_stdin = True
         self.files = []
@@ -237,9 +237,33 @@ class CPPKernel(Kernel):
         return "".join(includes) + code
 
     def _add_code_compat(self, code, cpp_res_path):
-        if not code_search(r"\b(?:[a-zA-Z_]\w*(?:\s*\*+\s*)?\s+)+main\s*\(\s*([^)]*)\s*\)", code):
-            code = f"{self.main_head}\n{code}\n{self.main_foot}"
-        code = "#include" + cpp_res_path + "\n" + code
+        if not code_search(r"\b(?:[a-zA-Z_]\w*(?:\s*\*+\s*)?\s+)+main\s*\(", code):
+            lines = code.splitlines()
+            defs_lines = []
+            main_body_lines = []
+            in_function = False
+            brace_count = 0
+            func_def_regex = compile(r'^[\w\s:<>&*,]+\s+\**\s*\w+\s*\(.*\)\s*{')
+            for line in lines:
+                if not in_function and func_def_regex.search(line):
+                    in_function = True
+                    brace_count = line.count('{') - line.count('}')
+                    defs_lines.append(line)
+                elif in_function:
+                    defs_lines.append(line)
+                    brace_count += line.count('{') - line.count('}')
+                    if brace_count <= 0:
+                        in_function = False
+                else:
+                    main_body_lines.append(line)
+            defs = "\n".join(defs_lines).strip()
+            main_body = "\n".join(main_body_lines).strip()
+            if main_body:
+                wrapped_main = f"{self.main_head}\n{main_body}\n{self.main_foot}"
+            else:
+                wrapped_main = ""
+            code = (defs + "\n\n" if defs else "") + wrapped_main
+        code = "#include " + cpp_res_path + "\n" + code
         code = self._support_external_header(code)
         return code
 
