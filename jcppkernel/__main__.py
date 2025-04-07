@@ -4,7 +4,6 @@ from ipykernel.kernelbase import Kernel
 from os import path, remove, close as fsclose, name as ostype, scandir
 from sys import prefix
 from tempfile import mkstemp, NamedTemporaryFile
-from re import search as code_search, compile
 import subprocess
 
 class RealTimeSubprocess(subprocess.Popen):
@@ -14,75 +13,45 @@ class RealTimeSubprocess(subprocess.Popen):
         self._write_to_stdout = write_to_stdout
         self._write_to_stderr = write_to_stderr
         self._read_from_stdin = read_from_stdin
-        super().__init__(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            stdin=subprocess.PIPE,
-            bufsize=0,
-        )
-        self._stdout_buffer = ""
-        self._stderr_buffer = ""
+        super().__init__(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE,bufsize=0)
         self._stdout_queue = Queue()
-        self._stdout_thread = Thread(
-            target=RealTimeSubprocess._enqueue_output,
-            args=(self.stdout, self._stdout_queue),
-        )
+        self._stdout_thread = Thread(target=RealTimeSubprocess._enqueue_output, args=(self.stdout, self._stdout_queue))
         self._stdout_thread.daemon = True
         self._stdout_thread.start()
         self._stderr_queue = Queue()
-        self._stderr_thread = Thread(
-            target=RealTimeSubprocess._enqueue_output,
-            args=(self.stderr, self._stderr_queue),
-        )
+        self._stderr_thread = Thread(target=RealTimeSubprocess._enqueue_output, args=(self.stderr, self._stderr_queue))
         self._stderr_thread.daemon = True
         self._stderr_thread.start()
 
     @staticmethod
     def _enqueue_output(stream, queue):
-        while True:
-            data = stream.read(4096)
-            if not data:
-                break
-            queue.put(data)
+        for line in iter(lambda: stream.read(4096), b""): queue.put(line)
         stream.close()
 
     def write_contents(self):
-        def read_all_from_queue(queue, buffer):
-            # Append new data to the existing buffer
-            while not queue.empty():
-                buffer += queue.get_nowait().decode()
-            return buffer
+        def read_all_from_queue(queue):
+            res = b""
+            size = queue.qsize()
+            while size != 0:
+                res += queue.get_nowait()
+                size -= 1
+            return res
 
-        self._stderr_buffer = read_all_from_queue(self._stderr_queue, self._stderr_buffer)
-        if self._stderr_buffer:
-            self._write_to_stderr(self._stderr_buffer)
-            self._stderr_buffer = ""  # reset after writing
+        stderr_contents = read_all_from_queue(self._stderr_queue)
+        if stderr_contents: self._write_to_stderr(stderr_contents.decode())
 
-        self._stdout_buffer = read_all_from_queue(self._stdout_queue, self._stdout_buffer)
-        # Check if the full token is present in the accumulated output
-        token_index = self._stdout_buffer.find(self.__class__.inputRequest)
-        if token_index >= 0:
-            # Remove the token from the output
-            before_token = self._stdout_buffer[:token_index]
-            after_token = self._stdout_buffer[token_index + len(self.__class__.inputRequest):]
-            if before_token:
-                self._write_to_stdout(before_token)
-            # Update the buffer with the remaining data after the token
-            self._stdout_buffer = after_token
-
-            # Read input from the user until non-empty
-            readLine = ""
-            while not readLine:
-                readLine = self._read_from_stdin()
-            readLine += "\n"
-            self.stdin.write(readLine.encode())
-            self.stdin.flush()  # Ensure it's sent immediately
-        else:
-            # If no complete token is found, flush whatever is available
-            if self._stdout_buffer:
-                self._write_to_stdout(self._stdout_buffer)
-                self._stdout_buffer = ""
+        stdout_contents = read_all_from_queue(self._stdout_queue)
+        if stdout_contents:
+            contents = stdout_contents.decode()
+            start = contents.find(self.__class__.inputRequest)
+            if start >= 0:
+                contents = contents.replace(self.__class__.inputRequest, "")
+                if len(contents) > 0: self._write_to_stdout(contents)
+                readLine = ""
+                while len(readLine) == 0: readLine = self._read_from_stdin()
+                readLine += "\n"
+                self.stdin.write(readLine.encode())
+            else: self._write_to_stdout(contents)
 
 class CPPKernel(Kernel):
     implementation = "jupyter_cpp_kernel"
@@ -116,6 +85,10 @@ class CPPKernel(Kernel):
         self.main_foot = "\nreturn 0;\n}"
         self._allow_stdin = True
         self.files = []
+        
+        if ostype == 'nt': self._end_line_sys = '\r\n'
+        else: self._end_line_sys = '\n'
+        
         master_temp = mkstemp(suffix=".out")
         fsclose(master_temp[0])
         self.master_path = master_temp[1]
@@ -162,10 +135,7 @@ class CPPKernel(Kernel):
         return file
 
     def _write_to_stdout(self, contents):
-        if ostype == "nt":
-            contents = contents.replace("\r\n", "\r\n\r\n")
-        else:
-            contents = contents.replace("\n", "\n\n")
+        contents = contents.replace(self._end_line_sys, self._end_line_sys * 2)
         self.send_response(
             self.iopub_socket,
             "display_data",
@@ -237,42 +207,15 @@ class CPPKernel(Kernel):
         return "".join(includes) + code
 
     def _add_code_compat(self, code, cpp_res_path):
-        if not code_search(r"\b(?:[a-zA-Z_]\w*(?:\s*\*+\s*)?\s+)+main\s*\(", code):
-            lines = code.splitlines()
-            defs_lines = []
-            main_body_lines = []
-            in_function = False
-            brace_count = 0
-            func_def_regex = compile(r'^[\w\s:<>&*,]+\s+\**\s*\w+\s*\(.*\)\s*{')
-            for line in lines:
-                if not in_function and func_def_regex.search(line):
-                    in_function = True
-                    brace_count = line.count('{') - line.count('}')
-                    defs_lines.append(line)
-                elif in_function:
-                    defs_lines.append(line)
-                    brace_count += line.count('{') - line.count('}')
-                    if brace_count <= 0:
-                        in_function = False
-                else:
-                    main_body_lines.append(line)
-            defs = "\n".join(defs_lines).strip()
-            main_body = "\n".join(main_body_lines).strip()
-            if main_body:
-                wrapped_main = f"{self.main_head}\n{main_body}\n{self.main_foot}"
-            else:
-                wrapped_main = ""
-            code = (defs + "\n\n" if defs else "") + wrapped_main
+        #code = code_sub(r'\/\/.*?(?=\r?\n)|\/\*[\s\S]*?\*\/', r'', code)
         code = "#include " + cpp_res_path + "\n" + code
         code = self._support_external_header(code)
         return code
 
-    def do_execute(
-        self, code, silent, store_history=True, user_expressions=None, allow_stdin=True
-    ):
+    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         cpp_res_path = f'"{self.resDir}/gcpph.hpp"'
         code = self._add_code_compat(code, cpp_res_path)
-
+        
         with self.new_temp_file(suffix=".cpp") as source_file, self.new_temp_file(
             suffix=".out"
         ) as binary_file:
@@ -283,10 +226,10 @@ class CPPKernel(Kernel):
             while p.poll() is None:
                 p.write_contents()
             p.write_contents()
-
+            
             if p.returncode != 0:
                 self._write_to_stderr(
-                    f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {p.returncode}."
+                    f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {hex(p.returncode)}."
                 )
                 return {
                     "status": "ok",
@@ -305,7 +248,7 @@ class CPPKernel(Kernel):
 
         if p.returncode != 0:
             self._write_to_stderr(
-                f"\n[C++ kernel] Error: Executable exited with code {p.returncode}."
+                f"\n[C++ kernel] Error: Executable exited with code {hex(p.returncode)}."
             )
 
         return {
