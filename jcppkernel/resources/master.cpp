@@ -1,8 +1,9 @@
 /*==============================================================================
 Pre-kernel "master.cpp"
 
-Copyright (C) 2024 shiroinekotfs
 Copyright (C) Brendan Rius
+Copyright (C) 2024 shiroinekotfs
+Copyright (C) 2024 anhvlt-2k6
 
 Component: Pre-kernel
 
@@ -14,6 +15,17 @@ First created by: shiroinekotfs (signed-off by shiroinekotfs)
 Help Link: https://github.com/shiroinekotfs/jupyter-cpp-kernel
 Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 ==============================================================================*/
+
+/*
+MASTER.CPP MEMO
+*
+* This file is the entry point, act as the starting point of every single 
+* programs that run within the kernel session (aka the kernel process).
+*
+* It also act as a "supervisor" for the user program, which means it will
+* supervise the user program and handle the exit code of the user program.
+*
+*/
 
 #include "gcpph.hpp"
 
