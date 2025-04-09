@@ -123,10 +123,8 @@ class CPPKernel(Kernel):
         self, code, silent, store_history=True, user_expressions=None, allow_stdin=True
     ):
         cpp_res_path = f'"{self.resDir}/gcpph.hpp"'
-        code = CPPCodeProcessingUnit._add_code_compat(
-            CPPCodeProcessingUnit, code, cpp_res_path
-        )
-
+        code = CPPCodeProcessingUnit()._add_code_compat(code, cpp_res_path)
+        
         with CPPTempFileProcessing._new_temp_file(
             CPPTempFileProcessing, self.files, suffix=".cpp"
         ) as source_file, CPPTempFileProcessing._new_temp_file(
