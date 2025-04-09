@@ -1,57 +1,11 @@
-from queue import Queue
-from threading import Thread
 from ipykernel.kernelbase import Kernel
-from os import path, remove, close as fsclose, name as ostype, scandir
-from sys import prefix
-from tempfile import mkstemp, NamedTemporaryFile
+from os import path, close as fsclose, name as ostype
+from tempfile import mkstemp
 import subprocess
 
-class RealTimeSubprocess(subprocess.Popen):
-    inputRequest = "<inputRequest>"
-
-    def __init__(self, cmd, write_to_stdout, write_to_stderr, read_from_stdin):
-        self._write_to_stdout = write_to_stdout
-        self._write_to_stderr = write_to_stderr
-        self._read_from_stdin = read_from_stdin
-        super().__init__(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE,bufsize=0)
-        self._stdout_queue = Queue()
-        self._stdout_thread = Thread(target=RealTimeSubprocess._enqueue_output, args=(self.stdout, self._stdout_queue))
-        self._stdout_thread.daemon = True
-        self._stdout_thread.start()
-        self._stderr_queue = Queue()
-        self._stderr_thread = Thread(target=RealTimeSubprocess._enqueue_output, args=(self.stderr, self._stderr_queue))
-        self._stderr_thread.daemon = True
-        self._stderr_thread.start()
-
-    @staticmethod
-    def _enqueue_output(stream, queue):
-        for line in iter(lambda: stream.read(4096), b""): queue.put(line)
-        stream.close()
-
-    def write_contents(self):
-        def read_all_from_queue(queue):
-            res = b""
-            size = queue.qsize()
-            while size != 0:
-                res += queue.get_nowait()
-                size -= 1
-            return res
-
-        stderr_contents = read_all_from_queue(self._stderr_queue)
-        if stderr_contents: self._write_to_stderr(stderr_contents.decode())
-
-        stdout_contents = read_all_from_queue(self._stdout_queue)
-        if stdout_contents:
-            contents = stdout_contents.decode()
-            start = contents.find(self.__class__.inputRequest)
-            if start >= 0:
-                contents = contents.replace(self.__class__.inputRequest, "")
-                if len(contents) > 0: self._write_to_stdout(contents)
-                readLine = ""
-                while len(readLine) == 0: readLine = self._read_from_stdin()
-                readLine += "\n"
-                self.stdin.write(readLine.encode())
-            else: self._write_to_stdout(contents)
+from .realtime_subprocess import RealTimeSubprocess
+from .code_processing import CPPCodeProcessingUnit
+from .temp_file_processing import CPPTempFileProcessing
 
 class CPPKernel(Kernel):
     implementation = "jupyter_cpp_kernel"
@@ -61,7 +15,7 @@ class CPPKernel(Kernel):
     help_links = [
         {
             "text": "License",
-            "url": "https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE",
+            "url": "https://raw.githubusercontent.com/shiroinekotfs/jupyter-cpp-kernel/refs/heads/master/LICENSE",
         },
         {
             "text": "Notebook tutorial",
@@ -81,14 +35,14 @@ class CPPKernel(Kernel):
 
     def __init__(self, *args, **kwargs):
         super(CPPKernel, self).__init__(*args, **kwargs)
-        self.main_head = "int main() {\n"
-        self.main_foot = "\nreturn 0;\n}"
         self._allow_stdin = True
         self.files = []
-        
-        if ostype == 'nt': self._end_line_sys = '\r\n'
-        else: self._end_line_sys = '\n'
-        
+
+        if ostype == "nt":
+            self._end_line_sys = "\r\n"
+        else:
+            self._end_line_sys = "\n"
+
         master_temp = mkstemp(suffix=".out")
         fsclose(master_temp[0])
         self.master_path = master_temp[1]
@@ -123,17 +77,6 @@ class CPPKernel(Kernel):
             "Notebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc"
         )
 
-    def cleanup_files(self):
-        for file in self.files:
-            if path.exists(file):
-                remove(file)
-        remove(self.master_path)
-
-    def new_temp_file(self, **kwargs):
-        file = NamedTemporaryFile(delete=False, mode="w", **kwargs)
-        self.files.append(file.name)
-        return file
-
     def _write_to_stdout(self, contents):
         contents = contents.replace(self._end_line_sys, self._end_line_sys * 2)
         self.send_response(
@@ -150,13 +93,13 @@ class CPPKernel(Kernel):
     def _read_from_stdin(self):
         return self.raw_input()
 
-    def create_jupyter_subprocess(self, cmd):
+    def _create_jupyter_subprocess(self, cmd):
         return RealTimeSubprocess(
             cmd, self._write_to_stdout, self._write_to_stderr, self._read_from_stdin
         )
 
-    def compile_with_gpp(self, source_filename, binary_filename):
-        return self.create_jupyter_subprocess(
+    def _compile_with_gpp(self, source_filename, binary_filename):
+        return self._create_jupyter_subprocess(
             [
                 "g++",
                 source_filename,
@@ -176,57 +119,27 @@ class CPPKernel(Kernel):
             ]
         )
 
-    def _find_local_header(self):
-        if hasattr(self, "_cached_local_header"):
-            return self._cached_local_header
-        search_paths = [path.abspath(path.dirname(__file__)), prefix]
-        for base in search_paths:
-            current = base
-            while current != path.sep:
-                cpp_header_path = path.join(current, "share", "cpp_header")
-                if path.exists(path.join(cpp_header_path, "check_cpp.hpp")):
-                    self._cached_local_header = cpp_header_path
-                    return cpp_header_path
-                new_current = path.dirname(current)
-                if new_current == current:
-                    break
-                current = new_current
-        self._cached_local_header = ""
-        return ""
-
-    def _support_external_header(self, code):
-        DATA_FILES_PATH = self._find_local_header()
-        includes = []
-        try:
-            with scandir(DATA_FILES_PATH) as entries:
-                for entry in entries:
-                    if entry.is_file():
-                        includes.append(f'#include "{entry.path}"\n')
-        except FileNotFoundError:
-            pass
-        return "".join(includes) + code
-
-    def _add_code_compat(self, code, cpp_res_path):
-        #code = code_sub(r'\/\/.*?(?=\r?\n)|\/\*[\s\S]*?\*\/', r'', code)
-        code = "#include " + cpp_res_path + "\n" + code
-        code = self._support_external_header(code)
-        return code
-
-    def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
+    def do_execute(
+        self, code, silent, store_history=True, user_expressions=None, allow_stdin=True
+    ):
         cpp_res_path = f'"{self.resDir}/gcpph.hpp"'
-        code = self._add_code_compat(code, cpp_res_path)
-        
-        with self.new_temp_file(suffix=".cpp") as source_file, self.new_temp_file(
-            suffix=".out"
+        code = CPPCodeProcessingUnit._add_code_compat(
+            CPPCodeProcessingUnit, code, cpp_res_path
+        )
+
+        with CPPTempFileProcessing._new_temp_file(
+            CPPTempFileProcessing, self.files, suffix=".cpp"
+        ) as source_file, CPPTempFileProcessing._new_temp_file(
+            CPPTempFileProcessing, self.files, suffix=".out"
         ) as binary_file:
             source_file.write(code)
             source_file.flush()
 
-            p = self.compile_with_gpp(source_file.name, binary_file.name)
+            p = self._compile_with_gpp(source_file.name, binary_file.name)
             while p.poll() is None:
                 p.write_contents()
             p.write_contents()
-            
+
             if p.returncode != 0:
                 self._write_to_stderr(
                     f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {hex(p.returncode)}."
@@ -238,7 +151,7 @@ class CPPKernel(Kernel):
                     "user_expressions": {},
                 }
 
-        p = self.create_jupyter_subprocess([self.master_path, binary_file.name])
+        p = self._create_jupyter_subprocess([self.master_path, binary_file.name])
         while p.poll() is None:
             p.write_contents()
 
@@ -259,4 +172,4 @@ class CPPKernel(Kernel):
         }
 
     def do_shutdown(self, restart):
-        self.cleanup_files()
+        CPPTempFileProcessing._cleanup_files(CPPTempFileProcessing, self.master_path, self.files)
