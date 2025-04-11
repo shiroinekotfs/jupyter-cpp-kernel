@@ -4,7 +4,7 @@
         "-m",
         "jupyter-cpp-kernel-20",
         "-f",
-        "{connection_file}"
+        "\"{connection_file}\""
     ],
     "display_name": "C++ 20",
     "language": "c++"
