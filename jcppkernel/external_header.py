@@ -16,7 +16,7 @@ class CPPExternalHeader:
                 current = new_current
         return ""
     
-    def _support_external_header(self, code):
+    def __init__(self, code):
         DATA_FILES_PATH = self._find_local_header(self)
         includes = []
         try:
