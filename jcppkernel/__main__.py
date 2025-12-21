@@ -17,9 +17,7 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 '''
 
 from ipykernel.kernelbase import Kernel
-from os import path, close as fsclose
 from sys import platform as osplatform
-from tempfile import mkstemp
 import subprocess
 
 from .realtime_subprocess import RealTimeSubprocess
@@ -28,15 +26,13 @@ from .temp_file_processing import CPPTempFileProcessing
 
 class CPPKernel:
     ####################################################################################
-    '''
-    Properties of the program, including the licenses, help links, and other information
-    '''
+    # Properties of the program, including the licenses, help links, and other information
     ####################################################################################
-    implementation = "jupyter_cpp_kernel"
-    implementation_version = "1.0"
-    language = "C++"
-    language_version = "C++"
-    help_links = [
+    implementation: str = "jupyter_cpp_kernel"
+    implementation_version: str = "1.0"
+    language: str = "C++"
+    language_version: str = "C++"
+    help_links: list[dict[str, str]] = [
         {
             "text": "License",
             "url": "https://raw.githubusercontent.com/shiroinekotfs/jupyter-cpp-kernel/refs/heads/master/LICENSE",
@@ -50,17 +46,17 @@ class CPPKernel:
             "url": "https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues",
         }
     ]
-    language_info = {
+    language_info: dict[str, str] = {
         "name": "C++",
-        "version": "1.0.0a9",
+        "version": "1.0.0a10",
         "mimetype": "text/markdown",
         "file_extension": ".cpp",
     }
     
     @property
-    def banner(self):
+    def banner(self) -> str:
         return (
-            f"C++ kernel (Standard: {self.standard}) for Jupyter (master), version 1.0.0a9\n\n"
+            f"C++ kernel (Standard: {self.standard}) for Jupyter (master), version 1.0.0a10\n\n"
             "Copyright (C) Brendan Rius\n"
             "Copyright (C) Shiroi Neko\n"
             "Copyright (C) Vo Luu Tuong Anh\n\n"
@@ -72,20 +68,22 @@ class CPPKernel:
         )
 
     ####################################################################################
-    '''
-    Constructor of the program
-    '''
+    # Constructor of the program
     ####################################################################################
     def __init__(self, *args, **kwargs):
-        self._allow_stdin = True
-        self.files = []
-        self._end_line_sys = "\r\n" if osplatform == 'win32' else "\n"
-        self.master_path = self._get_tmp_folder()
-        self.resDir = path.join(path.dirname(path.realpath(__file__)), "resources")
+        # System variables (fixed variables)
+        self._allow_stdin: bool = True
+        self._end_line_sys: str = "\r\n" if osplatform == 'win32' else "\n"
+        
+        # Sub-modules (to load external objects)
+        self.codeProcessingUnit = CPPCodeProcessingUnit()
+        self.tmpFileProcessing = CPPTempFileProcessing()
+        
+        # Sub-calls
         subprocess.call(
             [
                 "g++",
-                path.join(self.resDir, "master.cpp"),
+                self.codeProcessingUnit.global_header,
                 f"-std={self.standard}",
                 "-Wno-unused-but-set-variable",
                 "-Wno-unused-parameter",
@@ -93,68 +91,58 @@ class CPPKernel:
                 "-ldl",
                 "-w",
                 "-o",
-                self.master_path,
+                self.tmpFileProcessing.master_file,
             ]
         )
 
-    '''
-    Extended constructor - To get the temp folder
-    '''
-    def _get_tmp_folder(self):
-        master_temp = mkstemp(suffix = ".exe" if osplatform == 'win32' else '.out')
-        fsclose(master_temp[0])
-        return master_temp[1]
-
     ####################################################################################
-    '''
-    Front end handler - Read and Write from Jupyter Web Application
-    '''
+    # Front end handler - Read and Write from Jupyter Web Application
     ####################################################################################
     
-    '''
-    Write contents to the front end (success)
-    '''
+    # Write contents to the front end (success)
     def _write_to_stdout(self, contents):
         self.send_response(
             self.iopub_socket,
             "display_data",
             {
                 "data": {
-                    "text/markdown": contents.replace(
-                        self._end_line_sys,
-                        self._end_line_sys * 2
+                    "text/markdown": 
+                        contents.replace (
+                            self._end_line_sys,
+                            self._end_line_sys * 2
                         )
                 }, 
                 "metadata": {}
             }
         )
 
-    '''
-    Write contents to the front end (error)
-    '''
+    # Write contents to the front end (error)
     def _write_to_stderr(self, contents):
         self.send_response(
             self.iopub_socket, 
             "stream", 
             {
-                "name": "stderr", 
+                "name": "stderr",
                 "text": contents
             }
         )
 
-    '''
-    Read input from Jupyter Web Application
-    '''
+    # Read input from Jupyter Web Application
     def _read_from_stdin(self):
         return self.raw_input()
 
-    '''
-    Create new process of 
-    '''
-    def _create_jupyter_subprocess(self, cmd):
-        return RealTimeSubprocess(cmd, self._write_to_stdout, self._write_to_stderr, self._read_from_stdin)
+    
+    # Create new process
+    def _create_jupyter_subprocess(self, cmd: list[str]) -> RealTimeSubprocess:
+        return RealTimeSubprocess(
+            cmd, 
+            self._write_to_stdout, 
+            self._write_to_stderr, 
+            self._read_from_stdin
+        )
 
-    def _compile_with_gpp(self, source_filename, binary_filename):
+    # Compile that source, using 
+    def _compile_with_gpp(self, source_filename: str, binary_filename: str) -> RealTimeSubprocess:
         return self._create_jupyter_subprocess(
             [
                 "g++",
@@ -176,29 +164,28 @@ class CPPKernel:
         )
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
-        cpp_res_path = f'"{self.resDir}/gcpph.hpp"'
-        code = CPPCodeProcessingUnit(code, cpp_res_path)
+        code = self.codeProcessingUnit.processing_code(code)
         
-        with CPPTempFileProcessing._new_temp_file(CPPTempFileProcessing, self.files, suffix=".cpp") as source_file, CPPTempFileProcessing._new_temp_file(
-            CPPTempFileProcessing, self.files, suffix=".out"
-        ) as binary_file:
-            source_file.write(code)
-            source_file.flush()
+        source_file = self.tmpFileProcessing.new_temp_file(suffix=".cpp")
+        binary_file = self.tmpFileProcessing.cleanup_files()
+        
+        source_file.write(code)
+        source_file.flush()
 
-            p = self._compile_with_gpp(source_file.name, binary_file.name)
-            while p.poll() is None:
-                p.write_contents()
+        p = self._compile_with_gpp(source_file.name, binary_file.name)
+        while p.poll() is None:
+            p.write_contents()
 
-            if p.returncode != 0:
-                self._write_to_stderr(
-                    f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {hex(p.returncode)}."
-                )
-                return {
-                    "status": "ok",
-                    "execution_count": self.execution_count,
-                    "payload": [],
-                    "user_expressions": {},
-                }
+        if p.returncode != 0:
+            self._write_to_stderr(
+                f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {hex(p.returncode)}."
+            )
+            return {
+                "status": "ok",
+                "execution_count": self.execution_count,
+                "payload": [],
+                "user_expressions": {},
+            }
 
         p = self._create_jupyter_subprocess([self.master_path, binary_file.name])
         while p.poll() is None:
@@ -220,4 +207,4 @@ class CPPKernel:
         }
 
     def do_shutdown(self, restart):
-        CPPTempFileProcessing._cleanup_files(CPPTempFileProcessing, self.master_path, self.files)
+        self.tmpFileProcessing.cleanup_files()

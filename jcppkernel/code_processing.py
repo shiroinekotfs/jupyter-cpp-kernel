@@ -24,7 +24,9 @@ class CPPCodeProcessingUnit:
         
     def processing_code(self, code) -> str:
         code = code_sub(self.comments, r'', code)
-        code = f"{self.main_head}\n{code}\n{self.main_foot}" if not code_search(self.main_method, code) else code
+        
+        if not code_search(self.main_method, code): code = f"{self.main_head}\n{code}\n{self.main_foot}"
+        
         code = f'#include "{self.global_header}"\n{code}'
         
         for header_path in self.local_headers:
