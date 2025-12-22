@@ -3,12 +3,12 @@ Check C++ header for Jupyter C++ kernel
 
 DO NOT OVERWRITE
 
-Copyright (C) 2024 shiroinekotfs
+Copyright (C) shiroinekotfs
 
 Component: Global Header
 
-Purpose:   This header is used to provide checking script for externalization C++
-            header
+Purpose:   This header is used to provide checking script for externalization 
+            C++ header
 Owner:     shiroinekotfs (signed off by shiroinekotfs)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 First created by: shiroinekotfs (signed-off by shiroinekotfs)

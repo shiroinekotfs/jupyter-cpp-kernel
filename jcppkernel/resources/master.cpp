@@ -2,8 +2,8 @@
 Pre-kernel "master.cpp"
 
 Copyright (C) Brendan Rius
-Copyright (C) 2024 shiroinekotfs
-Copyright (C) 2024 anhvlt-2k6
+Copyright (C) shiroinekotfs
+Copyright (C) anhvlt-2k6
 
 Component: Pre-kernel
 

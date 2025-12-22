@@ -1,7 +1,7 @@
 /*==============================================================================
 C++ Header for Jupyter C++ kernel
 
-Copyright (C) 2024 shiroinekotfs
+Copyright (C) shiroinekotfs
 
 Component: Global Header
 

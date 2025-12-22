@@ -1,13 +1,13 @@
 /*==============================================================================
 Math Definitions Header
 
-Copyright (C) 2024 shiroinekotfs
+Copyright (C) shiroinekotfs
 
 Component: Component Header
 
 Purpose:   Math Definition Header provides an extendable math library,
-           including special math characters in ASCII format, basic
-           functions and special calculation
+            including special math characters in ASCII format, basic
+            functions and special calculation
 Owner:     shiroinekotfs (signed off by shiroinekotfs)
 Platform:  Windows (WIN32), macOS (X and later), Unix/Linux
 

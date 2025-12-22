@@ -2,8 +2,8 @@
 C++ Kernel - Main Program
 
 Copyright (C) Brendan Rius
-Copyright (C) 2024 shiroinekotfs
-Copyright (C) 2024 anhvlt-2k6
+Copyright (C) shiroinekotfs
+Copyright (C) anhvlt-2k6
 
 Component:  Main Program
 
@@ -97,9 +97,7 @@ class CPPKernel(Kernel):
     # Enable debugging
     def _enable_debug_on_startup_banner(self) -> None:
         self.banner += (
-            f"Debugging mode is {'enabled' if self.debug_mode else 'disabled'}.\n\n"
-            f"MIME type: {self.language_info['mimetype']}\n"
-            f"File extension: {self.language_info['file_extension']}\n"
+            f"\nDebugging mode is {'enabled' if self.debug_mode else 'disabled'}"
         )
         
         for module in self.codeProcessingUnit.local_headers:

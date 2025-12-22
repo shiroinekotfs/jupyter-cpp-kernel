@@ -1,7 +1,7 @@
 /*==============================================================================
 Jupyter Display Core Handler - C++ header
 
-Copyright (C) 2024 shiroinekotfs
+Copyright (C) shiroinekotfs
 
 Component: Component Header
 
