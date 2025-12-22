@@ -28,6 +28,7 @@ class CPPKernel(Kernel):
     ####################################################################################
     # Properties of the program, including the licenses, help links, and other information
     ####################################################################################
+    debug_mode: bool = True
     implementation: str = "jupyter_cpp_kernel"
     implementation_version: str = "1.0"
     language: str = "C++"
@@ -53,25 +54,11 @@ class CPPKernel(Kernel):
         "file_extension": ".cpp",
     }
     
-    @property
-    def banner(self) -> str:
-        return (
-            f"C++ kernel (Standard: {self.standard}) for Jupyter (master), version 1.0.0a10\n\n"
-            "Copyright (C) Brendan Rius\n"
-            "Copyright (C) Shiroi Neko\n"
-            "Copyright (C) Vo Luu Tuong Anh\n\n"
-            "Project Main Page: https://github.com/shiroinekotfs/jupyter-cpp-kernel\n"
-            "Track Project Status: https://github.com/users/shiroinekotfs/projects/1\n"
-            "Reporting the issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues\n"
-            "Legal information: https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/LICENSE\n\n"
-            "Notebook tutorial: https://github.com/shiroinekotfs/jupyter-cpp-kernel-doc"
-        )
-
     ####################################################################################
     # Constructor of the program
     ####################################################################################
     def __init__(self, *args, **kwargs):
-        # super(CPPKernel, self).__init__(*args, **kwargs)
+        super(CPPKernel, self).__init__(*args, **kwargs)
         
         # System variables (fixed variables)
         self._allow_stdin: bool = True
@@ -80,6 +67,12 @@ class CPPKernel(Kernel):
         # Sub-modules (to load external objects)
         self.codeProcessingUnit = CPPCodeProcessingUnit()
         self.tmpFileProcessing = CPPTempFileProcessing()
+        
+        # Banner
+        self.banner = f"C++ kernel (Standard {self.standard.upper()}), version {self.language_info['version']}\n"
+        
+        # Run on debug
+        if self.debug_mode: self._enable_debug_on_startup_banner()
         
         # Sub-calls
         subprocess.call(
@@ -100,6 +93,17 @@ class CPPKernel(Kernel):
     ####################################################################################
     # Front end handler - Read and Write from Jupyter Web Application
     ####################################################################################
+    
+    # Enable debugging
+    def _enable_debug_on_startup_banner(self) -> None:
+        self.banner += (
+            f"Debugging mode is {'enabled' if self.debug_mode else 'disabled'}.\n\n"
+            f"MIME type: {self.language_info['mimetype']}\n"
+            f"File extension: {self.language_info['file_extension']}\n"
+        )
+        
+        for module in self.codeProcessingUnit.local_headers:
+            self.banner += f"\nLoaded module: {module}"
     
     # Write contents to the front end (success)
     def _write_to_stdout(self, contents):
