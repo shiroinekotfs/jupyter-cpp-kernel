@@ -24,7 +24,7 @@ from .realtime_subprocess import RealTimeSubprocess
 from .code_processing import CPPCodeProcessingUnit
 from .temp_file_processing import CPPTempFileProcessing
 
-class CPPKernel:
+class CPPKernel(Kernel):
     ####################################################################################
     # Properties of the program, including the licenses, help links, and other information
     ####################################################################################
@@ -71,6 +71,8 @@ class CPPKernel:
     # Constructor of the program
     ####################################################################################
     def __init__(self, *args, **kwargs):
+        # super(CPPKernel, self).__init__(*args, **kwargs)
+        
         # System variables (fixed variables)
         self._allow_stdin: bool = True
         self._end_line_sys: str = "\r\n" if osplatform == 'win32' else "\n"
@@ -83,7 +85,7 @@ class CPPKernel:
         subprocess.call(
             [
                 "g++",
-                self.codeProcessingUnit.global_header,
+                self.codeProcessingUnit.master_source,
                 f"-std={self.standard}",
                 "-Wno-unused-but-set-variable",
                 "-Wno-unused-parameter",
@@ -131,7 +133,6 @@ class CPPKernel:
     def _read_from_stdin(self):
         return self.raw_input()
 
-    
     # Create new process
     def _create_jupyter_subprocess(self, cmd: list[str]) -> RealTimeSubprocess:
         return RealTimeSubprocess(
@@ -166,33 +167,39 @@ class CPPKernel:
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
         code = self.codeProcessingUnit.processing_code(code)
         
-        source_file = self.tmpFileProcessing.new_temp_file(suffix=".cpp")
-        binary_file = self.tmpFileProcessing.cleanup_files()
-        
-        source_file.write(code)
-        source_file.flush()
+        with self.tmpFileProcessing.new_temp_file(suffix=".cpp") as source_file, self.tmpFileProcessing.new_temp_file(suffix=".out") as binary_file:
+            source_file.write(code)
+            source_file.flush()
 
-        p = self._compile_with_gpp(source_file.name, binary_file.name)
-        while p.poll() is None:
+            p = self._compile_with_gpp(source_file.name, binary_file.name)
+            while p.poll() is None:
+                p.write_contents()
+            
             p.write_contents()
 
-        if p.returncode != 0:
-            self._write_to_stderr(
-                f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {hex(p.returncode)}."
-            )
-            return {
-                "status": "ok",
-                "execution_count": self.execution_count,
-                "payload": [],
-                "user_expressions": {},
-            }
+            if p.returncode != 0:
+                self._write_to_stderr(
+                    f"\n[C++ kernel] Error: Unable to compile the source code. Return error: {hex(p.returncode)}."
+                )
+                return {
+                    "status": "ok",
+                    "execution_count": self.execution_count,
+                    "payload": [],
+                    "user_expressions": {},
+                }
 
-        p = self._create_jupyter_subprocess([self.master_path, binary_file.name])
+        p = self._create_jupyter_subprocess(
+            [
+                self.tmpFileProcessing.master_file, 
+                binary_file.name
+            ]
+        )
         while p.poll() is None:
             p.write_contents()
 
         p._stdout_thread.join()
         p._stderr_thread.join()
+        p.write_contents()
 
         if p.returncode != 0:
             self._write_to_stderr(
@@ -205,6 +212,6 @@ class CPPKernel:
             "payload": [],
             "user_expressions": {},
         }
-
+    
     def do_shutdown(self, restart):
         self.tmpFileProcessing.cleanup_files()

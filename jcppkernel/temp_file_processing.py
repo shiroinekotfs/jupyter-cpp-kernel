@@ -1,6 +1,5 @@
 from os import remove
 from tempfile import NamedTemporaryFile
-from typing import Any
 from os import close as fsclose, path
 from sys import platform as osplatform
 from tempfile import mkstemp
@@ -11,7 +10,7 @@ class CPPTempFileProcessing:
         self.master_file: str = self._create_master_file()
     
     def _create_master_file(self) -> str:
-        master_temp: tuple[int, str] = mkstemp('.exe' if osplatform == 'win32' else '.out')
+        master_temp: tuple[int, str] = mkstemp(suffix = '_master.exe' if osplatform == 'win32' else '_master.out')
         fsclose(master_temp[0])
         return master_temp[1]
     

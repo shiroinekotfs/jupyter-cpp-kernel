@@ -3,9 +3,15 @@ from sys import prefix as os_prefix
 from os import path as os_path, listdir
 
 class CPPCodeProcessingUnit:
+    main_head = 'int main() {'
+    main_foot = '\treturn 0;\n}'
+    comments = r'\/\/.*?(?=\r?\n)|\/\*[\s\S]*?\*\/'
+    main_method = r'\bmain\s*\(|^\s*#\s*define\s+\w+\s+main\b'
+
     def __init__(self):
         self.local_headers: list[str] = self._get_local_headers()
         self.global_header: str = self._get_global_header()
+        self.master_source: str = self._get_master_source()
     
     def _get_local_headers(self) -> list[str]:
         header_file: list[str] = []
@@ -21,6 +27,9 @@ class CPPCodeProcessingUnit:
     
     def _get_global_header(self) -> str:
         return str(os_path.abspath(os_path.dirname(__file__))) + '/resources/gcpph.hpp'
+    
+    def _get_master_source(self) -> str:
+        return os_path.join(os_path.dirname(__file__), 'resources', 'master.cpp')
         
     def processing_code(self, code) -> str:
         code = code_sub(self.comments, r'', code)
