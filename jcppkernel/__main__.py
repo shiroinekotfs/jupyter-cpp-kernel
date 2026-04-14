@@ -17,6 +17,7 @@ Report issue: https://github.com/shiroinekotfs/jupyter-cpp-kernel/issues
 '''
 
 from ipykernel.kernelbase import Kernel
+from os import path as os_path
 from sys import platform as osplatform
 import subprocess
 
@@ -75,8 +76,26 @@ class CPPKernel(Kernel):
         if self.debug_mode: self._enable_debug_on_startup_banner()
         
         # Sub-calls
-        subprocess.call(
-            [
+        if osplatform == 'win32':
+            # MinGW on Windows has no libdl - use the dlfcn-win32 shim compiled in
+            dlfcn_src = os_path.join(
+                os_path.dirname(self.codeProcessingUnit.master_source),
+                "basicf", "dlfcn.c"
+            )
+            compile_cmd = [
+                "g++",
+                self.codeProcessingUnit.master_source,
+                dlfcn_src,
+                f"-std={self.standard}",
+                "-Wno-unused-but-set-variable",
+                "-Wno-unused-parameter",
+                "-Wno-unused-variable",
+                "-w",
+                "-o",
+                self.tmpFileProcessing.master_file,
+            ]
+        else:
+            compile_cmd = [
                 "g++",
                 self.codeProcessingUnit.master_source,
                 f"-std={self.standard}",
@@ -88,7 +107,13 @@ class CPPKernel(Kernel):
                 "-o",
                 self.tmpFileProcessing.master_file,
             ]
-        )
+        ret = subprocess.call(compile_cmd)
+        if ret != 0:
+            raise RuntimeError(
+                f"[C++ kernel] Failed to compile master binary (exit {ret}).\n"
+                f"  Command: {' '.join(compile_cmd)}\n"
+                f"  Check that g++ is installed and on PATH."
+            )
 
     ####################################################################################
     # Front end handler - Read and Write from Jupyter Web Application
