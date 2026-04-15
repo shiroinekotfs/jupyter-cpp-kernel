@@ -17,7 +17,7 @@ class CPPCodeProcessingUnit:
         header_file: list[str] = []
         current_path: str = os_path.join(os_prefix, "share", "cpp_header")
         
-        if not os_path.exists(current_path): return
+        if not os_path.exists(current_path): return []
         
         for filename in listdir(current_path):
             if filename.lower().endswith('.hpp') or filename.lower().endswith('.h'):
