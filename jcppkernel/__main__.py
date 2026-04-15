@@ -132,16 +132,10 @@ class CPPKernel(Kernel):
     def _write_to_stdout(self, contents):
         self.send_response(
             self.iopub_socket,
-            "display_data",
+            "stream",
             {
-                "data": {
-                    "text/markdown": 
-                        contents.replace (
-                            self._end_line_sys,
-                            self._end_line_sys * 2
-                        )
-                }, 
-                "metadata": {}
+                "name": "stdout",
+                "text": contents.replace(self._end_line_sys, "\n")
             }
         )
 
