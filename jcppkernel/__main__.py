@@ -20,6 +20,7 @@ from ipykernel.kernelbase import Kernel
 from os import path as os_path
 from sys import platform as osplatform
 import subprocess
+import uuid
 
 from .realtime_subprocess import RealTimeSubprocess
 from .code_processing import CPPCodeProcessingUnit
@@ -130,14 +131,19 @@ class CPPKernel(Kernel):
     
     # Write contents to the front end (success)
     def _write_to_stdout(self, contents):
-        self.send_response(
-            self.iopub_socket,
-            "stream",
-            {
-                "name": "stdout",
-                "text": contents.replace(self._end_line_sys, "\n")
-            }
-        )
+        self._stdout_buffer += contents.replace(self._end_line_sys, "\n")
+        md = self._stdout_buffer.replace("\n", "\n\n")
+        payload = {
+            "data": {"text/markdown": md},
+            "metadata": {},
+            "transient": {"display_id": self._stdout_display_id},
+        }
+        if self._stdout_display_id is None:
+            self._stdout_display_id = uuid.uuid4().hex
+            payload["transient"] = {"display_id": self._stdout_display_id}
+            self.send_response(self.iopub_socket, "display_data", payload)
+        else:
+            self.send_response(self.iopub_socket, "update_display_data", payload)
 
     # Write contents to the front end (error)
     def _write_to_stderr(self, contents):
@@ -186,6 +192,8 @@ class CPPKernel(Kernel):
         )
 
     def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=True):
+        self._stdout_display_id = None
+        self._stdout_buffer = ""
         code = self.codeProcessingUnit.processing_code(code)
         
         with self.tmpFileProcessing.new_temp_file(suffix=".cpp") as source_file, self.tmpFileProcessing.new_temp_file(suffix=".out") as binary_file:
