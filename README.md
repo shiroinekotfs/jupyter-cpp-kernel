@@ -14,36 +14,44 @@
 
 ## Installation
 
-> :warning:
->
-> If you want to use it on Windows, please install the [GNU Compiler Collection for Windows](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
+Your machine needs:
 
-Normally, your target machine must meet these requirement packages before installing and using `jupyter-cpp-kernel`.
-
-* `g++`
-* `python3`, `python3-pip`
+* `g++` (Linux/macOS: system package; Windows: conda-forge `gxx` or [WinLibs](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md))
+* Python 3.9+ with `pip`
 * `jupyter` (recommend `jupyterlab`)
 
 ### Install from PyPI
 
-> :warning:
->
-> For Windows User: Please follow [this instruction](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md) to install GCC properly.
-
 ```shell
 pip install jupyter-cpp-kernel
+jupyter-cpp-kernel-install
 ```
 
 ### Install from the GitHub repo
 
-
-> :warning:
->
-> For Windows User: Please follow [this instruction](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md) to install GCC properly.
-
 ```shell
 pip install git+https://github.com/shiroinekotfs/jupyter-cpp-kernel.git
+jupyter-cpp-kernel-install
 ```
+
+> :information_source:
+>
+> `jupyter-cpp-kernel-install` registers the kernels for the **current Python
+> interpreter** (the one that pip just installed into). The `pip` step alone
+> registers a fallback spec that uses `python3`, which may resolve to the wrong
+> interpreter or fail entirely on Windows. Always run the install command after
+> pip.
+>
+> **Windows users:** install `g++` first via conda-forge (`mamba install gxx`)
+> or [WinLibs](https://github.com/shiroinekotfs/jupyter-cpp-kernel/blob/master/INSTALL_ON_WINDOWS.md)
+> before running `pip install`.
+>
+> Options:
+> ```
+> jupyter-cpp-kernel-install --user        # install for current user only
+> jupyter-cpp-kernel-install --sys-prefix  # install into current conda env / venv (default)
+> jupyter-cpp-kernel-install --prefix DIR  # install into a specific prefix
+> ```
 
 ## Contributing
 

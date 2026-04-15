@@ -1,5 +1,6 @@
 include jcppkernel/resources/master.cpp
 include jcppkernel/resources/basicf/dlfcn.h
+include jcppkernel/resources/basicf/dlfcn.c
 include jcppkernel/resources/basicf/mathdefs.hpp
 include jcppkernel/resources/basicf/rstdio.h
 include jcppkernel/resources/cppio/cppout.hpp
